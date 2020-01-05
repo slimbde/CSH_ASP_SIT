@@ -11,154 +11,117 @@ using SIT.Models;
 
 namespace SIT.Controllers
 {
-	public class SectionsController : Controller
+	public class UnitsController : Controller
 	{
 		private ApplicationDbContext db = new ApplicationDbContext();
 
-		// GET: Sections
+		// GET: Units
 		public async Task<ActionResult> Index()
 		{
-			var sections = db.Sections.Include(s => s.Chief);
-			return View(await sections.OrderBy(s => s.Name).ToListAsync());
+			var units = db.Units.Include(u => u.Chief);
+			ViewBag.Sections = await db.Sections.ToListAsync();
+			return View(await units.ToListAsync());
 		}
 
-
-		/// <summary>
-		/// добавляет выбранному в ~/Unit/Edit бюро UnitId
-		/// </summary>
-		/// <param name="sectionId">ид бюро</param>
-		/// <param name="unitId">ид отдела</param>
-		public void Append(int sectionId, int unitId)
-		{
-			var section = db.Sections.Find(sectionId);
-			section.UnitId = unitId;
-			db.SaveChanges();
-		}
-
-		/// <summary>
-		/// удаляет у выбранного в ~/Unit/Edit бюро UnitId
-		/// </summary>
-		/// <param name="sectionId">ид бюро</param>
-		/// <param name="unitId">ид отдела</param>
-		public void Remove(int sectionId, int unitId)
-		{
-			var section = db.Sections.Find(sectionId);
-			if (section.UnitId == unitId)
-				section.UnitId = null;
-			db.SaveChanges();
-		}
-
-		/// <summary>
-		/// удаляет у всех сотрудников бюро UnitId
-		/// </summary>
-		/// <param name="unitId">ид отдела</param>
-		public void ClearUnit(int unitId)
-		{
-			foreach (var section in db.Sections)
-			{
-				if (section.UnitId == unitId)
-					section.UnitId = null;
-			}
-			db.SaveChanges();
-		}
-
-
-		// GET: Sections/Details/5
+		// GET: Units/Details/5
 		public async Task<ActionResult> Details(int? id)
 		{
 			if (id == null)
 			{
 				return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
 			}
-
-			Section section = await db.Sections.FindAsync(id);
-			if (section == null)
+			Unit unit = await db.Units.FindAsync(id);
+			if (unit == null)
 			{
 				return HttpNotFound();
 			}
-			section.Workers = await db.Users.Where(u => u.SectionId == id).ToListAsync();
-			return View(section);
+			unit.Chief = db.Users.FirstOrDefault(u => u.Id == unit.ChiefId);
+			ViewBag.sections = db.Sections.Where(s => s.UnitId == id).ToList();
+			return View(unit);
 		}
 
-		// GET: Sections/Create
+		// GET: Units/Create
 		public ActionResult Create()
 		{
 			ViewBag.Users = db.Users.OrderBy(u => u.Surname).ToList();
 			return View();
 		}
 
-		// POST: Sections/Create
+		// POST: Units/Create
 		// Чтобы защититься от атак чрезмерной передачи данных, включите определенные свойства, для которых следует установить привязку. Дополнительные 
 		// сведения см. в статье https://go.microsoft.com/fwlink/?LinkId=317598.
 		[HttpPost]
 		[ValidateAntiForgeryToken]
-		public async Task<ActionResult> Create([Bind(Include = "Id,Name,ChiefId")] Section section)
+		public async Task<ActionResult> Create([Bind(Include = "Id,Name,ChiefId")] Unit unit)
 		{
 			if (ModelState.IsValid)
 			{
-				db.Users.FirstOrDefault(u => u.Id == section.ChiefId).SectionId = section.Id;
-				db.Sections.Add(section);
+				db.Units.Add(unit);
 				await db.SaveChangesAsync();
 				return RedirectToAction("Index");
 			}
 
-			return View(section);
+			ViewBag.ChiefId = new SelectList(db.Users, "Id", "FullName", unit.ChiefId);
+			return View(unit);
 		}
 
-		// GET: Sections/Edit/5
+		// GET: Units/Edit/5
 		public async Task<ActionResult> Edit(int? id)
 		{
 			if (id == null)
 			{
 				return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
 			}
-			Section section = await db.Sections.FindAsync(id);
-			if (section == null)
+			Unit unit = await db.Units.FindAsync(id);
+			if (unit == null)
 			{
 				return HttpNotFound();
 			}
-			return View(section);
+
+			return View(unit);
 		}
 
-		// POST: Sections/Edit/5
+		// POST: Units/Edit/5
 		// Чтобы защититься от атак чрезмерной передачи данных, включите определенные свойства, для которых следует установить привязку. Дополнительные 
 		// сведения см. в статье https://go.microsoft.com/fwlink/?LinkId=317598.
 		[HttpPost]
 		[ValidateAntiForgeryToken]
-		public async Task<ActionResult> Edit([Bind(Include = "Id,Name,ChiefId")] Section section)
+		public async Task<ActionResult> Edit([Bind(Include = "Id,Name,ChiefId")] Unit unit)
 		{
 			if (ModelState.IsValid)
 			{
-				db.Entry(section).State = EntityState.Modified;
+				db.Entry(unit).State = EntityState.Modified;
 				await db.SaveChangesAsync();
 				return RedirectToAction("Index");
 			}
-			return View(section);
+			return View(unit);
 		}
 
-		// GET: Sections/Delete/5
+		// GET: Units/Delete/5
 		public async Task<ActionResult> Delete(int? id)
 		{
 			if (id == null)
 			{
 				return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
 			}
-			Section section = await db.Sections.FindAsync(id);
-			if (section == null)
+			Unit unit = await db.Units.FindAsync(id);
+			if (unit == null)
 			{
 				return HttpNotFound();
 			}
-			return View(section);
+			unit.Chief = db.Users.FirstOrDefault(u => u.Id == unit.ChiefId);
+			ViewBag.SectionCount = db.Sections.Where(s => s.UnitId == id).Count();
+			return View(unit);
 		}
 
-		// POST: Sections/Delete/5
+		// POST: Units/Delete/5
 		[HttpPost, ActionName("Delete")]
 		[ValidateAntiForgeryToken]
 		public async Task<ActionResult> DeleteConfirmed(int id)
 		{
-			var section = await db.Sections.FindAsync(id);
+			Unit unit = await db.Units.FindAsync(id);
 
-			db.Sections.Remove(section);
+			db.Units.Remove(unit);
 			await db.SaveChangesAsync();
 			return RedirectToAction("Index");
 		}

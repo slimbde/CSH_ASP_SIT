@@ -1,0 +1,51 @@
+﻿@model IEnumerable<Unit>
+@using SIT.Models
+@{
+	ViewBag.Title = "Index";
+	List<Section> sections = ViewBag.Sections;
+}
+
+<div class="row">
+	<div class="col-md-10">
+		<h2>Список отделов</h2>
+
+		<p>
+			@Html.ActionLink("Создать новый", "Create")
+		</p>
+		<table class="table">
+			<tr>
+				<th>
+					@Html.LabelFor(model => model.First().Name)
+				</th>
+				<th>
+					@Html.LabelFor(model => model.First().ChiefId)
+				</th>
+				<th>
+					Бюро
+				</th>
+				<th></th>
+			</tr>
+
+			@foreach (Unit item in Model)
+			{
+				<tr>
+					<td>
+						@Html.DisplayFor(modelItem => item.Name)
+					</td>
+					<td>
+						@Html.DisplayFor(modelItem => item.Chief.FullName)
+					</td>
+					<td>
+						@sections.Where(s => s.UnitId == item.Id).Count()
+					</td>
+					<td>
+						@Html.ActionLink("Изменить", "Edit", new { id = item.Id }) |
+						@Html.ActionLink("Подробнее", "Details", new { id = item.Id }) |
+						@Html.ActionLink("Удалить", "Delete", new { id = item.Id })
+					</td>
+				</tr>
+			}
+
+		</table>
+	</div>
+</div>

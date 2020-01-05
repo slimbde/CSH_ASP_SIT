@@ -1,0 +1,55 @@
+﻿@model SIT.Models.Unit
+
+@{
+	ViewBag.Title = "Delete";
+}
+
+<h2>Удаление отдела</h2>
+
+<h3>Вы уверены, что хотите удалить?</h3>
+<div>
+	<hr />
+	<dl class="dl-horizontal">
+		<dt>
+			@Html.DisplayNameFor(model => model.Name)
+		</dt>
+
+		<dd>
+			@Html.DisplayFor(model => model.Name)
+		</dd>
+
+		<dt>
+			@Html.LabelFor(model => model.ChiefId)
+		</dt>
+
+		<dd>
+			@Html.DisplayFor(model => model.Chief.FullName)
+		</dd>
+		<dt></dt>
+		<dd>
+			<br />
+			@using (Html.BeginForm())
+			{
+				@Html.AntiForgeryToken()
+				<input type="submit" value="Удалить" class="btn btn-danger" onclick="return handle()" />
+			}
+		</dd>
+	</dl>
+	@Html.ActionLink("Назад", "Index")
+</div>
+
+@section Scripts {
+	<script>
+		function handle() {
+			if (@(ViewBag.SectionCount)> 0) {
+				$.ajax({
+					url: '@(Url.Action("ClearUnit","Sections"))?unitId=@Model.Id',
+					type: 'get',
+					async: false,
+				});
+			}
+
+			return true;
+		}
+	</script>
+}

@@ -9,15 +9,18 @@ function toggle() {
     page = window.location.pathname.split('/')[1];
     idx = 0;
     switch (page) {
-        case 'Sections':
+        case 'Units':
             idx = 0;
             break;
-        case 'Staff':
+        case 'Sections':
             idx = 1;
+            break;
+        case 'Staff':
+            idx = 2;
             break;
         case 'Home':
             if (window.location.pathname.split('/')[2] == "Help")
-                idx = 2;
+                idx = 3;
             break;
         default:
             return;

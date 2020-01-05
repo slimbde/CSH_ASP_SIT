@@ -1,0 +1,43 @@
+﻿@model Unit
+@using SIT.Models
+@{
+	ViewBag.Title = "Details";
+	var sections = ViewBag.sections as List<Section>;
+}
+
+<h2>Подробно</h2>
+
+<div>
+	<h4>Отдел</h4>
+	<hr />
+	<dl class="dl-horizontal">
+		<dt>
+			@Html.DisplayNameFor(model => model.Name)
+		</dt>
+
+		<dd>
+			@Html.DisplayFor(model => model.Name)
+		</dd>
+
+		<dt>
+			@Html.LabelFor(model => model.ChiefId)
+		</dt>
+
+		<dd>
+			@Html.DisplayFor(model => model.Chief.FullName)
+		</dd>
+
+		<hr />
+		<dt><label>Бюро</label></dt>
+		<dd>
+			@foreach (var item in sections)
+			{
+				@Html.DisplayFor(u => item.Name)<br />
+			}
+		</dd>
+	</dl>
+</div>
+<p>
+	@Html.ActionLink("Назад", "Index") |
+	@Html.ActionLink("Изменить", "Edit", new { id = Model.Id })
+</p>

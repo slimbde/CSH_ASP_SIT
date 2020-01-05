@@ -21,6 +21,11 @@ namespace SIT.Models
 		public virtual ApplicationUser Chief { get; set; }
 
 
+		[Display(Name = "Отдел")]
+		public int? UnitId { get; set; }
+		public virtual Unit Unit { get; set; }
+
+
 		[Display(Name = "Сотрудники")]
 		public virtual ICollection<ApplicationUser> Workers { get; set; }
 

@@ -1,20 +1,12 @@
-﻿@model Section
+﻿@model Unit
 @using SIT.Models
 @{
 	ViewBag.Title = "Edit";
 
 	var db = new ApplicationDbContext();
-	var usrList = new SelectList(db.Users.OrderBy(u => u.Surname), "Id", "FullName");
-	foreach (var item in usrList)
-	{
-		if (item.Value == Model.ChiefId)
-		{
-			item.Selected = true;
-			break;
-		}
-	}
-
-	Model.Workers = db.Users.Where(u => u.SectionId == Model.Id).OrderBy(u => u.Surname).ToList();
+	var sections = db.Sections.Where(s => s.UnitId == Model.Id).OrderBy(s => s.Name).ToList();
+	var userList = new SelectList(db.Users.OrderBy(u => u.Surname).ToList(), "Id", "FullName");
+	var sectionList = new SelectList(db.Sections.OrderBy(s => s.Name).ToList(), "Id", "Name");
 }
 
 <h2>Редактировать</h2>
@@ -25,7 +17,7 @@
 	@Html.AntiForgeryToken()
 
 	<div class="form-horizontal">
-		<h4>Бюро</h4>
+		<h4></h4>
 		<hr />
 		@Html.ValidationSummary(true, "", new { @class = "text-danger" })
 		@Html.HiddenFor(model => model.Id)
@@ -41,18 +33,18 @@
 		<div class="form-group">
 			@Html.LabelFor(model => model.ChiefId, htmlAttributes: new { @class = "control-label col-md-2" })
 			<div class="col-md-10">
-				@Html.DropDownListFor(model => model.ChiefId, usrList, "-- выбрать руководителя --", htmlAttributes: new { @class = "form-control" })
+				@Html.DropDownListFor(model => model.ChiefId, userList, htmlAttributes: new { @class = "form-control" })
 				@Html.ValidationMessageFor(model => model.ChiefId, "", new { @class = "text-danger" })
 			</div>
 		</div>
 
 		<hr />
 		<div class="form-group">
-			@Html.LabelFor(model => model.Workers, htmlAttributes: new { @class = "control-label col-md-2" })
-			<div class="col-md-5" id="staff">
-				@foreach (var item in Model.Workers)
+			<label class="control-label col-md-2">Бюро</label>
+			<div class="col-md-5" id="sects">
+				@foreach (var item in sections)
 				{
-					<div id="@(item.Id)_1">@(Html.DisplayFor(u => item.FullName))&nbsp;&nbsp;&nbsp;<a href='#' id="@(item.Id)" onclick="deleteItem(event)" class='text-danger'>Удалить</a></div>
+					<div id="@(item.Id)_1">@(Html.DisplayFor(s => item.Name))&nbsp;&nbsp;&nbsp;<a href='#' id="@(item.Id)" onclick="deleteItem(event)" class='text-danger'>Удалить</a></div>
 				}
 			</div>
 		</div>
@@ -60,13 +52,12 @@
 		<dl class="form-group">
 			<dt class="col-md-2">&nbsp;</dt>
 			<dd class="col-md-10 control-label">
-				@Html.DropDownListFor(model => model.Workers, usrList, htmlAttributes: new { @class = "form-control col-md-2", @id = "pick" })
+				@Html.DropDownListFor(model => sections, sectionList, htmlAttributes: new { @class = "form-control col-md-2", @id = "pick" })
 				@Html.ValidationMessageFor(model => model.ChiefId, "", new { @class = "text-danger" })
 				<a href="#" class="addLink col-md-3 text-left text-success">Добавить</a>
 			</dd>
 		</dl>
 
-		<hr />
 		<div class="form-group">
 			<div class="col-md-offset-2 col-md-10">
 				<input type="submit" value="Сохранить" class="btn btn-success" />
@@ -81,7 +72,7 @@
 @section Scripts {
 	@Scripts.Render("~/bundles/jqueryval")
 	<script>
-		// функция добавления сотрудника в бюро
+		// функция добавления бюро в отдел
 		$(function () {
 			var i = 0;
 			$('.addLink').click(function () {
@@ -89,13 +80,13 @@
 				var id = $('#pick option').filter(':selected').val();
 
 				if ($('#'+ id).length)
-					alert("Сотрудник уже в этом бюро");
+					alert("Бюро уже в этом отделе");
 				else {
 					var html = "<div id='" + id + "_1'>" + nick + "&nbsp;&nbsp;&nbsp;<a href='#' id=" + id + " onclick='deleteItem(event)' class='text-danger'>Удалить</a><br />";
-					$('#staff').append(html);
+					$('#sects').append(html);
 
 					$.ajax({
-						url: '@(Url.Action("Append","Staff"))?id='+id+'&section='+@Model.Id,
+						url: '@(Url.Action("Append","Sections"))?sectionId='+id+'&unitId='+@Model.Id,
 						type: 'get',
 					});
 				}
@@ -103,13 +94,13 @@
 		});
 
 
-		// функция удаления сотрудника из бюро
+		// функция удаления бюро из отдела
 		function deleteItem(event) {
 			event.preventDefault();
 			var id = event.target.id;
 
 			$.ajax({
-				url: '@(Url.Action("Remove","Staff"))?id='+id+'&section='+@Model.Id,
+				url: '@(Url.Action("Remove","Sections"))?sectionId='+id+'&unitId='+@Model.Id,
 				type: 'get',
 			});
 

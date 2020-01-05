@@ -34,9 +34,6 @@ namespace SIT.Models
 		public virtual Section Section { get; set; }
 
 
-		public virtual ICollection<Vacation> Vacations { get; set; }
-
-
 		public async Task<ClaimsIdentity> GenerateUserIdentityAsync(UserManager<ApplicationUser> manager)
 		{
 			// Обратите внимание, что authenticationType должен совпадать с типом, определенным в CookieAuthenticationOptions.AuthenticationType
@@ -44,17 +41,14 @@ namespace SIT.Models
 			// Здесь добавьте утверждения пользователя
 			return userIdentity;
 		}
-		public ApplicationUser()
-		{
-			Vacations = new List<Vacation>();
-		}
 	}
 
 	public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
 	{
+		public virtual DbSet<Unit> Units { get; set; }
 		public virtual DbSet<Section> Sections { get; set; }
 		public virtual DbSet<MonthWeight> MonthWeights { get; set; }
-
+		public virtual DbSet<UserVacation> UserVacations { get; set; }
 
 		public ApplicationDbContext()
 			: base("DefaultConnection", throwIfV1Schema: false)
