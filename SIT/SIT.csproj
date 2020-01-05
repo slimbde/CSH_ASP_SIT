@@ -170,21 +170,72 @@
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\ManageController.cs" />
+    <Compile Include="Controllers\SectionsController.cs" />
+    <Compile Include="Controllers\StaffController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
-    <Compile Include="Migrations\202001011350586_InitialCreate.cs" />
-    <Compile Include="Migrations\202001011350586_InitialCreate.Designer.cs">
-      <DependentUpon>202001011350586_InitialCreate.cs</DependentUpon>
+    <Compile Include="Migrations\202001040737449_1.cs" />
+    <Compile Include="Migrations\202001040737449_1.Designer.cs">
+      <DependentUpon>202001040737449_1.cs</DependentUpon>
     </Compile>
-    <Compile Include="Migrations\202001011430455_user_principal_fields.cs" />
-    <Compile Include="Migrations\202001011430455_user_principal_fields.Designer.cs">
-      <DependentUpon>202001011430455_user_principal_fields.cs</DependentUpon>
+    <Compile Include="Migrations\202001040745187_2.cs" />
+    <Compile Include="Migrations\202001040745187_2.Designer.cs">
+      <DependentUpon>202001040745187_2.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202001040826178_3.cs" />
+    <Compile Include="Migrations\202001040826178_3.Designer.cs">
+      <DependentUpon>202001040826178_3.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202001040828504_4.cs" />
+    <Compile Include="Migrations\202001040828504_4.Designer.cs">
+      <DependentUpon>202001040828504_4.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202001040834423_5.cs" />
+    <Compile Include="Migrations\202001040834423_5.Designer.cs">
+      <DependentUpon>202001040834423_5.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202001040843595_SectionUsers - SectionWorkers.cs" />
+    <Compile Include="Migrations\202001040843595_SectionUsers - SectionWorkers.Designer.cs">
+      <DependentUpon>202001040843595_SectionUsers - SectionWorkers.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202001040847377_sdfsd.cs" />
+    <Compile Include="Migrations\202001040847377_sdfsd.Designer.cs">
+      <DependentUpon>202001040847377_sdfsd.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202001040848567_sdfs.cs" />
+    <Compile Include="Migrations\202001040848567_sdfs.Designer.cs">
+      <DependentUpon>202001040848567_sdfs.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202001040853312_122.cs" />
+    <Compile Include="Migrations\202001040853312_122.Designer.cs">
+      <DependentUpon>202001040853312_122.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202001040854321_123.cs" />
+    <Compile Include="Migrations\202001040854321_123.Designer.cs">
+      <DependentUpon>202001040854321_123.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202001041409120_115.cs" />
+    <Compile Include="Migrations\202001041409120_115.Designer.cs">
+      <DependentUpon>202001041409120_115.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202001041651514_119.cs" />
+    <Compile Include="Migrations\202001041651514_119.Designer.cs">
+      <DependentUpon>202001041651514_119.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202001041820598_89.cs" />
+    <Compile Include="Migrations\202001041820598_89.Designer.cs">
+      <DependentUpon>202001041820598_89.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202001041843171_88.cs" />
+    <Compile Include="Migrations\202001041843171_88.Designer.cs">
+      <DependentUpon>202001041843171_88.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\IdentityModels.cs" />
     <Compile Include="Models\ManageViewModels.cs" />
+    <Compile Include="Models\Section.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Startup.cs" />
   </ItemGroup>
@@ -199,6 +250,9 @@
     <Content Include="Content\Site.css" />
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
+    <None Include="Properties\PublishProfiles\CustomProfile.pubxml" />
+    <None Include="Properties\PublishProfiles\FolderProfile.pubxml" />
+    <None Include="Properties\PublishProfiles\FolderProfile1.pubxml" />
     <None Include="Scripts\jquery-3.4.1.intellisense.js" />
     <Content Include="Scripts\jquery-3.4.1.js" />
     <Content Include="Scripts\jquery-3.4.1.min.js" />
@@ -210,6 +264,8 @@
     <Content Include="Scripts\jquery.validate.unobtrusive.js" />
     <Content Include="Scripts\jquery.validate.unobtrusive.min.js" />
     <Content Include="Scripts\modernizr-2.8.3.js" />
+    <Content Include="Scripts\my.js" />
+    <Content Include="Scripts\particle-wave.js" />
     <Content Include="Web.config" />
     <Content Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
@@ -221,8 +277,7 @@
     <Content Include="Views\_ViewStart.cshtml" />
     <Content Include="Views\Shared\Error.cshtml" />
     <Content Include="Views\Shared\_Layout.cshtml" />
-    <Content Include="Views\Home\About.cshtml" />
-    <Content Include="Views\Home\Contact.cshtml" />
+    <Content Include="Views\Home\Help.cshtml" />
     <Content Include="Views\Home\Index.cshtml" />
     <Content Include="Views\Account\_ExternalLoginsListPartial.cshtml" />
     <Content Include="Views\Account\ConfirmEmail.cshtml" />
@@ -245,6 +300,16 @@
     <Content Include="Views\Shared\Lockout.cshtml" />
     <Content Include="Views\Shared\_LoginPartial.cshtml" />
     <Content Include="Views\Account\RegSucceed.cshtml" />
+    <Content Include="Views\Sections\Create.cshtml" />
+    <Content Include="Views\Sections\Delete.cshtml" />
+    <Content Include="Views\Sections\Details.cshtml" />
+    <Content Include="Views\Sections\Edit.cshtml" />
+    <Content Include="Views\Sections\Index.cshtml" />
+    <Content Include="Views\Staff\Create.cshtml" />
+    <Content Include="Views\Staff\Delete.cshtml" />
+    <Content Include="Views\Staff\Details.cshtml" />
+    <Content Include="Views\Staff\Edit.cshtml" />
+    <Content Include="Views\Staff\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
@@ -263,11 +328,47 @@
     <Content Include="Scripts\jquery-3.4.1.min.map" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Migrations\202001011350586_InitialCreate.resx">
-      <DependentUpon>202001011350586_InitialCreate.cs</DependentUpon>
+    <EmbeddedResource Include="Migrations\202001040737449_1.resx">
+      <DependentUpon>202001040737449_1.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\202001011430455_user_principal_fields.resx">
-      <DependentUpon>202001011430455_user_principal_fields.cs</DependentUpon>
+    <EmbeddedResource Include="Migrations\202001040745187_2.resx">
+      <DependentUpon>202001040745187_2.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202001040826178_3.resx">
+      <DependentUpon>202001040826178_3.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202001040828504_4.resx">
+      <DependentUpon>202001040828504_4.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202001040834423_5.resx">
+      <DependentUpon>202001040834423_5.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202001040843595_SectionUsers - SectionWorkers.resx">
+      <DependentUpon>202001040843595_SectionUsers - SectionWorkers.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202001040847377_sdfsd.resx">
+      <DependentUpon>202001040847377_sdfsd.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202001040848567_sdfs.resx">
+      <DependentUpon>202001040848567_sdfs.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202001040853312_122.resx">
+      <DependentUpon>202001040853312_122.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202001040854321_123.resx">
+      <DependentUpon>202001040854321_123.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202001041409120_115.resx">
+      <DependentUpon>202001041409120_115.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202001041651514_119.resx">
+      <DependentUpon>202001041651514_119.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202001041820598_89.resx">
+      <DependentUpon>202001041820598_89.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202001041843171_88.resx">
+      <DependentUpon>202001041843171_88.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>
@@ -284,15 +385,14 @@
     <VisualStudio>
       <FlavorProperties GUID="{349c5851-65df-11da-9384-00065b846f21}">
         <WebProjectProperties>
-          <UseIIS>True</UseIIS>
+          <UseIIS>False</UseIIS>
           <AutoAssignPort>True</AutoAssignPort>
           <DevelopmentServerPort>58799</DevelopmentServerPort>
           <DevelopmentServerVPath>/</DevelopmentServerVPath>
-          <IISUrl>https://localhost:44399/</IISUrl>
+          <IISUrl>http://localhost:58799/</IISUrl>
           <NTLMAuthentication>False</NTLMAuthentication>
-          <UseCustomServer>False</UseCustomServer>
-          <CustomServerUrl>
-          </CustomServerUrl>
+          <UseCustomServer>True</UseCustomServer>
+          <CustomServerUrl>http://sit.mechel.com</CustomServerUrl>
           <SaveServerSettingsInUserFile>False</SaveServerSettingsInUserFile>
         </WebProjectProperties>
       </FlavorProperties>

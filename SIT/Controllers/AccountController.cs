@@ -74,26 +74,29 @@ namespace SIT.Controllers
 				return View(model);
 			}
 
-			if (ModelState.IsValid)
+			var user = await UserManager.FindAsync(model.Email, model.Password);
+			if (user != null)
 			{
-				var user = await UserManager.FindAsync(model.Email, model.Password);
-				if (user != null)
+				if (user.EmailConfirmed == true)
 				{
-					if (user.EmailConfirmed == true)
-					{
-						await SignInManager.SignInAsync(user, isPersistent: false, rememberBrowser: false);
-						return RedirectToLocal(returnUrl);
-					}
-					else
-					{
-						ModelState.AddModelError("", "Не подтвержден email.");
-					}
+					await SignInManager.SignInAsync(user, isPersistent: false, rememberBrowser: false);
+					return RedirectToLocal(returnUrl);
 				}
 				else
 				{
-					ModelState.AddModelError("", "Неверный логин или пароль");
+					//ModelState.AddModelError("", "Не подтвержден email.");
+					string code = await UserManager.GenerateEmailConfirmationTokenAsync(user.Id);
+					var callbackUrl = Url.Action("ConfirmEmail", "Account", new { userId = user.Id, code = code, phone = user.PhoneNumber }, protocol: Request.Url.Scheme);
+					await UserManager.SendEmailAsync(user.Id, "Подтверждение учетной записи", "Подтвердите вашу учетную запись, щелкнув <a href=\"" + callbackUrl + "\">здесь</a>");
+
+					return View("RegSucceed");
 				}
 			}
+			else
+			{
+				ModelState.AddModelError("", "Неверный логин или пароль");
+			}
+
 			return View(model);
 
 			//// Сбои при входе не приводят к блокированию учетной записи
@@ -187,21 +190,18 @@ namespace SIT.Controllers
 				var result = await UserManager.CreateAsync(user, model.Password);
 				if (result.Succeeded)
 				{
-					await SignInManager.SignInAsync(user, isPersistent: false, rememberBrowser: false);
+					// вход в аккаунт перенесен в ConfirmEmail, чтобы только после подтверждения был автовход
+					//await SignInManager.SignInAsync(user, isPersistent: false, rememberBrowser: false);
 
 					// Дополнительные сведения о включении подтверждения учетной записи и сброса пароля см. на странице https://go.microsoft.com/fwlink/?LinkID=320771.
 					// Отправка сообщения электронной почты с этой ссылкой
-					string code = await UserManager.GenerateEmailConfirmationTokenAsync(user.Id);
-					var callbackUrl = Url.Action("ConfirmEmail", "Account", new { userId = user.Id, code = code }, protocol: Request.Url.Scheme);
-					await UserManager.SendEmailAsync(user.Id, "Подтверждение учетной записи", "Подтвердите вашу учетную запись, щелкнув <a href=\"" + callbackUrl + "\">здесь</a>");
+					//string code = await UserManager.GenerateEmailConfirmationTokenAsync(user.Id);
+					//var callbackUrl = Url.Action("ConfirmEmail", "Account", new { userId = user.Id, code = code, phone = user.PhoneNumber }, protocol: Request.Url.Scheme);
+					//await UserManager.SendEmailAsync(user.Id, "Подтверждение учетной записи", "Подтвердите вашу учетную запись, щелкнув <a href=\"" + callbackUrl + "\">здесь</a>");
 
 					// эмулирую подтверждение почты
-					//string code = await UserManager.GenerateEmailConfirmationTokenAsync(user.Id);
-					//await ConfirmEmail(user.Id, code);
-
-					// эмулирую подтверждение телефона
-					var telCode = await UserManager.GenerateChangePhoneNumberTokenAsync(user.Id, user.PhoneNumber);
-					await UserManager.ChangePhoneNumberAsync(user.Id, user.PhoneNumber, telCode);
+					string code = await UserManager.GenerateEmailConfirmationTokenAsync(user.Id);
+					await ConfirmEmail(user.Id, code, user.PhoneNumber);
 
 					return View("RegSucceed");
 				}
@@ -215,14 +215,26 @@ namespace SIT.Controllers
 		//
 		// GET: /Account/ConfirmEmail
 		[AllowAnonymous]
-		public async Task<ActionResult> ConfirmEmail(string userId, string code)
+		public async Task<ActionResult> ConfirmEmail(string userId, string code, string phone)
 		{
 			if (userId == null || code == null)
 			{
 				return View("Error");
 			}
-			var result = await UserManager.ConfirmEmailAsync(userId, code);
-			return View(result.Succeeded ? "ConfirmEmail" : "Error");
+			var resultEmail = await UserManager.ConfirmEmailAsync(userId, code);
+
+			if (resultEmail.Succeeded)
+			{
+				// эмулирую подтверждение телефона
+				var telCode = await UserManager.GenerateChangePhoneNumberTokenAsync(userId, phone);
+				await UserManager.ChangePhoneNumberAsync(userId, phone, telCode);
+
+				// вхожу в учетную запись
+				var user = UserManager.FindByIdAsync(userId).Result;
+				await SignInManager.SignInAsync(user, isPersistent: false, rememberBrowser: false);
+			}
+
+			return View(resultEmail.Succeeded ? "ConfirmEmail" : "Error");
 		}
 
 		//
@@ -251,10 +263,10 @@ namespace SIT.Controllers
 
 				// Дополнительные сведения о включении подтверждения учетной записи и сброса пароля см. на странице https://go.microsoft.com/fwlink/?LinkID=320771.
 				// Отправка сообщения электронной почты с этой ссылкой
-				// string code = await UserManager.GeneratePasswordResetTokenAsync(user.Id);
-				// var callbackUrl = Url.Action("ResetPassword", "Account", new { userId = user.Id, code = code }, protocol: Request.Url.Scheme);		
-				// await UserManager.SendEmailAsync(user.Id, "Сброс пароля", "Сбросьте ваш пароль, щелкнув <a href=\"" + callbackUrl + "\">здесь</a>");
-				// return RedirectToAction("ForgotPasswordConfirmation", "Account");
+				string code = await UserManager.GeneratePasswordResetTokenAsync(user.Id);
+				var callbackUrl = Url.Action("ResetPassword", "Account", new { userId = user.Id, code = code }, protocol: Request.Url.Scheme);
+				await UserManager.SendEmailAsync(user.Id, "Сброс пароля", "Сбросьте ваш пароль, щелкнув <a href=\"" + callbackUrl + "\">здесь</a>");
+				return RedirectToAction("ForgotPasswordConfirmation", "Account");
 			}
 
 			// Появление этого сообщения означает наличие ошибки; повторное отображение формы

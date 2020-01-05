@@ -12,6 +12,7 @@ using Microsoft.Owin;
 using Microsoft.Owin.Security;
 using SIT.Models;
 using System.Net.Mail;
+using System.Text;
 
 namespace SIT
 {
@@ -19,28 +20,29 @@ namespace SIT
 	{
 		public Task SendAsync(IdentityMessage message)
 		{
-			// настройка логина, пароля отправителя
-			var from = "slimbde@gmail.com";
-			var pass = "2213maY1985";
+			try
+			{
+				var senderEmail = System.Configuration.ConfigurationManager.AppSettings["senderEmail"].ToString();
+				var senderPassword = System.Configuration.ConfigurationManager.AppSettings["senderPassword"].ToString();
 
-			// адрес и порт smtp-сервера, с которого мы и будем отправлять письмо
-			SmtpClient client = new SmtpClient("smtp.gmail.com", 465);
+				var client = new SmtpClient("smtp.gmail.com", 587);
+				client.EnableSsl = true;
+				client.Timeout = 5000;
+				client.DeliveryMethod = SmtpDeliveryMethod.Network;
+				client.UseDefaultCredentials = false;
+				client.Credentials = new System.Net.NetworkCredential(senderEmail, senderPassword);
 
-			client.DeliveryMethod = SmtpDeliveryMethod.Network;
-			client.UseDefaultCredentials = false;
-			client.Credentials = new System.Net.NetworkCredential(from, pass);
-			client.EnableSsl = true;
+				var mail = new MailMessage(senderEmail, message.Destination, message.Subject, message.Body);
+				mail.IsBodyHtml = true;
+				mail.BodyEncoding = Encoding.UTF8;
 
-			// создаем письмо: message.Destination - адрес получателя
-			var mail = new MailMessage(from, message.Destination);
-			mail.Subject = message.Subject;
-			mail.Body = message.Body;
-			mail.IsBodyHtml = true;
-
-			return client.SendMailAsync(mail);
-
-			// Подключите здесь службу электронной почты для отправки сообщения электронной почты.
-			//return Task.FromResult(0);
+				return client.SendMailAsync(mail);
+			}
+			catch (Exception ex)
+			{
+				var mes = ex.Message;
+				throw;
+			}
 		}
 	}
 

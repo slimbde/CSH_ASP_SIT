@@ -1,0 +1,43 @@
+﻿@using SIT.Models
+@using System.Data.Entity
+@model Section
+@{
+	ViewBag.Title = "Details";
+}
+
+<h2>Подробно</h2>
+
+<div>
+	<h4>Бюро</h4>
+	<hr />
+	<dl class="dl-horizontal">
+		<dt>
+			@Html.LabelFor(model => model.Name)
+		</dt>
+
+		<dd>
+			@Html.DisplayFor(model => model.Name)
+		</dd>
+
+		<dt>
+			@Html.LabelFor(model => model.ChiefId)
+		</dt>
+
+		<dd>
+			@Html.DisplayFor(model => model.Chief.FullName)
+		</dd>
+
+		<hr />
+		<dt>@Html.LabelFor(m => m.Workers)</dt>
+		<dd>
+			@foreach (var item in Model.Workers)
+			{
+				@Html.DisplayFor(u => item.FullName)<br />
+			}
+		</dd>
+	</dl>
+</div>
+<p>
+	@Html.ActionLink("Назад", "Index") |
+	@Html.ActionLink("Изменить", "Edit", new { id = Model.Id })
+</p>

@@ -1,0 +1,33 @@
+﻿@model SIT.Models.ApplicationUser
+
+@{
+	ViewBag.Title = "Details";
+}
+
+<h2>Подробно</h2>
+
+<div>
+	<h4>Сотрудник</h4>
+	<hr />
+	<dl class="dl-horizontal">
+		<dt>@Html.DisplayNameFor(model => model.FullName)</dt>
+		<dd>@Html.DisplayFor(model => model.FullName)</dd>
+
+		<dt>@Html.DisplayNameFor(model => model.TabNo)</dt>
+		<dd>@Html.DisplayFor(model => model.TabNo)</dd>
+
+		<dt>@Html.DisplayNameFor(model => model.Email)</dt>
+		<dd>@Html.DisplayFor(model => model.Email)</dd>
+
+		<dt>Сот.</dt>
+		<dd>@Html.DisplayFor(model => model.PhoneNumber)</dd>
+
+		<dt>@Html.DisplayNameFor(model => model.Section.Name)</dt>
+		<dd>@Html.DisplayFor(model => model.Section.Name)</dd>
+	</dl>
+</div>
+<hr />
+<p>
+	@Html.ActionLink("Назад", "Index") | 
+	@Html.ActionLink("Изменить", "Edit", new { id = Model.Id })
+</p>

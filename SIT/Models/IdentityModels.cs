@@ -1,6 +1,8 @@
-﻿using System.Data.Entity;
+﻿using System.ComponentModel.DataAnnotations;
+using System.Data.Entity;
 using System.Security.Claims;
 using System.Threading.Tasks;
+using System.Web.Mvc;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.EntityFramework;
 
@@ -12,7 +14,16 @@ namespace SIT.Models
 		public string Name { get; set; }
 		public string Surname { get; set; }
 		public string Patronic { get; set; }
+
+		[Display(Name = "Таб. №")]
 		public string TabNo { get; set; }
+
+		[Display(Name = "Бюро")]
+		public int? SectionId { get; set; }
+		public virtual Section Section { get; set; }
+
+		[Display(Name = "Ф.И.О.")]
+		public string FullName { get { return $"{Surname} {Name} {Patronic}"; } }
 
 		public async Task<ClaimsIdentity> GenerateUserIdentityAsync(UserManager<ApplicationUser> manager)
 		{
@@ -21,10 +32,14 @@ namespace SIT.Models
 			// Здесь добавьте утверждения пользователя
 			return userIdentity;
 		}
+
+
 	}
 
 	public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
 	{
+		public virtual DbSet<Section> Sections { get; set; }
+
 		public ApplicationDbContext()
 			: base("DefaultConnection", throwIfV1Schema: false)
 		{

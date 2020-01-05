@@ -7,13 +7,13 @@ namespace SIT.Migrations
     using System.Resources;
     
     [GeneratedCode("EntityFramework.Migrations", "6.2.0-61023")]
-    public sealed partial class user_principal_fields : IMigrationMetadata
+    public sealed partial class _89 : IMigrationMetadata
     {
-        private readonly ResourceManager Resources = new ResourceManager(typeof(user_principal_fields));
+        private readonly ResourceManager Resources = new ResourceManager(typeof(_89));
         
         string IMigrationMetadata.Id
         {
-            get { return "202001011430455_user_principal_fields"; }
+            get { return "202001041820598_89"; }
         }
         
         string IMigrationMetadata.Source
