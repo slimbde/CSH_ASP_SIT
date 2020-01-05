@@ -175,54 +175,6 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
-    <Compile Include="Migrations\202001040737449_1.cs" />
-    <Compile Include="Migrations\202001040737449_1.Designer.cs">
-      <DependentUpon>202001040737449_1.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\202001040745187_2.cs" />
-    <Compile Include="Migrations\202001040745187_2.Designer.cs">
-      <DependentUpon>202001040745187_2.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\202001040826178_3.cs" />
-    <Compile Include="Migrations\202001040826178_3.Designer.cs">
-      <DependentUpon>202001040826178_3.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\202001040828504_4.cs" />
-    <Compile Include="Migrations\202001040828504_4.Designer.cs">
-      <DependentUpon>202001040828504_4.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\202001040834423_5.cs" />
-    <Compile Include="Migrations\202001040834423_5.Designer.cs">
-      <DependentUpon>202001040834423_5.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\202001040843595_SectionUsers - SectionWorkers.cs" />
-    <Compile Include="Migrations\202001040843595_SectionUsers - SectionWorkers.Designer.cs">
-      <DependentUpon>202001040843595_SectionUsers - SectionWorkers.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\202001040847377_sdfsd.cs" />
-    <Compile Include="Migrations\202001040847377_sdfsd.Designer.cs">
-      <DependentUpon>202001040847377_sdfsd.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\202001040848567_sdfs.cs" />
-    <Compile Include="Migrations\202001040848567_sdfs.Designer.cs">
-      <DependentUpon>202001040848567_sdfs.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\202001040853312_122.cs" />
-    <Compile Include="Migrations\202001040853312_122.Designer.cs">
-      <DependentUpon>202001040853312_122.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\202001040854321_123.cs" />
-    <Compile Include="Migrations\202001040854321_123.Designer.cs">
-      <DependentUpon>202001040854321_123.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\202001041409120_115.cs" />
-    <Compile Include="Migrations\202001041409120_115.Designer.cs">
-      <DependentUpon>202001041409120_115.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\202001041651514_119.cs" />
-    <Compile Include="Migrations\202001041651514_119.Designer.cs">
-      <DependentUpon>202001041651514_119.cs</DependentUpon>
-    </Compile>
     <Compile Include="Migrations\202001041820598_89.cs" />
     <Compile Include="Migrations\202001041820598_89.Designer.cs">
       <DependentUpon>202001041820598_89.cs</DependentUpon>
@@ -231,11 +183,17 @@
     <Compile Include="Migrations\202001041843171_88.Designer.cs">
       <DependentUpon>202001041843171_88.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\202001050923023_add vacations.cs" />
+    <Compile Include="Migrations\202001050923023_add vacations.Designer.cs">
+      <DependentUpon>202001050923023_add vacations.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\IdentityModels.cs" />
     <Compile Include="Models\ManageViewModels.cs" />
+    <Compile Include="Models\MonthWeight.cs" />
     <Compile Include="Models\Section.cs" />
+    <Compile Include="Models\Vacation.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Startup.cs" />
   </ItemGroup>
@@ -328,47 +286,14 @@
     <Content Include="Scripts\jquery-3.4.1.min.map" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Migrations\202001040737449_1.resx">
-      <DependentUpon>202001040737449_1.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\202001040745187_2.resx">
-      <DependentUpon>202001040745187_2.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\202001040826178_3.resx">
-      <DependentUpon>202001040826178_3.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\202001040828504_4.resx">
-      <DependentUpon>202001040828504_4.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\202001040834423_5.resx">
-      <DependentUpon>202001040834423_5.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\202001040843595_SectionUsers - SectionWorkers.resx">
-      <DependentUpon>202001040843595_SectionUsers - SectionWorkers.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\202001040847377_sdfsd.resx">
-      <DependentUpon>202001040847377_sdfsd.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\202001040848567_sdfs.resx">
-      <DependentUpon>202001040848567_sdfs.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\202001040853312_122.resx">
-      <DependentUpon>202001040853312_122.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\202001040854321_123.resx">
-      <DependentUpon>202001040854321_123.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\202001041409120_115.resx">
-      <DependentUpon>202001041409120_115.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\202001041651514_119.resx">
-      <DependentUpon>202001041651514_119.cs</DependentUpon>
-    </EmbeddedResource>
     <EmbeddedResource Include="Migrations\202001041820598_89.resx">
       <DependentUpon>202001041820598_89.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\202001041843171_88.resx">
       <DependentUpon>202001041843171_88.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202001050923023_add vacations.resx">
+      <DependentUpon>202001050923023_add vacations.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

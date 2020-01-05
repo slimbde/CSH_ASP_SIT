@@ -7,13 +7,13 @@ namespace SIT.Migrations
     using System.Resources;
     
     [GeneratedCode("EntityFramework.Migrations", "6.2.0-61023")]
-    public sealed partial class sdfs : IMigrationMetadata
+    public sealed partial class addvacations : IMigrationMetadata
     {
-        private readonly ResourceManager Resources = new ResourceManager(typeof(sdfs));
+        private readonly ResourceManager Resources = new ResourceManager(typeof(addvacations));
         
         string IMigrationMetadata.Id
         {
-            get { return "202001040848567_sdfs"; }
+            get { return "202001050923023_add vacations"; }
         }
         
         string IMigrationMetadata.Source

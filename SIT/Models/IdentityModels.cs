@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Data.Entity;
 using System.Security.Claims;
 using System.Threading.Tasks;
@@ -18,12 +19,23 @@ namespace SIT.Models
 		[Display(Name = "Таб. №")]
 		public string TabNo { get; set; }
 
+		[Display(Name = "Ф.И.О.")]
+		public string FullName { get { return $"{Surname} {Name} {Patronic}"; } }
+
+		[Display(Name = "Рейтинг отпуска")]
+		public double? VacationRating { get; set; }
+
+		[Display(Name = "Рейтинг субботника")]
+		public double? CleaningRating { get; set; }
+
+
 		[Display(Name = "Бюро")]
 		public int? SectionId { get; set; }
 		public virtual Section Section { get; set; }
 
-		[Display(Name = "Ф.И.О.")]
-		public string FullName { get { return $"{Surname} {Name} {Patronic}"; } }
+
+		public virtual ICollection<Vacation> Vacations { get; set; }
+
 
 		public async Task<ClaimsIdentity> GenerateUserIdentityAsync(UserManager<ApplicationUser> manager)
 		{
@@ -32,13 +44,17 @@ namespace SIT.Models
 			// Здесь добавьте утверждения пользователя
 			return userIdentity;
 		}
-
-
+		public ApplicationUser()
+		{
+			Vacations = new List<Vacation>();
+		}
 	}
 
 	public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
 	{
 		public virtual DbSet<Section> Sections { get; set; }
+		public virtual DbSet<MonthWeight> MonthWeights { get; set; }
+
 
 		public ApplicationDbContext()
 			: base("DefaultConnection", throwIfV1Schema: false)

@@ -16,6 +16,11 @@
 			width: 100%;
 			table-layout: fixed;
 		}
+
+	::-webkit-scrollbar {
+		width: 0px; /*Remove scrollbar space */
+		background: transparent; /* Optional: just make scrollbar invisible */
+	}
 </style>
 
 <h2>Список сотрудников</h2>
@@ -26,7 +31,7 @@
 <table class="table">
 	<thead>
 		<tr>
-			<th width="22.5%">
+			<th width="23%">
 				@Html.DisplayNameFor(model => model.FullName)
 			</th>
 			<th width="15%">
