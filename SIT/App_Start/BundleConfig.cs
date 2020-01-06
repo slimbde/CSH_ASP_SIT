@@ -11,6 +11,9 @@ namespace SIT
 			bundles.Add(new ScriptBundle("~/bundles/jquery").Include(
 						"~/Scripts/jquery-{version}.js"));
 
+			bundles.Add(new ScriptBundle("~/bundles/jquerymin").Include(
+						"~/Scripts/jquery-3.4.1.min.js"));
+
 			bundles.Add(new ScriptBundle("~/bundles/jqueryval").Include(
 						"~/Scripts/jquery.validate*"));
 
@@ -18,16 +21,22 @@ namespace SIT
 				.Include("~/Scripts/my.js"));
 			//.Include("~/Scripts/particle-wave.js"));
 
-			// Используйте версию Modernizr для разработчиков, чтобы учиться работать. Когда вы будете готовы перейти к работе,
-			// готово к выпуску, используйте средство сборки по адресу https://modernizr.com, чтобы выбрать только необходимые тесты.
-			bundles.Add(new ScriptBundle("~/bundles/modernizr").Include(
-						"~/Scripts/modernizr-*"));
+			//// Используйте версию Modernizr для разработчиков, чтобы учиться работать. Когда вы будете готовы перейти к работе,
+			//// готово к выпуску, используйте средство сборки по адресу https://modernizr.com, чтобы выбрать только необходимые тесты.
+			//bundles.Add(new ScriptBundle("~/bundles/modernizr").Include(
+			//			"~/Scripts/modernizr-*"));
 
 			bundles.Add(new ScriptBundle("~/bundles/bootstrap").Include(
-					  "~/Scripts/bootstrap.js"));
+					  "~/Scripts/bootstrap.min.js"));
+
+			bundles.Add(new ScriptBundle("~/bundles/datetimepicker").Include(
+					  "~/Scripts/bootstrap-datetimepicker.js"));
+
+			bundles.Add(new ScriptBundle("~/bundles/moment")
+				.Include("~/Scripts/moment-with-locales.min.js"));
 
 			bundles.Add(new StyleBundle("~/Content/css").Include(
-					  "~/Content/bootstrap.css",
+					  "~/Content/bootstrap*",
 					  "~/Content/site.css"));
 		}
 	}

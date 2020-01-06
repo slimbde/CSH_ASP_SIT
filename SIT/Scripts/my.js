@@ -4,27 +4,13 @@ toggle();
 
 
 function toggle() {
-    $('#menuTabs').children('li').each(function () { $(this).removeClass('active') })
+    //$('#menuTabs').children('li').each(function () { $(this).removeClass('active') })
 
     page = window.location.pathname.split('/')[1];
-    idx = 0;
-    switch (page) {
-        case 'Units':
-            idx = 0;
-            break;
-        case 'Sections':
-            idx = 1;
-            break;
-        case 'Staff':
-            idx = 2;
-            break;
-        case 'Home':
-            if (window.location.pathname.split('/')[2] == "Help")
-                idx = 3;
-            break;
-        default:
-            return;
-            break;
-    }
-    $('#menuTabs').children('li').get(idx).classList.add('active');
+
+    var extra = window.location.pathname.split('/')[2];
+    if (extra == "Help" || extra == "Register" || extra == "Login")
+        page = extra;
+
+    $('#menu_' + page).addClass('active');
 }

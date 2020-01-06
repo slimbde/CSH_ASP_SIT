@@ -6,7 +6,7 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<title>@ViewBag.Title - My ASP.NET Application</title>
 	@Styles.Render("~/Content/css")
-	@Scripts.Render("~/bundles/modernizr")
+	@*@Scripts.Render("~/bundles/modernizr")*@
 
 </head>
 <body>
@@ -18,14 +18,20 @@
 					<span class="icon-bar"></span>
 					<span class="icon-bar"></span>
 				</button>
-				@Html.ActionLink("СИТ Персонал", "Index", "Home", new { area = "" }, new { @class = "navbar-brand" })
+				@Html.ActionLink("СИТ Персонал", "Index", "Home", new { area = "" }, new { @class = "navbar-brand", @id = "menu_Main" })
 			</div>
 			<div class="collapse navbar-collapse">
 				<ul class="nav navbar-nav" id="menuTabs">
-					<li><a href="~/Units/Index" style="color:yellowgreen;" onmouseover="this.style.color = 'chartreuse';" onmouseout="this.style.color = 'yellowgreen';">Отделы</a></li>
-					<li><a href="~/Sections/Index" style="color:darkgoldenrod;" onmouseover="this.style.color = '#f5b820';" onmouseout="this.style.color = 'darkgoldenrod';">Бюро</a></li>
-					<li><a href="~/Staff/Index" style="color:darkgoldenrod;" onmouseover="this.style.color = '#f5b820';" onmouseout="this.style.color = 'darkgoldenrod';">Сотрудники</a></li>
-					<li>@Html.ActionLink("Помощь", "Help", "Home")</li>
+					@if (User.IsInRole("manager") || User.IsInRole("admin"))
+					{
+						<li id="menu_Units"><a href="~/Units/Index" style="color:yellowgreen;" onmouseover="this.style.color = 'chartreuse';" onmouseout="this.style.color = 'yellowgreen';">Отделы</a></li>
+					}
+					@if (User.IsInRole("manager") || User.IsInRole("chief") || User.IsInRole("admin"))
+					{
+						<li id="menu_Sections"><a href="~/Sections/Index" style="color:darkgoldenrod;" onmouseover="this.style.color = '#f5b820';" onmouseout="this.style.color = 'darkgoldenrod';">Бюро</a></li>
+						<li id="menu_Staff"><a href="~/Staff/Index" style="color:darkgoldenrod;" onmouseover="this.style.color = '#f5b820';" onmouseout="this.style.color = 'darkgoldenrod';">Сотрудники</a></li>
+					}
+					<li id="menu_Help">@Html.ActionLink("Помощь", "Help", "Home")</li>
 				</ul>
 				@Html.Partial("_LoginPartial")
 			</div>
@@ -36,11 +42,14 @@
 		@RenderBody()
 		<hr />
 		<footer>
-			<p class="text-right">&copy; @DateTime.Now.Year - Служба информационных технологий</p>
+			<p>&copy; @DateTime.Now.Year - Служба информационных технологий</p>
 		</footer>
 	</div>
-	@Scripts.Render("~/bundles/jquery")
+	@*@Scripts.Render("~/bundles/jquery")*@
+	@Scripts.Render("~/bundles/jquerymin")
+	@Scripts.Render("~/bundles/moment")
 	@Scripts.Render("~/bundles/bootstrap")
+	@Scripts.Render("~/bundles/datetimepicker")
 	@Scripts.Render("~/bundles/myScripts")
 	@RenderSection("scripts", required: false)
 </body>

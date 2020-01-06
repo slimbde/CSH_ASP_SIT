@@ -1,4 +1,6 @@
-﻿using SIT.Models;
+﻿using Microsoft.AspNet.Identity;
+using Microsoft.AspNet.Identity.EntityFramework;
+using SIT.Models;
 using System;
 using System.Collections.Generic;
 using System.Data.Entity;
@@ -16,6 +18,11 @@ namespace SIT.Controllers
 
 		public ActionResult Index()
 		{
+			//// костыль добавления ролей пользователям
+			//var user = db.Users.FirstOrDefault(u => u.Surname == "Теличко");
+			//var userManager = new ApplicationUserManager(new UserStore<ApplicationUser>(db));
+			//userManager.AddToRole(user.Id, "admin");
+
 			return View();
 		}
 

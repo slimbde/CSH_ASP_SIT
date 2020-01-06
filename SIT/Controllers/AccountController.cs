@@ -21,6 +21,7 @@ namespace SIT.Controllers
 
 		public AccountController()
 		{
+			
 		}
 
 		public AccountController(ApplicationUserManager userManager, ApplicationSignInManager signInManager)

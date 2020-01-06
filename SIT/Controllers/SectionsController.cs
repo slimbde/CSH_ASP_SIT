@@ -11,6 +11,7 @@ using SIT.Models;
 
 namespace SIT.Controllers
 {
+	[Authorize(Roles = "manager, admin, chief")]
 	public class SectionsController : Controller
 	{
 		private ApplicationDbContext db = new ApplicationDbContext();
