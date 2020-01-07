@@ -16,29 +16,82 @@ namespace SIT.Controllers
 		private ApplicationDbContext db = new ApplicationDbContext();
 
 		// GET: Vacations
-		public async Task<ActionResult> Index()
+		public ActionResult Index()
 		{
-			return View(await db.Vacations.ToListAsync());
+			return View(db.Vacations.Where(v => v.Year == 2019).OrderBy(v => v.Usr.Surname).ThenBy(v => v.Month).Include(v => v.Usr).ToList());
 		}
 
-		// GET: Vacations/Details/5
-		public async Task<ActionResult> Details(int? id)
+		[Authorize(Roles = "admin, manager, chief")]
+		public ActionResult Review(int? unit, string UsrId, string Year, string Month)
 		{
-			if (id == null)
+			var vacations = db.Vacations.Include(u => u.Usr);
+			var units = new List<Unit> { new Unit { Name = "-- все --" } };
+			units.AddRange(db.Vacations.Select(v => v.Usr.Section.Unit).Distinct().ToList());
+			units[1] = new Unit { Name = "руководители", Id = 3 };
+			switch (unit)
 			{
-				return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+				case 3: // managers
+					vacations = vacations.Where(v => v.Usr.SectionId == null);
+					break;
+				case 0: // all of them
+				case null:
+					break;
+				default:
+					vacations = vacations.Where(v => v.Usr.Section.UnitId == unit);
+					break;
 			}
-			Vacation vacation = await db.Vacations.FindAsync(id);
-			if (vacation == null)
+
+			var users = new List<ApplicationUser> { new ApplicationUser { Id = "-- все --", Surname = "-- все --" } };
+			users.AddRange(db.Users.OrderBy(u => u.Surname).ToList());
+			if (!string.IsNullOrEmpty(UsrId) && UsrId != "-- все --")
 			{
-				return HttpNotFound();
+				vacations = vacations.Where(v => v.UsrId == UsrId);
 			}
-			return View(vacation);
+
+
+			var years = vacations.Select(v => v.Year).Distinct().ToList();
+			var strYears = new List<string> { "-- все --" };
+			foreach (var item in years)
+			{
+				strYears.Add(item.ToString());
+			}
+			if (!string.IsNullOrEmpty(Year) && Year != "-- все --")
+			{
+				int year = Convert.ToInt32(Year);
+				vacations = vacations.Where(v => v.Year == year);
+			}
+
+
+			var months = vacations.Select(v => v.Month).Distinct().ToList();
+			var strMonths = new List<string> { "-- все --" };
+			foreach (var item in months)
+			{
+				strMonths.Add(item.ToString());
+			}
+			if (!string.IsNullOrEmpty(Month) && Month != "-- все --")
+			{
+				int month = Convert.ToInt32(Month);
+				vacations = vacations.Where(v => v.Month == month);
+			}
+
+
+			var vlvm = new VacationListViewModel
+			{
+				Vacations = vacations.OrderBy(v => v.Usr.Surname).ToList(),
+				Units = new SelectList(units, "Id", "Name"),
+				Users = new SelectList(users, "Id", "FullName"),
+				Years = new SelectList(strYears),
+				Months = new SelectList(strMonths),
+			};
+
+			return View(vlvm);
 		}
+
 
 		// GET: Vacations/Create
 		public ActionResult Create()
 		{
+			ViewBag.UserList = new SelectList(db.Users.OrderBy(u => u.Surname), "Id", "FullName");
 			return View();
 		}
 
@@ -47,15 +100,19 @@ namespace SIT.Controllers
 		// сведения см. в статье https://go.microsoft.com/fwlink/?LinkId=317598.
 		[HttpPost]
 		[ValidateAntiForgeryToken]
-		public async Task<ActionResult> Create([Bind(Include = "Id,StartDate,EndDate,Duration")] Vacation vacation)
+		public async Task<ActionResult> Create([Bind(Include = "Id,UsrId,Duration")] Vacation vacation, DateTime date)
 		{
 			if (ModelState.IsValid)
 			{
+				vacation.Year = date.Year;
+				vacation.Month = date.Month;
+
 				db.Vacations.Add(vacation);
 				await db.SaveChangesAsync();
-				return RedirectToAction("Index");
+				return RedirectToAction("Review");
 			}
 
+			ViewBag.UserList = new SelectList(db.Users.OrderBy(u => u.Surname), "Id", "FullName");
 			return View(vacation);
 		}
 
@@ -79,7 +136,7 @@ namespace SIT.Controllers
 		// сведения см. в статье https://go.microsoft.com/fwlink/?LinkId=317598.
 		[HttpPost]
 		[ValidateAntiForgeryToken]
-		public async Task<ActionResult> Edit([Bind(Include = "Id,StartDate,EndDate,Duration")] Vacation vacation)
+		public async Task<ActionResult> Edit([Bind(Include = "Id,UserId,Year,Month,Duration,Score")] Vacation vacation)
 		{
 			if (ModelState.IsValid)
 			{
@@ -102,6 +159,7 @@ namespace SIT.Controllers
 			{
 				return HttpNotFound();
 			}
+			vacation.Usr = db.Users.FirstOrDefault(u => u.Id == vacation.UsrId);
 			return View(vacation);
 		}
 
@@ -113,7 +171,7 @@ namespace SIT.Controllers
 			Vacation vacation = await db.Vacations.FindAsync(id);
 			db.Vacations.Remove(vacation);
 			await db.SaveChangesAsync();
-			return RedirectToAction("Index");
+			return RedirectToAction("Review");
 		}
 
 		protected override void Dispose(bool disposing)

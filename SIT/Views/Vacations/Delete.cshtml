@@ -1,48 +1,59 @@
 ﻿@model SIT.Models.Vacation
 
 @{
-    ViewBag.Title = "Delete";
+	ViewBag.Title = "Delete";
 }
 
-<h2>Delete</h2>
+<h2>Вы действительно хотите удалить?</h2>
 
-<h3>Are you sure you want to delete this?</h3>
 <div>
-    <h4>Vacation</h4>
-    <hr />
-    <dl class="dl-horizontal">
-        <dt>
-            @Html.DisplayNameFor(model => model.StartDate)
-        </dt>
+	<h4>Отпуск</h4>
+	<hr />
+	<dl class="dl-horizontal">
+		<dt>
+			@Html.DisplayNameFor(model => model.UsrId)
+		</dt>
 
-        <dd>
-            @Html.DisplayFor(model => model.StartDate)
-        </dd>
+		<dd>
+			@Html.DisplayFor(model => model.Usr.FullName)
+		</dd>
 
-        <dt>
-            @Html.DisplayNameFor(model => model.EndDate)
-        </dt>
+		<dt>
+			@Html.DisplayNameFor(model => model.Year)
+		</dt>
 
-        <dd>
-            @Html.DisplayFor(model => model.EndDate)
-        </dd>
+		<dd>
+			@Html.DisplayFor(model => model.Year)
+		</dd>
 
-        <dt>
-            @Html.DisplayNameFor(model => model.Duration)
-        </dt>
+		<dt>
+			@Html.DisplayNameFor(model => model.Month)
+		</dt>
 
-        <dd>
-            @Html.DisplayFor(model => model.Duration)
-        </dd>
+		<dd>
+			@Html.DisplayFor(model => model.Month)
+		</dd>
 
-    </dl>
+		<dt>
+			@Html.DisplayNameFor(model => model.Duration)
+		</dt>
 
-    @using (Html.BeginForm()) {
-        @Html.AntiForgeryToken()
+		<dd>
+			@Html.DisplayFor(model => model.Duration)
+		</dd>
 
-        <div class="form-actions no-color">
-            <input type="submit" value="Delete" class="btn btn-default" /> |
-            @Html.ActionLink("Back to List", "Index")
-        </div>
-    }
+		<hr />
+		<dt></dt>
+		<dd>
+			@using (Html.BeginForm())
+			{
+				@Html.AntiForgeryToken()
+
+				<div class="form-actions no-color">
+					<input type="submit" value="Удалить" class="btn btn-danger" />
+				</div>
+			}
+		</dd>
+	</dl>
+	@Html.ActionLink("Назад", "Review")
 </div>

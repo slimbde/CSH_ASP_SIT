@@ -48,7 +48,8 @@ namespace SIT.Models
 		public virtual DbSet<Unit> Units { get; set; }
 		public virtual DbSet<Section> Sections { get; set; }
 		public virtual DbSet<MonthWeight> MonthWeights { get; set; }
-		public virtual DbSet<UserVacation> UserVacations { get; set; }
+		public virtual DbSet<Vacation> Vacations { get; set; }
+
 
 		public ApplicationDbContext()
 			: base("DefaultConnection", throwIfV1Schema: false)
@@ -58,7 +59,5 @@ namespace SIT.Models
 		{
 			return new ApplicationDbContext();
 		}
-
-		public System.Data.Entity.DbSet<SIT.Models.Vacation> Vacations { get; set; }
 	}
 }

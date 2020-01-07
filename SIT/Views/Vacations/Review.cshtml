@@ -1,0 +1,89 @@
+﻿@model VacationListViewModel
+@using SIT.Models
+@{
+	ViewBag.Title = "Review";
+}
+
+<h2>Отпуска детально</h2>
+
+<p>
+	@Html.ActionLink("Добавить отпуск", "Create")
+</p>
+
+<form method="get" style="padding-left:6px;">
+	<div class="form-inline">
+		<label class="control-label text-muted">Отдел&nbsp;</label>
+		@Html.DropDownList("unit", Model.Units as SelectList, htmlAttributes: new { @class = "form-control" })
+
+		<label class="control-label text-muted">&nbsp;Сотрудник&nbsp;</label>
+		@Html.DropDownList("UsrId", Model.Users as SelectList, htmlAttributes: new { @class = "form-control" })
+
+		<label class="control-label text-muted">&nbsp;Год&nbsp;</label>
+		@Html.DropDownList("Year", Model.Years as SelectList, htmlAttributes: new { @class = "form-control" })
+
+		<label class="control-label text-muted">&nbsp;Месяц&nbsp;</label>
+		@Html.DropDownList("Month", Model.Months as SelectList, htmlAttributes: new { @class = "form-control" })
+
+		<input type="submit" value="Применить" class="btn btn-default col-lg-offset-1" />
+	</div>
+</form>
+
+
+<style>
+	table tbody {
+		display: block;
+		max-height: 600px;
+		overflow-y: scroll;
+	}
+
+		table thead, table tbody tr {
+			display: table;
+			width: 100%;
+			table-layout: fixed;
+		}
+
+	::-webkit-scrollbar {
+		width: 0px; /*Remove scrollbar space */
+		background: transparent; /* Optional: just make scrollbar invisible */
+	}
+</style>
+
+<br />
+<table class="table" border="0">
+	<thead>
+		<tr>
+			<th width="25%">Отдел</th>
+			<th width="30%">Сотрудник</th>
+			<th width="7%">Год</th>
+			<th width="7%">Месяц</th>
+			<th width="15%">Продолжительность</th>
+			<th></th>
+		</tr>
+	</thead>
+	<tbody>
+		@foreach (var item in Model.Vacations)
+		{
+			<tr>
+				<td width="25%">
+					@Html.DisplayFor(modelItem => item.Usr.Section.Name)
+				</td>
+				<td width="30%">
+					@Html.DisplayFor(modelItem => item.Usr.FullName)
+				</td>
+				<td width="7%">
+					@Html.DisplayFor(modelItem => item.Year)
+				</td>
+				<td width="7%">
+					@Html.DisplayFor(modelItem => item.Month)
+				</td>
+				<td width="15%">
+					@Html.DisplayFor(modelItem => item.Duration)
+				</td>
+				<td>
+					@Html.ActionLink("Изменить", "Edit", new { id = item.Id }) |
+					@Html.ActionLink("Удалить", "Delete", new { id = item.Id })
+				</td>
+			</tr>
+		}
+	</tbody>
+</table>

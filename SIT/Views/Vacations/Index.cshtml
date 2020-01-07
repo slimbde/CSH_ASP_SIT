@@ -1,46 +1,94 @@
-﻿@model IEnumerable<SIT.Models.Vacation>
-
+﻿@model IEnumerable<Vacation>
+@using SIT.Models
 @{
 	ViewBag.Title = "Index";
+	var monthList = new Dictionary<string, Dictionary<int, int>>(Model.Count());
+	var mdl = Model as List<Vacation>;
+
+	//
+	for (var i = 0; i < mdl.Count; ++i)
+	{
+		if (!monthList.ContainsKey(mdl[i].Usr.FullName))
+		{
+			monthList.Add(mdl[i].Usr.FullName, new Dictionary<int, int>(12));
+		}
+
+		monthList[mdl[i].Usr.FullName].Add(mdl[i].Month, mdl[i].Duration);
+	}
 }
 
-<h2>Index</h2>
+<h2>Отпуска @(DateTime.Now.Year)</h2>
 
 <p>
-	@Html.ActionLink("Create New", "Create")
+	@Html.ActionLink("To Review", "Review")
 </p>
-<table class="table">
-	<tr>
-		<th>
-			@Html.DisplayNameFor(model => model.StartDate)
-		</th>
-		<th>
-			@Html.DisplayNameFor(model => model.EndDate)
-		</th>
-		<th>
-			@Html.DisplayNameFor(model => model.Duration)
-		</th>
-		<th></th>
-	</tr>
 
-	@foreach (var item in Model)
-	{
-		<tr>
-			<td>
-				@Html.DisplayFor(modelItem => item.StartDate)
-			</td>
-			<td>
-				@Html.DisplayFor(modelItem => item.EndDate)
-			</td>
-			<td>
-				@Html.DisplayFor(modelItem => item.Duration)
-			</td>
-			<td>
-				@Html.ActionLink("Edit", "Edit", new { id = item.Id }) |
-				@Html.ActionLink("Details", "Details", new { id = item.Id }) |
-				@Html.ActionLink("Delete", "Delete", new { id = item.Id })
-			</td>
-		</tr>
+
+<style>
+	table tbody {
+		display: block;
+		max-height: 600px;
+		overflow-y: scroll;
 	}
 
-</table>
+		table thead, table tbody tr {
+			display: table;
+			width: 100%;
+			table-layout: fixed;
+		}
+
+	::-webkit-scrollbar {
+		width: 0px; /*Remove scrollbar space */
+		background: transparent; /* Optional: just make scrollbar invisible */
+	}
+</style>
+
+<div class="col-md-10">
+	<table class="table" style="margin-bottom:0;">
+		<thead>
+			<tr>
+				<th width="5%">№</th>
+				<th width="35%" style="text-align:right">Месяц:&nbsp;</th>
+				@for (var i = 1; i < 13; ++i)
+				{
+					<th width="5%" style="text-align:center; border-left:0px solid lightgray;">@i</th>
+				}
+			</tr>
+		</thead>
+		<tbody>
+			@foreach (var item in monthList)
+			{
+				<tr>
+					<td width="5%">R</td>
+					<td width="35%">@Html.DisplayFor(it => item.Key)</td>
+
+					@for (int j = 1; j <= 12; ++j)
+					{
+						<td style="border-left:1px solid lightgray; text-align:center;" width="5%">
+							@if (item.Value.ContainsKey(j))
+							{
+								@item.Value[j]
+							}
+						</td>
+					}
+				</tr>
+			}
+		</tbody>
+	</table>
+
+	<table class="table">
+		<tbody>
+			<tr>
+				<td width="5%"></td>
+				<td width="35%"></td>
+
+				@for (int j = 1; j <= 12; ++j)
+				{
+					var duration = monthList.Count * 28 - Model.Where(m => m.Month == j).Sum(m => m.Duration);
+					<td style="background:@(duration>=0?"#ebf5d6":"#fad1d1"); border-left:1px solid lightgray; text-align:center;" width="5%">@(duration)</td>
+				}
+			</tr>
+		</tbody>
+	</table>
+</div>
+<div class="row"></div>
