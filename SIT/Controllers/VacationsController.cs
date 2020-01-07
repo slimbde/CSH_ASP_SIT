@@ -11,19 +11,45 @@ using SIT.Models;
 
 namespace SIT.Controllers
 {
+	[Authorize]
 	public class VacationsController : Controller
 	{
 		private ApplicationDbContext db = new ApplicationDbContext();
 
 		// GET: Vacations
-		public ActionResult Index()
+		public async Task<ActionResult> Index(string message)
 		{
-			return View(db.Vacations.Where(v => v.Year == 2019).OrderBy(v => v.Usr.Surname).ThenBy(v => v.Month).Include(v => v.Usr).ToList());
+			ViewBag.msg = message;
+
+			var year = 2019;
+			var unit = 0;
+
+			IEnumerable<Vacation> vacations = null;
+			if (User.IsInRole("chief"))
+			{
+				var chiefName = User.Identity.Name;
+				unit = db.Sections.FirstOrDefault(s => s.Chief.UserName == chiefName).Unit.Id;
+				vacations = db.Vacations.Where(v => v.Usr.Section.UnitId == unit).Where(v => v.Year == year).OrderBy(v => v.Usr.Surname).ThenBy(v => v.Month).Include(v => v.Usr);
+			}
+			else if (User.IsInRole("manager"))
+			{
+				var chiefName = User.Identity.Name;
+				unit = db.Sections.FirstOrDefault(s => s.Chief.UserName == chiefName).Unit.Id;
+				vacations = db.Vacations.Where(v => v.Usr.Section.UnitId == unit).Where(v => v.Year == year).OrderBy(v => v.Usr.Surname).ThenBy(v => v.Month).Include(v => v.Usr);
+				//TODO:;
+			}
+			return View(vacations);
 		}
 
 		[Authorize(Roles = "admin, manager, chief")]
 		public ActionResult Review(int? unit, string UsrId, string Year, string Month)
 		{
+			if (User.IsInRole("chief"))
+			{
+				var chiefName = User.Identity.Name;
+				unit = db.Sections.FirstOrDefault(s => s.Chief.UserName == chiefName).Unit.Id;
+			}
+
 			var vacations = db.Vacations.Include(u => u.Usr);
 			var units = new List<Unit> { new Unit { Name = "-- все --" } };
 			units.AddRange(db.Vacations.Select(v => v.Usr.Section.Unit).Distinct().ToList());
@@ -42,7 +68,11 @@ namespace SIT.Controllers
 			}
 
 			var users = new List<ApplicationUser> { new ApplicationUser { Id = "-- все --", Surname = "-- все --" } };
-			users.AddRange(db.Users.OrderBy(u => u.Surname).ToList());
+			var qUsers = db.Users.AsQueryable();
+			if (User.IsInRole("chief"))
+				qUsers = qUsers.Where(u => u.Section.UnitId == unit);
+
+			users.AddRange(qUsers.OrderBy(u => u.Surname).ToList());
 			if (!string.IsNullOrEmpty(UsrId) && UsrId != "-- все --")
 			{
 				vacations = vacations.Where(v => v.UsrId == UsrId);
@@ -123,7 +153,7 @@ namespace SIT.Controllers
 			{
 				return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
 			}
-			Vacation vacation = await db.Vacations.FindAsync(id);
+			var vacation = await db.Vacations.Include(v => v.Usr).FirstOrDefaultAsync(v => v.Id == id);
 			if (vacation == null)
 			{
 				return HttpNotFound();
@@ -136,14 +166,15 @@ namespace SIT.Controllers
 		// сведения см. в статье https://go.microsoft.com/fwlink/?LinkId=317598.
 		[HttpPost]
 		[ValidateAntiForgeryToken]
-		public async Task<ActionResult> Edit([Bind(Include = "Id,UserId,Year,Month,Duration,Score")] Vacation vacation)
+		public async Task<ActionResult> Edit([Bind(Include = "Id,UsrId,Year,Month,Duration")] Vacation vacation)
 		{
 			if (ModelState.IsValid)
 			{
 				db.Entry(vacation).State = EntityState.Modified;
 				await db.SaveChangesAsync();
-				return RedirectToAction("Index");
+				return RedirectToAction("Review");
 			}
+			vacation = await db.Vacations.Include(v => v.Usr).FirstOrDefaultAsync(v => v.Id == vacation.Id);
 			return View(vacation);
 		}
 

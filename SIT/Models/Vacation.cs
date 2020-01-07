@@ -11,7 +11,6 @@ namespace SIT.Models
 	{
 		public int Id { get; set; }
 
-		[Required]
 		[Display(Name = "Сотрудник")]
 		public string UsrId { get; set; }
 		public ApplicationUser Usr { get; set; }

@@ -4,31 +4,6 @@
 	ViewBag.Title = "Review";
 }
 
-<h2>Отпуска детально</h2>
-
-<p>
-	@Html.ActionLink("Добавить отпуск", "Create")
-</p>
-
-<form method="get" style="padding-left:6px;">
-	<div class="form-inline">
-		<label class="control-label text-muted">Отдел&nbsp;</label>
-		@Html.DropDownList("unit", Model.Units as SelectList, htmlAttributes: new { @class = "form-control" })
-
-		<label class="control-label text-muted">&nbsp;Сотрудник&nbsp;</label>
-		@Html.DropDownList("UsrId", Model.Users as SelectList, htmlAttributes: new { @class = "form-control" })
-
-		<label class="control-label text-muted">&nbsp;Год&nbsp;</label>
-		@Html.DropDownList("Year", Model.Years as SelectList, htmlAttributes: new { @class = "form-control" })
-
-		<label class="control-label text-muted">&nbsp;Месяц&nbsp;</label>
-		@Html.DropDownList("Month", Model.Months as SelectList, htmlAttributes: new { @class = "form-control" })
-
-		<input type="submit" value="Применить" class="btn btn-default col-lg-offset-1" />
-	</div>
-</form>
-
-
 <style>
 	table tbody {
 		display: block;
@@ -46,7 +21,43 @@
 		width: 0px; /*Remove scrollbar space */
 		background: transparent; /* Optional: just make scrollbar invisible */
 	}
+
+	#menu_Vacations a {
+		color: darkgoldenrod;
+	}
+
+		#menu_Vacations a:hover {
+			color: #f5b820;
+		}
 </style>
+
+<h2>Редактирование отпусков</h2>
+
+<p>
+	@Html.ActionLink("Назад", "Index")
+	@Html.ActionLink("Добавить отпуск", "Create", null, new { @class = "pull-right" })
+</p>
+
+<form method="get" style="padding-left:6px;">
+	<div class="form-inline">
+		@if (!User.IsInRole("chief"))
+		{
+			<label class="control-label text-muted">Отдел&nbsp;</label>
+			@Html.DropDownList("unit", Model.Units as SelectList, htmlAttributes: new { @class = "form-control" })
+		}
+
+		<label class="control-label text-muted">&nbsp;Сотрудник&nbsp;</label>
+		@Html.DropDownList("UsrId", Model.Users as SelectList, htmlAttributes: new { @class = "form-control" })
+
+		<label class="control-label text-muted">&nbsp;Год&nbsp;</label>
+		@Html.DropDownList("Year", Model.Years as SelectList, htmlAttributes: new { @class = "form-control" })
+
+		<label class="control-label text-muted">&nbsp;Месяц&nbsp;</label>
+		@Html.DropDownList("Month", Model.Months as SelectList, htmlAttributes: new { @class = "form-control" })
+
+		<input type="submit" value="Применить" class="btn btn-primary" style="margin-left:10px" />
+	</div>
+</form>
 
 <br />
 <table class="table" border="0">

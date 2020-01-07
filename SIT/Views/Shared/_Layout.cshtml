@@ -31,6 +31,7 @@
 						<li id="menu_Sections"><a href="~/Sections/Index" style="color:darkgoldenrod;" onmouseover="this.style.color = '#f5b820';" onmouseout="this.style.color = 'darkgoldenrod';">Бюро</a></li>
 						<li id="menu_Staff"><a href="~/Staff/Index" style="color:darkgoldenrod;" onmouseover="this.style.color = '#f5b820';" onmouseout="this.style.color = 'darkgoldenrod';">Сотрудники</a></li>
 					}
+					<li id="menu_Vacations">@Html.ActionLink("Отпуска", "Index", "Vacations")</li>
 					<li id="menu_Help">@Html.ActionLink("Помощь", "Help", "Home")</li>
 				</ul>
 				@Html.Partial("_LoginPartial")

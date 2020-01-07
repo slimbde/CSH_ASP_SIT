@@ -5,7 +5,7 @@
 	var monthList = new Dictionary<string, Dictionary<int, int>>(Model.Count());
 	var mdl = Model as List<Vacation>;
 
-	//
+	// консолидация отпусков в сущности по каждому сотруднику
 	for (var i = 0; i < mdl.Count; ++i)
 	{
 		if (!monthList.ContainsKey(mdl[i].Usr.FullName))
@@ -18,11 +18,11 @@
 }
 
 <h2>Отпуска @(DateTime.Now.Year)</h2>
-
-<p>
-	@Html.ActionLink("To Review", "Review")
-</p>
-
+<text class="text-danger">@ViewBag.msg</text>
+@if (User.IsInRole("admin") || @User.IsInRole("manager") || @User.IsInRole("chief"))
+{
+	@Html.ActionLink("Редактировать", "Review", null, new { @style = "color:darkgoldenrod;float:right;" });
+}
 
 <style>
 	table tbody {
@@ -43,52 +43,51 @@
 	}
 </style>
 
-<div class="col-md-10">
-	<table class="table" style="margin-bottom:0;">
-		<thead>
-			<tr>
-				<th width="5%">№</th>
-				<th width="35%" style="text-align:right">Месяц:&nbsp;</th>
-				@for (var i = 1; i < 13; ++i)
-				{
-					<th width="5%" style="text-align:center; border-left:0px solid lightgray;">@i</th>
-				}
-			</tr>
-		</thead>
-		<tbody>
-			@foreach (var item in monthList)
+<table class="table" style="margin-bottom:0;">
+	<thead>
+		<tr>
+			<th width="5%" title="Рейтинговая позиция">R</th>
+			<th width="35%" style="text-align:right">Месяц:&nbsp;</th>
+			@for (var i = 1; i < 13; ++i)
 			{
-				<tr>
-					<td width="5%">R</td>
-					<td width="35%">@Html.DisplayFor(it => item.Key)</td>
-
-					@for (int j = 1; j <= 12; ++j)
-					{
-						<td style="border-left:1px solid lightgray; text-align:center;" width="5%">
-							@if (item.Value.ContainsKey(j))
-							{
-								@item.Value[j]
-							}
-						</td>
-					}
-				</tr>
+				<th width="5%" style="text-align:center; border-left:0px solid lightgray;">@i</th>
 			}
-		</tbody>
-	</table>
-
-	<table class="table">
-		<tbody>
+		</tr>
+	</thead>
+	<tbody>
+		@foreach (var item in monthList)
+		{
+			var surname = item.Key.Split(' ')[0];
 			<tr>
-				<td width="5%"></td>
-				<td width="35%"></td>
+				<td width="5%" style="font-weight:bold">@Model.FirstOrDefault(m => m.Usr.Surname == surname).Usr.VacationRating</td>
+				<td width="35%">@Html.DisplayFor(it => item.Key)</td>
 
 				@for (int j = 1; j <= 12; ++j)
 				{
-					var duration = monthList.Count * 28 - Model.Where(m => m.Month == j).Sum(m => m.Duration);
-					<td style="background:@(duration>=0?"#ebf5d6":"#fad1d1"); border-left:1px solid lightgray; text-align:center;" width="5%">@(duration)</td>
+					<td style="border-left:1px solid lightgray; text-align:center;" width="5%">
+						@if (item.Value.ContainsKey(j))
+						{
+							@item.Value[j]
+						}
+					</td>
 				}
 			</tr>
-		</tbody>
-	</table>
-</div>
-<div class="row"></div>
+		}
+	</tbody>
+</table>
+
+<table class="table">
+	<tbody>
+		<tr>
+			<td width="5%"></td>
+			<td width="35%"></td>
+
+			@for (int j = 1; j <= 12; ++j)
+			{
+				var spent = Model.Where(m => m.Month == j).Sum(m => m.Duration);
+				var duration = monthList.Count * 28 / 12 - spent;
+				<td style="background:@(duration>=0?"#ebf5d6":"#fad1d1"); border-left:1px solid lightgray; text-align:center;" width="5%">@duration</td>
+			}
+		</tr>
+	</tbody>
+</table>

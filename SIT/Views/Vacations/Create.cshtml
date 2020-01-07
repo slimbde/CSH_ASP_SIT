@@ -5,6 +5,16 @@
 	var userList = ViewBag.UserList as SelectList;
 }
 
+<style>
+	#menu_Vacations a {
+		color: darkgoldenrod;
+	}
+
+		#menu_Vacations a:hover {
+			color: #f5b820;
+		}
+</style>
+
 <h2>Создать новый</h2>
 
 
@@ -49,7 +59,7 @@
 }
 
 <div>
-	@Html.ActionLink("Назад", "Index")
+	@Html.ActionLink("Назад", "Review")
 </div>
 
 @section Scripts {
