@@ -261,6 +261,26 @@
     <Compile Include="Migrations\202001071836197_4.Designer.cs">
       <DependentUpon>202001071836197_4.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\202001090636540_alter monthWeights.cs" />
+    <Compile Include="Migrations\202001090636540_alter monthWeights.Designer.cs">
+      <DependentUpon>202001090636540_alter monthWeights.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202001090722397_float score.cs" />
+    <Compile Include="Migrations\202001090722397_float score.Designer.cs">
+      <DependentUpon>202001090722397_float score.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202001090907278_check.cs" />
+    <Compile Include="Migrations\202001090907278_check.Designer.cs">
+      <DependentUpon>202001090907278_check.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202001091353023_voting.cs" />
+    <Compile Include="Migrations\202001091353023_voting.Designer.cs">
+      <DependentUpon>202001091353023_voting.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202001091939516_vacation duration.cs" />
+    <Compile Include="Migrations\202001091939516_vacation duration.Designer.cs">
+      <DependentUpon>202001091939516_vacation duration.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\IdentityModels.cs" />
@@ -269,6 +289,7 @@
     <Compile Include="Models\Section.cs" />
     <Compile Include="Models\Unit.cs" />
     <Compile Include="Models\Vacation.cs" />
+    <Compile Include="Models\VotingEngine.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Startup.cs" />
   </ItemGroup>
@@ -519,6 +540,21 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\202001071836197_4.resx">
       <DependentUpon>202001071836197_4.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202001090636540_alter monthWeights.resx">
+      <DependentUpon>202001090636540_alter monthWeights.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202001090722397_float score.resx">
+      <DependentUpon>202001090722397_float score.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202001090907278_check.resx">
+      <DependentUpon>202001090907278_check.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202001091353023_voting.resx">
+      <DependentUpon>202001091353023_voting.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202001091939516_vacation duration.resx">
+      <DependentUpon>202001091939516_vacation duration.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

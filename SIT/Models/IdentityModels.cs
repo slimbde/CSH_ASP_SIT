@@ -16,14 +16,14 @@ namespace SIT.Models
 		public string Surname { get; set; }
 		public string Patronic { get; set; }
 
+
 		[Display(Name = "Таб. №")]
 		public string TabNo { get; set; }
+
 
 		[Display(Name = "Ф.И.О.")]
 		public string FullName { get { return $"{Surname} {Name} {Patronic}"; } }
 
-		[Display(Name = "Рейтинг отпуска")]
-		public double? VacationRating { get; set; }
 
 		[Display(Name = "Рейтинг субботника")]
 		public double? CleaningRating { get; set; }
@@ -49,6 +49,7 @@ namespace SIT.Models
 		public virtual DbSet<Section> Sections { get; set; }
 		public virtual DbSet<MonthWeight> MonthWeights { get; set; }
 		public virtual DbSet<Vacation> Vacations { get; set; }
+		public virtual DbSet<Voting> Votings { get; set; }
 
 
 		public ApplicationDbContext()

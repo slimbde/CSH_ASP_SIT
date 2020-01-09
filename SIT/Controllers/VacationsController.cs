@@ -16,30 +16,40 @@ namespace SIT.Controllers
 	{
 		private ApplicationDbContext db = new ApplicationDbContext();
 
-		// GET: Vacations
-		public async Task<ActionResult> Index(string message)
+		public ActionResult Index(int unit = 1)
 		{
-			ViewBag.msg = message;
-
-			var year = 2019;
-			var unit = 0;
-
-			IEnumerable<Vacation> vacations = null;
-			if (User.IsInRole("chief"))
+			if (!User.IsInRole("admin"))
 			{
-				var chiefName = User.Identity.Name;
-				unit = db.Sections.FirstOrDefault(s => s.Chief.UserName == chiefName).Unit.Id;
-				vacations = db.Vacations.Where(v => v.Usr.Section.UnitId == unit).Where(v => v.Year == year).OrderBy(v => v.Usr.Surname).ThenBy(v => v.Month).Include(v => v.Usr);
+				try
+				{
+					unit = db.Users.FirstOrDefault(u => u.UserName == User.Identity.Name).Section.Unit.Id;
+				}
+				catch (Exception)
+				{
+					unit = db.Units.FirstOrDefault(u => u.Chief.UserName == User.Identity.Name).Id;
+				}
 			}
-			else if (User.IsInRole("manager"))
-			{
-				var chiefName = User.Identity.Name;
-				unit = db.Sections.FirstOrDefault(s => s.Chief.UserName == chiefName).Unit.Id;
-				vacations = db.Vacations.Where(v => v.Usr.Section.UnitId == unit).Where(v => v.Year == year).OrderBy(v => v.Usr.Surname).ThenBy(v => v.Month).Include(v => v.Usr);
-				//TODO:;
-			}
-			return View(vacations);
+
+			bool voting = VotingEngine.GetVotingStatus(unit);
+			//var year = voting ? DateTime.Now.Year + 1 : DateTime.Now.Year;
+			var year = 2020;
+			var ViewModel = new VacationVotingViewModel(year, User, unit, voting);
+
+			ViewBag.ReturnAction = "Index";
+			return View(ViewModel);
 		}
+
+		/// <summary>
+		/// метод для инициализации голосования
+		/// </summary>
+		[Authorize(Roles = "admin, manager")]
+		public ActionResult InitiateVoting(int unit)
+		{
+			VotingEngine.InitiateVoting(unit);
+
+			return RedirectToAction("Index");
+		}
+
 
 		[Authorize(Roles = "admin, manager, chief")]
 		public ActionResult Review(int? unit, string UsrId, string Year, string Month)
@@ -121,8 +131,27 @@ namespace SIT.Controllers
 		// GET: Vacations/Create
 		public ActionResult Create()
 		{
+			var model = new Vacation { UsrId = db.Users.FirstOrDefault(u => u.UserName == User.Identity.Name).Id, Duration = 14 };
+
+			// когда заходит обычный пользователь для голосования
+			if (!User.IsInRole("admin") && !User.IsInRole("chief") && !User.IsInRole("manager"))
+			{
+				var unit = (int)db.Users.FirstOrDefault(u => u.UserName == User.Identity.Name).Section.UnitId;
+
+				var currentVotingUserName = VotingEngine.GetVotingUserName(unit);
+				if (currentVotingUserName == "not started")
+					return RedirectToAction("Index");
+
+				var requestUserName = db.Users.FirstOrDefault(u => u.UserName == User.Identity.Name).FullName;
+				if (!currentVotingUserName.Equals(requestUserName))
+					return RedirectToAction("Index", new { unit = unit });
+
+				ViewBag.UserList = new SelectList(db.Users.Where(u => u.UserName == User.Identity.Name), "Id", "FullName");
+				return View(model);
+			}
+
 			ViewBag.UserList = new SelectList(db.Users.OrderBy(u => u.Surname), "Id", "FullName");
-			return View();
+			return View(model);
 		}
 
 		// POST: Vacations/Create
@@ -130,16 +159,34 @@ namespace SIT.Controllers
 		// сведения см. в статье https://go.microsoft.com/fwlink/?LinkId=317598.
 		[HttpPost]
 		[ValidateAntiForgeryToken]
-		public async Task<ActionResult> Create([Bind(Include = "Id,UsrId,Duration")] Vacation vacation, DateTime date)
+		public ActionResult Create([Bind(Include = "Id,UsrId,Duration")] Vacation vacation, DateTime date, string returnAction)
 		{
+			// смотрим какие уже заявки есть
+			var votes = db.Vacations.Where(v => v.UsrId == vacation.UsrId && v.Year == date.Year).ToList();
+			var votedDays = 0;
+			if (votes.Count > 0)
+				votedDays = votes.Sum(v => v.Duration);
+
+			// проверяем валидность ввода продолжительности
+			var availableDays = 28 - votedDays;
+			if (vacation.Duration > availableDays)
+				ModelState.AddModelError("Duration", $"Неверно введена продолжительность. Вам доступно: {availableDays} дней");
+
 			if (ModelState.IsValid)
 			{
 				vacation.Year = date.Year;
 				vacation.Month = date.Month;
-
 				db.Vacations.Add(vacation);
-				await db.SaveChangesAsync();
-				return RedirectToAction("Review");
+				db.SaveChanges();
+
+				// если новая сумма достигла предела - выставляем флаг проголосовал
+				if (availableDays == vacation.Duration)
+				{
+					db.Votings.FirstOrDefault(v => v.UsrId == vacation.UsrId).Voted = true;
+					db.SaveChanges();
+				}
+
+				return RedirectToAction(returnAction);
 			}
 
 			ViewBag.UserList = new SelectList(db.Users.OrderBy(u => u.Surname), "Id", "FullName");
@@ -147,6 +194,7 @@ namespace SIT.Controllers
 		}
 
 		// GET: Vacations/Edit/5
+		[Authorize(Roles = "admin, manager, chief")]
 		public async Task<ActionResult> Edit(int? id)
 		{
 			if (id == null)
@@ -166,6 +214,7 @@ namespace SIT.Controllers
 		// сведения см. в статье https://go.microsoft.com/fwlink/?LinkId=317598.
 		[HttpPost]
 		[ValidateAntiForgeryToken]
+		[Authorize(Roles = "admin, manager, chief")]
 		public async Task<ActionResult> Edit([Bind(Include = "Id,UsrId,Year,Month,Duration")] Vacation vacation)
 		{
 			if (ModelState.IsValid)
@@ -179,6 +228,7 @@ namespace SIT.Controllers
 		}
 
 		// GET: Vacations/Delete/5
+		[Authorize(Roles = "admin, manager, chief")]
 		public async Task<ActionResult> Delete(int? id)
 		{
 			if (id == null)
@@ -197,6 +247,7 @@ namespace SIT.Controllers
 		// POST: Vacations/Delete/5
 		[HttpPost, ActionName("Delete")]
 		[ValidateAntiForgeryToken]
+		[Authorize(Roles = "admin, manager, chief")]
 		public async Task<ActionResult> DeleteConfirmed(int id)
 		{
 			Vacation vacation = await db.Vacations.FindAsync(id);

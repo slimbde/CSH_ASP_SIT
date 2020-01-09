@@ -1,27 +1,7 @@
-﻿@model IEnumerable<Vacation>
+﻿@model VacationVotingViewModel
 @using SIT.Models
 @{
 	ViewBag.Title = "Index";
-	var monthList = new Dictionary<string, Dictionary<int, int>>(Model.Count());
-	var mdl = Model as List<Vacation>;
-
-	// консолидация отпусков в сущности по каждому сотруднику
-	for (var i = 0; i < mdl.Count; ++i)
-	{
-		if (!monthList.ContainsKey(mdl[i].Usr.FullName))
-		{
-			monthList.Add(mdl[i].Usr.FullName, new Dictionary<int, int>(12));
-		}
-
-		monthList[mdl[i].Usr.FullName].Add(mdl[i].Month, mdl[i].Duration);
-	}
-}
-
-<h2>Отпуска @(DateTime.Now.Year)</h2>
-<text class="text-danger">@ViewBag.msg</text>
-@if (User.IsInRole("admin") || @User.IsInRole("manager") || @User.IsInRole("chief"))
-{
-	@Html.ActionLink("Редактировать", "Review", null, new { @style = "color:darkgoldenrod;float:right;" });
 }
 
 <style>
@@ -41,33 +21,87 @@
 		width: 0px; /*Remove scrollbar space */
 		background: transparent; /* Optional: just make scrollbar invisible */
 	}
+
+	a.disabled {
+		color: gray;
+		pointer-events: none;
+	}
+
+	a.manager {
+		color: darkgoldenrod;
+	}
 </style>
+
+<div style="display:inline-block;margin:20px 0 10px;width:100%;">
+	<text style="font-size:xx-large;">Отпуска @Model.Year</text>
+	@if (User.IsInRole("admin"))
+	{
+		using (Html.BeginForm("Index", "Vacations", FormMethod.Get, new { @style = "float:right;margin-top:10px;" }))
+		{
+			<div class="form-inline">
+				<label class="control-label" style="color:#8ab92d;">Отдел&nbsp;</label>
+				@Html.DropDownList("unit", new SelectList(Model.GetUnitList(), "Id", "Name"), new { @class = "form-control", @onchange = "form.submit();", @style = "box-shadow:0 0 10px yellowgreen" })
+			</div>
+		}
+	}
+</div>
+
+<table class="table" style="margin-bottom:0;" border="0">
+	<tbody>
+		<tr>
+			<td>
+				<text class="text-danger">Голосование запущено. Голосует сотрудник:</text><text style="margin:0 20px;"><b>@Model.VoterFullName</b></text>
+				@if (Model.UsrIsVoter)
+				{
+					@Html.ActionLink("Добавить заявку", "Create", new { returnAction = ViewBag.ReturnAction });
+				}
+			</td>
+			<td width="200px">
+				@if (User.IsInRole("admin") || @User.IsInRole("manager"))
+				{
+					@:Голосование:
+					@Html.ActionLink(Model.VotingStarted ? "Запущено" : "Запустить", "InitiateVoting",
+									   new { unit = Model.UnitId },
+									   new { @class = Model.VotingStarted ? "disabled" : "manager", @id = "vote_status", @onclick = "return alterLink();" });
+				}
+			</td>
+			<td width="150px">
+				@if (User.IsInRole("admin") || @User.IsInRole("manager") || @User.IsInRole("chief"))
+				{
+					@Html.ActionLink("Редактировать", "Review", null, new { @style = "color:darkgoldenrod;float:right;" });
+				}
+			</td>
+		</tr>
+	</tbody>
+</table>
 
 <table class="table" style="margin-bottom:0;">
 	<thead>
 		<tr>
 			<th width="5%" title="Рейтинговая позиция">R</th>
 			<th width="35%" style="text-align:right">Месяц:&nbsp;</th>
-			@for (var i = 1; i < 13; ++i)
+			@for (var i = 1; i <= 12; ++i)
 			{
 				<th width="5%" style="text-align:center; border-left:0px solid lightgray;">@i</th>
 			}
 		</tr>
 	</thead>
 	<tbody>
-		@foreach (var item in monthList)
+		@for (var i = 0; i < Model.UserMonthList.Count; ++i)
 		{
-			var surname = item.Key.Split(' ')[0];
+			var currentId = Model.UserMonthList.ElementAt(i).Key;
+			var currentRecord = Model.UserMonthList.ElementAt(i);
+			var currentFullName = Model.GetFullName(currentId);
 			<tr>
-				<td width="5%" style="font-weight:bold">@Model.FirstOrDefault(m => m.Usr.Surname == surname).Usr.VacationRating</td>
-				<td width="35%">@Html.DisplayFor(it => item.Key)</td>
+				<td width="5%" style="font-weight:bold">@(Model.UserRating[currentId] + 1)</td>
+				<td width="35%">@currentFullName</td>
 
-				@for (int j = 1; j <= 12; ++j)
+				@for (int month = 1; month < 13; ++month)
 				{
 					<td style="border-left:1px solid lightgray; text-align:center;" width="5%">
-						@if (item.Value.ContainsKey(j))
+						@if (currentRecord.Value.ContainsKey(month))
 						{
-							@item.Value[j]
+							@currentRecord.Value[month]
 						}
 					</td>
 				}
@@ -76,18 +110,28 @@
 	</tbody>
 </table>
 
-<table class="table">
-	<tbody>
-		<tr>
-			<td width="5%"></td>
-			<td width="35%"></td>
+@if (Model.VotingStarted)
+{
+	<table class="table" border="0">
+		<tbody>
+			<tr>
+				<td width="5%"></td>
+				<td width="35%" align="right"><b>Осталось дней:</b></td>
 
-			@for (int j = 1; j <= 12; ++j)
-			{
-				var spent = Model.Where(m => m.Month == j).Sum(m => m.Duration);
-				var duration = monthList.Count * 28 / 12 - spent;
-				<td style="background:@(duration>=0?"#ebf5d6":"#fad1d1"); border-left:1px solid lightgray; text-align:center;" width="5%">@duration</td>
-			}
-		</tr>
-	</tbody>
-</table>
+				@for (int month = 0; month < 12; ++month)
+				{
+					var duration = Model.UnitUserCount * 28 / 12 - Model.DaysOccupied[month];
+					<td style="background:@(duration>=0?"#ebf5d6":"#fad1d1"); border-left:1px solid lightgray; text-align:center;" width="5%">@duration</td>
+				}
+			</tr>
+		</tbody>
+	</table>
+}
+
+@section Scripts {
+	<script>
+		function alterLink() {
+			$('#vote_status').removeClass('manager').addClass('disabled');
+		}
+	</script>
+}

@@ -35,10 +35,11 @@
 
 <p>
 	@Html.ActionLink("Назад", "Index")
-	@Html.ActionLink("Добавить отпуск", "Create", null, new { @class = "pull-right" })
+	@Html.ActionLink("Добавить отпуск", "Create", new { returnAction = "Review" }, new { @class = "pull-right" })
 </p>
 
 <form method="get" style="padding-left:6px;">
+	<input type="hidden" name="returnAction" value="Review" />
 	<div class="form-inline">
 		@if (!User.IsInRole("chief"))
 		{
