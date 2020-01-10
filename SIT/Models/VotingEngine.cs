@@ -1,13 +1,16 @@
 ﻿using System;
+using System.Data.Entity;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Principal;
 using System.Web;
+using System.Web.Mvc;
 
 namespace SIT.Models
 {
 	public static class VotingEngine
 	{
-		private static ApplicationDbContext db = ApplicationDbContext.Create();
+		private static ApplicationDbContext db = new ApplicationDbContext();
 		private static int maxYear = db.Vacations.Max(v => v.Year);
 		private static List<int> years = new List<int> { maxYear - 2, maxYear - 1, maxYear };
 		private static Dictionary<int, Dictionary<int, double>> monthScore;
@@ -28,9 +31,9 @@ namespace SIT.Models
 					var exMonthScore = db.MonthWeights.FirstOrDefault(M => M.Id == m).Score / db.MonthWeights.FirstOrDefault(M => M.Id == m).MonthDays;
 					var score = 0.0;
 
-					if (y == maxYear - 3)
+					if (y == maxYear - 2)
 						score = exMonthScore * 0.5;
-					else if (y == maxYear - 2)
+					else if (y == maxYear - 1)
 						score = exMonthScore * 0.7;
 					else
 						score = exMonthScore;
@@ -86,19 +89,20 @@ namespace SIT.Models
 							annualScores.Add(usr, userScore);
 						else
 							annualScores[usr] += userScore;
-					}
 
-					avgScore += userScore;
-					++usrCount;
+						avgScore += userScore;
+						++usrCount;
+					}
 				}
+				avgScore /= usrCount;
 
 				// присвоим новичкам средний балл
 				rookies.ForEach(r =>
 				{
 					if (!annualScores.ContainsKey(r))
-						annualScores.Add(r, avgScore / usrCount);
+						annualScores.Add(r, avgScore);
 					else
-						annualScores[r] += avgScore / usrCount;
+						annualScores[r] += avgScore;
 				});
 			}
 
@@ -167,6 +171,25 @@ namespace SIT.Models
 			}
 
 			return "not started";
+		}
+		public static int GetUserUnit(IPrincipal User)
+		{
+			var unit = 0;
+			// СУУУУКАААА! чтобы использовать Include надо подключить System.Data.Entity;
+			var units = db.Units.Include(u => u.Chief);
+			try
+			{
+				var usr = db.Users.FirstOrDefault(unt => unt.UserName == User.Identity.Name);
+				unit = (int)usr.Section.UnitId;
+			}
+			catch (Exception)
+			{
+				// если пользователь руководитель и у него нет SectionId
+				var undb = db.Units.Include(un => un.Chief);
+				unit = undb.FirstOrDefault(u => u.Chief.UserName == User.Identity.Name).Id;
+			}
+
+			return unit;
 		}
 	}
 }

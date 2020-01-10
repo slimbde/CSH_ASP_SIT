@@ -6,6 +6,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Net;
 using System.Web;
+using System.Configuration;
 using System.Web.Mvc;
 using SIT.Models;
 
@@ -20,19 +21,12 @@ namespace SIT.Controllers
 		{
 			if (!User.IsInRole("admin"))
 			{
-				try
-				{
-					unit = db.Users.FirstOrDefault(u => u.UserName == User.Identity.Name).Section.Unit.Id;
-				}
-				catch (Exception)
-				{
-					unit = db.Units.FirstOrDefault(u => u.Chief.UserName == User.Identity.Name).Id;
-				}
+				unit = VotingEngine.GetUserUnit(User);
 			}
 
 			bool voting = VotingEngine.GetVotingStatus(unit);
-			//var year = voting ? DateTime.Now.Year + 1 : DateTime.Now.Year;
-			var year = 2020;
+			var year = voting ? DateTime.Now.Year + 1 : DateTime.Now.Year;
+			//var year = 2020;
 			var ViewModel = new VacationVotingViewModel(year, User, unit, voting);
 
 			ViewBag.ReturnAction = "Index";
@@ -52,43 +46,96 @@ namespace SIT.Controllers
 
 
 		[Authorize(Roles = "admin, manager, chief")]
-		public ActionResult Review(int? unit, string UsrId, string Year, string Month)
+		public ActionResult Review(int? unit, int? section, string UsrId, string Year, string Month)
 		{
-			if (User.IsInRole("chief"))
-			{
-				var chiefName = User.Identity.Name;
-				unit = db.Sections.FirstOrDefault(s => s.Chief.UserName == chiefName).Unit.Id;
-			}
-
 			var vacations = db.Vacations.Include(u => u.Usr);
-			var units = new List<Unit> { new Unit { Name = "-- все --" } };
-			units.AddRange(db.Vacations.Select(v => v.Usr.Section.Unit).Distinct().ToList());
-			units[1] = new Unit { Name = "руководители", Id = 3 };
-			switch (unit)
-			{
-				case 3: // managers
-					vacations = vacations.Where(v => v.Usr.SectionId == null);
-					break;
-				case 0: // all of them
-				case null:
-					break;
-				default:
-					vacations = vacations.Where(v => v.Usr.Section.UnitId == unit);
-					break;
-			}
+			var units = new List<Unit>();
+			var sections = new List<Section>();
+			var users = new List<ApplicationUser>();
 
-			var users = new List<ApplicationUser> { new ApplicationUser { Id = "-- все --", Surname = "-- все --" } };
-			var qUsers = db.Users.AsQueryable();
 			if (User.IsInRole("chief"))
-				qUsers = qUsers.Where(u => u.Section.UnitId == unit);
-
-			users.AddRange(qUsers.OrderBy(u => u.Surname).ToList());
-			if (!string.IsNullOrEmpty(UsrId) && UsrId != "-- все --")
 			{
-				vacations = vacations.Where(v => v.UsrId == UsrId);
+				if (unit == null || unit == 0)
+					unit = VotingEngine.GetUserUnit(User);
+
+				// отделы
+				units = new List<Unit> { new Unit { Id = 0, Name = "-- все --" } };
+				units.Add(db.Units.FirstOrDefault(unt => unt.Id == unit));
+				vacations = vacations.Where(v => v.Usr.Section.UnitId == unit); // фильтр по отделу
+
+				// бюро
+				sections = new List<Section> { new Section { Id = 0, Name = "-- все --" } };
+				section = db.Sections.FirstOrDefault(s => s.Chief.UserName == User.Identity.Name).Id;
+				sections.Add(db.Sections.FirstOrDefault(s => s.Id == section));
+
+				if (section != null && section != 0)
+					vacations = vacations.Where(v => v.Usr.SectionId == section); // фильтр по бюро
+
+				// пользователи
+				users = new List<ApplicationUser> { new ApplicationUser { Id = "-- все --", Surname = "-- все --" } };
+				users.AddRange(db.Users.Where(u => u.SectionId == section).OrderBy(u => u.Surname).ToList());
+
+				if (!string.IsNullOrEmpty(UsrId) && UsrId != "-- все --")
+					vacations = vacations.Where(v => v.UsrId == UsrId); // фильтр по пользователю
+			}
+			else if (User.IsInRole("manager"))
+			{
+				if (unit == null || unit == 0)
+					unit = VotingEngine.GetUserUnit(User);
+
+				// отделы
+				units = new List<Unit> { new Unit { Id = 0, Name = "-- все --" } };
+				units.Add(db.Units.FirstOrDefault(unt => unt.Id == unit));
+				vacations = vacations.Where(v => v.Usr.Section.UnitId == unit || v.UsrId == db.Units.FirstOrDefault(u => u.Id == unit).ChiefId); // фильтр по отделу
+
+
+				// бюро
+				sections = new List<Section> { new Section { Id = 0, Name = "-- все --" } };
+				sections.AddRange(db.Sections.Where(s => s.UnitId == unit).ToList());
+
+				if (section != null && section != 0)
+					vacations = vacations.Where(v => v.Usr.SectionId == section); // фильтр по бюро
+
+				// пользователи
+				users = new List<ApplicationUser> { new ApplicationUser { Id = "-- все --", Surname = "-- все --" } };
+				users.AddRange(db.Users.Where(u => u.Section.UnitId == unit).OrderBy(u => u.Surname).ToList());
+
+				if (!string.IsNullOrEmpty(UsrId) && UsrId != "-- все --")
+					vacations = vacations.Where(v => v.UsrId == UsrId); // фильтр по пользователю
+			}
+			else
+			{
+				// отделы
+				units = new List<Unit> { new Unit { Id = 0, Name = "-- все --" } };
+				units.AddRange(db.Units.ToList());
+
+				if (unit != null && unit != 0)
+					vacations = vacations.Where(v => v.Usr.Section.UnitId == unit || v.UsrId == db.Units.FirstOrDefault(u => u.Id == unit).ChiefId); // фильтр по отделу
+
+
+				// бюро
+				sections = new List<Section> { new Section { Id = 0, Name = "-- все --" } };
+				if (unit != 0 && unit != null)
+					sections.AddRange(db.Sections.Where(s => s.UnitId == unit).ToList());
+				else
+					sections.AddRange(db.Sections.ToList());
+
+				if (section != null && section != 0)
+					vacations = vacations.Where(v => v.Usr.SectionId == section); // фильтр по бюро
+
+				// пользователи
+				users = new List<ApplicationUser> { new ApplicationUser { Id = "-- все --", Surname = "-- все --" } };
+				if (unit != 0 && unit != null)
+					users.AddRange(db.Users.Where(u => u.Section.UnitId == unit).OrderBy(u => u.Surname).ToList());
+				else
+					users.AddRange(db.Users.OrderBy(u => u.Surname).ToList());
+
+				if (!string.IsNullOrEmpty(UsrId) && UsrId != "-- все --")
+					vacations = vacations.Where(v => v.UsrId == UsrId); // фильтр по пользователю
 			}
 
 
+			// года
 			var years = vacations.Select(v => v.Year).Distinct().ToList();
 			var strYears = new List<string> { "-- все --" };
 			foreach (var item in years)
@@ -101,7 +148,7 @@ namespace SIT.Controllers
 				vacations = vacations.Where(v => v.Year == year);
 			}
 
-
+			// месяцы
 			var months = vacations.Select(v => v.Month).Distinct().ToList();
 			var strMonths = new List<string> { "-- все --" };
 			foreach (var item in months)
@@ -119,6 +166,7 @@ namespace SIT.Controllers
 			{
 				Vacations = vacations.OrderBy(v => v.Usr.Surname).ToList(),
 				Units = new SelectList(units, "Id", "Name"),
+				Sections = new SelectList(sections, "Id", "Name"),
 				Users = new SelectList(users, "Id", "FullName"),
 				Years = new SelectList(strYears),
 				Months = new SelectList(strMonths),
@@ -133,24 +181,37 @@ namespace SIT.Controllers
 		{
 			var model = new Vacation { UsrId = db.Users.FirstOrDefault(u => u.UserName == User.Identity.Name).Id, Duration = 14 };
 
+			var unit = VotingEngine.GetUserUnit(User);
+
 			// когда заходит обычный пользователь для голосования
 			if (!User.IsInRole("admin") && !User.IsInRole("chief") && !User.IsInRole("manager"))
 			{
-				var unit = (int)db.Users.FirstOrDefault(u => u.UserName == User.Identity.Name).Section.UnitId;
-
 				var currentVotingUserName = VotingEngine.GetVotingUserName(unit);
 				if (currentVotingUserName == "not started")
 					return RedirectToAction("Index");
 
 				var requestUserName = db.Users.FirstOrDefault(u => u.UserName == User.Identity.Name).FullName;
 				if (!currentVotingUserName.Equals(requestUserName))
-					return RedirectToAction("Index", new { unit = unit });
+					return RedirectToAction("Index");
 
+				// ему для выбора сотрудника доступен только он
 				ViewBag.UserList = new SelectList(db.Users.Where(u => u.UserName == User.Identity.Name), "Id", "FullName");
 				return View(model);
 			}
+			else if (User.IsInRole("chief"))
+			{
+				var section = db.Sections.FirstOrDefault(s => s.Chief.UserName == User.Identity.Name).Id;
+				ViewBag.UserList = new SelectList(db.Users.Where(u => u.SectionId == section).OrderBy(u => u.Surname), "Id", "FullName");
+			}
+			else if (User.IsInRole("manager"))
+			{
+				db.Sections.Include(sec => sec.Unit);
+				var unitChief = db.Units.FirstOrDefault(un => un.Id == unit).Chief;
+				ViewBag.UserList = new SelectList(db.Users.Where(us => us.Section.Unit.ChiefId == unitChief.Id || us.Id == unitChief.Id).OrderBy(u => u.Surname), "Id", "FullName");
+			}
+			else
+				ViewBag.UserList = new SelectList(db.Users.OrderBy(u => u.Surname), "Id", "FullName");
 
-			ViewBag.UserList = new SelectList(db.Users.OrderBy(u => u.Surname), "Id", "FullName");
 			return View(model);
 		}
 

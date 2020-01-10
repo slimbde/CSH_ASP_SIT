@@ -36,6 +36,7 @@ namespace SIT.Models
 	{
 		public IEnumerable<Vacation> Vacations { get; set; }
 		public SelectList Units { get; set; }
+		public SelectList Sections { get; set; }
 		public SelectList Users { get; set; }
 		public SelectList Years { get; set; }
 		public SelectList Months { get; set; }

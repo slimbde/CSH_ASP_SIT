@@ -7,7 +7,7 @@
 <style>
 	table tbody {
 		display: block;
-		max-height: 600px;
+		max-height: 580px;
 		overflow-y: scroll;
 	}
 
@@ -38,33 +38,42 @@
 	@Html.ActionLink("Добавить отпуск", "Create", new { returnAction = "Review" }, new { @class = "pull-right" })
 </p>
 
-<form method="get" style="padding-left:6px;">
+<form method="get">
 	<input type="hidden" name="returnAction" value="Review" />
-	<div class="form-inline">
-		@if (!User.IsInRole("chief"))
-		{
-			<label class="control-label text-muted">Отдел&nbsp;</label>
-			@Html.DropDownList("unit", Model.Units as SelectList, htmlAttributes: new { @class = "form-control" })
-		}
-
-		<label class="control-label text-muted">&nbsp;Сотрудник&nbsp;</label>
-		@Html.DropDownList("UsrId", Model.Users as SelectList, htmlAttributes: new { @class = "form-control" })
-
-		<label class="control-label text-muted">&nbsp;Год&nbsp;</label>
-		@Html.DropDownList("Year", Model.Years as SelectList, htmlAttributes: new { @class = "form-control" })
-
-		<label class="control-label text-muted">&nbsp;Месяц&nbsp;</label>
-		@Html.DropDownList("Month", Model.Months as SelectList, htmlAttributes: new { @class = "form-control" })
-
-		<input type="submit" value="Применить" class="btn btn-primary" style="margin-left:10px" />
-	</div>
+	<table class="table" style="margin-bottom:0;background-color:#eeeeee;border-radius:5px;">
+		<tr>
+			<td width="15%">
+				<label class="control-label text-muted">Отдел&nbsp;</label>
+				@Html.DropDownList("unit", Model.Units, htmlAttributes: new { @class = "form-control" })
+			</td>
+			<td width="25%">
+				<label class="control-label text-muted">Бюро&nbsp;</label>
+				@Html.DropDownList("section", Model.Sections as SelectList, htmlAttributes: new { @class = "form-control" })
+			</td>
+			<td width="27%">
+				<label class="control-label text-muted">&nbsp;Сотрудник&nbsp;</label>
+				@Html.DropDownList("UsrId", Model.Users as SelectList, htmlAttributes: new { @class = "form-control" })
+			</td>
+			<td width="10%">
+				<label class="control-label text-muted">&nbsp;Год&nbsp;</label>
+				@Html.DropDownList("Year", Model.Years as SelectList, htmlAttributes: new { @class = "form-control" })
+			</td>
+			<td width="10%">
+				<label class="control-label text-muted">&nbsp;Месяц&nbsp;</label>
+				@Html.DropDownList("Month", Model.Months as SelectList, htmlAttributes: new { @class = "form-control" })
+			</td>
+			<td>
+				<label class="control-label disabled">&nbsp;</label><br />
+				<input type="submit" value="Применить" class="btn btn-primary" style="margin-left:10px" />
+			</td>
+		</tr>
+	</table>
 </form>
 
-<br />
 <table class="table" border="0">
 	<thead>
 		<tr>
-			<th width="25%">Отдел</th>
+			<th width="25%">Бюро</th>
 			<th width="30%">Сотрудник</th>
 			<th width="7%">Год</th>
 			<th width="7%">Месяц</th>

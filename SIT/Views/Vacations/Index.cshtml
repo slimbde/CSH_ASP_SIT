@@ -50,19 +50,25 @@
 	<tbody>
 		<tr>
 			<td>
-				<text class="text-danger">Голосование запущено. Голосует сотрудник:</text><text style="margin:0 20px;"><b>@Model.VoterFullName</b></text>
-				@if (Model.UsrIsVoter)
+				@if (Model.VotingStarted)
 				{
-					@Html.ActionLink("Добавить заявку", "Create", new { returnAction = ViewBag.ReturnAction });
+					<div class="text-danger" style="display:inline-block">Голосование запущено. Голосует сотрудник:</div><div style="margin:0 20px;display:inline-block"><b>@Model.VoterFullName</b></div>
+					if (Model.UsrIsVoter)
+					{
+						@Html.ActionLink("Добавить заявку", "Create", new { returnAction = ViewBag.ReturnAction }, new { @style = "display:inline-block;" });
+					}
 				}
 			</td>
 			<td width="200px">
 				@if (User.IsInRole("admin") || @User.IsInRole("manager"))
 				{
-					@:Голосование:
-					@Html.ActionLink(Model.VotingStarted ? "Запущено" : "Запустить", "InitiateVoting",
-									   new { unit = Model.UnitId },
-									   new { @class = Model.VotingStarted ? "disabled" : "manager", @id = "vote_status", @onclick = "return alterLink();" });
+					if (!Model.VotingStarted)
+					{
+						@:Голосование:
+						@Html.ActionLink(Model.VotingStarted ? "Запущено" : "Запустить", "InitiateVoting",
+										   new { unit = Model.UnitId },
+										   new { @class = Model.VotingStarted ? "disabled" : "manager", @id = "vote_status", @onclick = "return alterLink();" });
+					}
 				}
 			</td>
 			<td width="150px">
@@ -94,7 +100,7 @@
 			var currentFullName = Model.GetFullName(currentId);
 			<tr>
 				<td width="5%" style="font-weight:bold">@(Model.UserRating[currentId] + 1)</td>
-				<td width="35%">@currentFullName</td>
+				<td width="35%" style="background-color:@(currentFullName==Model.VoterFullName?"":"#f2f2f2")">@currentFullName</td>
 
 				@for (int month = 1; month < 13; ++month)
 				{
@@ -110,6 +116,7 @@
 	</tbody>
 </table>
 
+@* НИЖНЯЯ ПОДТАБЛИЦА ОСТАТКА ДНЕЙ ПО МЕСЯЦУ *@
 @if (Model.VotingStarted)
 {
 	<table class="table" border="0">

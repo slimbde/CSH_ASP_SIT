@@ -19,9 +19,9 @@ namespace SIT.Controllers
 		public ActionResult Index()
 		{
 			//// костыль добавления ролей пользователям
-			//var user = db.Users.FirstOrDefault(u => u.Surname == "Теличко");
+			//var user = db.Users.FirstOrDefault(u => u.Surname == "Белоглазова");
 			//var userManager = new ApplicationUserManager(new UserStore<ApplicationUser>(db));
-			//userManager.AddToRole(user.Id, "admin");
+			//userManager.AddToRole(user.Id, "chief");
 
 			return View();
 		}

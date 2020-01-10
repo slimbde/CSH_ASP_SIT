@@ -126,7 +126,7 @@ namespace SIT.Controllers
 		// сведения см. в статье https://go.microsoft.com/fwlink/?LinkId=317598.
 		[HttpPost]
 		[ValidateAntiForgeryToken]
-		public async Task<ActionResult> Edit([Bind(Include = "Id,Name,ChiefId")] Section section)
+		public async Task<ActionResult> Edit([Bind(Include = "Id,Name,ChiefId,UnitId")] Section section)
 		{
 			if (ModelState.IsValid)
 			{
