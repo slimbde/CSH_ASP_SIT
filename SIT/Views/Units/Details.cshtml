@@ -2,7 +2,6 @@
 @using SIT.Models
 @{
 	ViewBag.Title = "Details";
-	var sections = ViewBag.sections as List<Section>;
 }
 
 <h2>Подробно</h2>
@@ -30,7 +29,7 @@
 		<hr />
 		<dt><label>Бюро</label></dt>
 		<dd>
-			@foreach (var item in sections)
+			@foreach (var item in Model.Sections)
 			{
 				@Html.DisplayFor(u => item.Name)<br />
 			}

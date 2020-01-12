@@ -21,7 +21,7 @@ namespace SIT.Controllers
 
 		public AccountController()
 		{
-			
+
 		}
 
 		public AccountController(ApplicationUserManager userManager, ApplicationSignInManager signInManager)
@@ -203,6 +203,14 @@ namespace SIT.Controllers
 					// эмулирую подтверждение почты
 					string code = await UserManager.GenerateEmailConfirmationTokenAsync(user.Id);
 					await ConfirmEmail(user.Id, code, user.PhoneNumber);
+
+					// при создании пользователя прописываем его в таблицу голосующих
+					var votingRecord = new Voting { UsrId = user.Id, VacationRating = 0.0, Voted = true };
+					using (var db = ApplicationDbContext.Create())
+					{
+						db.Votings.Add(votingRecord);
+						await db.SaveChangesAsync();
+					}
 
 					return View("RegSucceed");
 				}

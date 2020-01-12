@@ -22,11 +22,18 @@ namespace SIT.Controllers
 			if (!User.IsInRole("admin"))
 			{
 				unit = VotingEngine.GetUserUnit(User);
+
+				// когда пользователь не прописан в бюро или отдел
+				if (unit == -1)
+				{
+					ViewBag.Message = "Пользователь не состоит ни в бюро ни в отделе";
+					return View("Error");
+				}
 			}
 
 			bool voting = VotingEngine.GetVotingStatus(unit);
 			var year = voting ? DateTime.Now.Year + 1 : DateTime.Now.Year;
-			//var year = 2020;
+			//var year = 2020; // для проверки
 			var ViewModel = new VacationVotingViewModel(year, User, unit, voting);
 
 			ViewBag.ReturnAction = "Index";
@@ -40,6 +47,17 @@ namespace SIT.Controllers
 		public ActionResult InitiateVoting(int unit)
 		{
 			VotingEngine.InitiateVoting(unit);
+
+			return RedirectToAction("Index");
+		}
+
+		/// <summary>
+		/// метод для остановки голосования
+		/// </summary>
+		[Authorize(Roles = "admin, manager")]
+		public ActionResult CancelVoting(int unit, int year)
+		{
+			VotingEngine.CancelVoting(unit, year);
 
 			return RedirectToAction("Index");
 		}

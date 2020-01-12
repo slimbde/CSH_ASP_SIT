@@ -41,7 +41,7 @@
 @section Scripts {
 	<script>
 		function handle() {
-			if (@(Model.Workers.Count())> 0) {
+			if (@(Model.Staff.Count())> 0) {
 				$.ajax({
 					url: '@(Url.Action("ClearSection","Staff"))?section=@Model.Id',
 					type: 'get',

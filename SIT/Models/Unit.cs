@@ -14,8 +14,13 @@ namespace SIT.Models
 		[Display(Name = "Название отдела")]
 		public string Name { get; set; }
 
+
 		[Display(Name = "Руководитель отдела")]
 		public string ChiefId { get; set; }
-		public ApplicationUser Chief { get; set; }
+		public virtual ApplicationUser Chief { get; set; }
+
+
+		[Display(Name = "Бюро в отделе")]
+		public virtual ICollection<Section> Sections { get; set; }
 	}
 }

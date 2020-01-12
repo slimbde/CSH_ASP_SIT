@@ -19,8 +19,13 @@ namespace SIT.Controllers
 		// GET: Sections
 		public async Task<ActionResult> Index()
 		{
-			var sections = db.Sections.Include(s => s.Chief);
-			return View(await sections.OrderBy(s => s.Name).ToListAsync());
+			var sections = await db.Sections.ToListAsync();
+			foreach (var item in sections)
+			{
+				item.Staff = db.Users.Where(u => u.SectionId == item.Id).ToList();
+			}
+
+			return View(sections);
 		}
 
 
@@ -77,7 +82,7 @@ namespace SIT.Controllers
 			{
 				return HttpNotFound();
 			}
-			section.Workers = await db.Users.Where(u => u.SectionId == id).ToListAsync();
+			section.Staff = await db.Users.Where(u => u.SectionId == id).ToListAsync();
 			return View(section);
 		}
 
@@ -113,11 +118,15 @@ namespace SIT.Controllers
 			{
 				return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
 			}
-			Section section = await db.Sections.FindAsync(id);
+
+			var section = await db.Sections.FindAsync(id);
+			section.Staff = await db.Users.Where(u => u.SectionId == id).OrderBy(u => u.Surname).ToListAsync();
+
 			if (section == null)
 			{
 				return HttpNotFound();
 			}
+			ViewBag.Users = await db.Users.ToListAsync();
 			return View(section);
 		}
 
@@ -134,6 +143,7 @@ namespace SIT.Controllers
 				await db.SaveChangesAsync();
 				return RedirectToAction("Index");
 			}
+			ViewBag.Users = await db.Users.ToListAsync();
 			return View(section);
 		}
 
@@ -144,7 +154,10 @@ namespace SIT.Controllers
 			{
 				return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
 			}
-			Section section = await db.Sections.FindAsync(id);
+
+			var section = await db.Sections.FindAsync(id);
+			section.Staff = await db.Users.Where(u => u.SectionId == id).OrderBy(u => u.Surname).ToListAsync();
+
 			if (section == null)
 			{
 				return HttpNotFound();

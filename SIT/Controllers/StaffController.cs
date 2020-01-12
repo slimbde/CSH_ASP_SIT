@@ -19,8 +19,7 @@ namespace SIT.Controllers
 		// GET: Staff
 		public async Task<ActionResult> Index()
 		{
-			var users = db.Users.Include(u => u.Section);
-			return View(await users.ToListAsync());
+			return View(await db.Users.ToListAsync());
 		}
 
 		/// <summary>
@@ -28,11 +27,11 @@ namespace SIT.Controllers
 		/// </summary>
 		/// <param name="id">ид сотрудника</param>
 		/// <param name="section">ид секции</param>
-		public void Append(string id, int section)
+		public async void Append(string id, int section)
 		{
 			var user = db.Users.Find(id);
 			user.SectionId = section;
-			db.SaveChanges();
+			await db.SaveChangesAsync();
 		}
 
 		/// <summary>
@@ -40,26 +39,26 @@ namespace SIT.Controllers
 		/// </summary>
 		/// <param name="id">ид сотрудника</param>
 		/// <param name="section">ид секции</param>
-		public void Remove(string id, int section)
+		public async void Remove(string id, int section)
 		{
 			var user = db.Users.Find(id);
 			if (user.SectionId == section)
 				user.SectionId = null;
-			db.SaveChanges();
+			await db.SaveChangesAsync();
 		}
 
 		/// <summary>
 		/// удаляет у всех сотрудников секции SectionId
 		/// </summary>
 		/// <param name="section">ид секции</param>
-		public void ClearSection(int section)
+		public async void ClearSection(int section)
 		{
 			foreach (var user in db.Users)
 			{
 				if (user.SectionId == section)
 					user.SectionId = null;
 			}
-			db.SaveChanges();
+			await db.SaveChangesAsync();
 		}
 
 		// GET: Staff/Details/5
@@ -80,7 +79,6 @@ namespace SIT.Controllers
 		// GET: Staff/Create
 		public ActionResult Create()
 		{
-			ViewBag.SectionId = new SelectList(db.Sections, "Id", "Name");
 			return View();
 		}
 
@@ -94,11 +92,13 @@ namespace SIT.Controllers
 			if (ModelState.IsValid)
 			{
 				db.Users.Add(applicationUser);
+
+				
+
 				await db.SaveChangesAsync();
 				return RedirectToAction("Index");
 			}
 
-			ViewBag.SectionId = new SelectList(db.Sections, "Id", "Name", applicationUser.SectionId);
 			return View(applicationUser);
 		}
 
@@ -114,7 +114,8 @@ namespace SIT.Controllers
 			{
 				return HttpNotFound();
 			}
-			ViewBag.SectionId = new SelectList(db.Sections, "Id", "Name", applicationUser.SectionId);
+
+			ViewBag.Sections = await db.Sections.ToListAsync();
 			return View(applicationUser);
 		}
 
@@ -131,7 +132,7 @@ namespace SIT.Controllers
 				await db.SaveChangesAsync();
 				return RedirectToAction("Index");
 			}
-			ViewBag.SectionId = new SelectList(db.Sections, "Id", "Name", applicationUser.SectionId);
+			ViewBag.Sections = await db.Sections.ToListAsync();
 			return View(applicationUser);
 		}
 
@@ -147,6 +148,7 @@ namespace SIT.Controllers
 			{
 				return HttpNotFound();
 			}
+
 			return View(applicationUser);
 		}
 

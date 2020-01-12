@@ -3,18 +3,7 @@
 @{
 	ViewBag.Title = "Edit";
 
-	var db = new ApplicationDbContext();
-	var usrList = new SelectList(db.Users.OrderBy(u => u.Surname), "Id", "FullName");
-	foreach (var item in usrList)
-	{
-		if (item.Value == Model.ChiefId)
-		{
-			item.Selected = true;
-			break;
-		}
-	}
-
-	Model.Workers = db.Users.Where(u => u.SectionId == Model.Id).OrderBy(u => u.Surname).ToList();
+	var usrList = new SelectList((ViewBag.Users as List<ApplicationUser>).OrderBy(u => u.Surname), "Id", "FullName");
 }
 
 <h2>Редактировать</h2>
@@ -49,9 +38,9 @@
 
 		<hr />
 		<div class="form-group">
-			@Html.LabelFor(model => model.Workers, htmlAttributes: new { @class = "control-label col-md-2" })
+			@Html.LabelFor(model => model.Staff, htmlAttributes: new { @class = "control-label col-md-2" })
 			<div class="col-md-5" id="staff">
-				@foreach (var item in Model.Workers)
+				@foreach (var item in Model.Staff)
 				{
 					<div id="@(item.Id)_1">@(Html.DisplayFor(u => item.FullName))&nbsp;&nbsp;&nbsp;<a href='#' id="@(item.Id)" onclick="deleteItem(event)" class='text-danger'>Удалить</a></div>
 				}
@@ -61,7 +50,7 @@
 		<dl class="form-group">
 			<dt class="col-md-2">&nbsp;</dt>
 			<dd class="col-md-10 control-label">
-				@Html.DropDownListFor(model => model.Workers, usrList, htmlAttributes: new { @class = "form-control col-md-2", @id = "pick" })
+				@Html.DropDownListFor(model => model.Staff, usrList, htmlAttributes: new { @class = "form-control col-md-2", @id = "pick" })
 				@Html.ValidationMessageFor(model => model.ChiefId, "", new { @class = "text-danger" })
 				<a href="#" class="addLink col-md-3 text-left text-success">Добавить</a>
 			</dd>

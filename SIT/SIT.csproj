@@ -185,101 +185,13 @@
     <Compile Include="Migrations\202001041843171_88.Designer.cs">
       <DependentUpon>202001041843171_88.cs</DependentUpon>
     </Compile>
-    <Compile Include="Migrations\202001050923023_add vacations.cs" />
-    <Compile Include="Migrations\202001050923023_add vacations.Designer.cs">
-      <DependentUpon>202001050923023_add vacations.cs</DependentUpon>
+    <Compile Include="Migrations\202001120902545_disable Section_Id.cs" />
+    <Compile Include="Migrations\202001120902545_disable Section_Id.Designer.cs">
+      <DependentUpon>202001120902545_disable Section_Id.cs</DependentUpon>
     </Compile>
-    <Compile Include="Migrations\202001051157473_add vacation-rating.cs" />
-    <Compile Include="Migrations\202001051157473_add vacation-rating.Designer.cs">
-      <DependentUpon>202001051157473_add vacation-rating.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\202001051203244_add user-vacation.cs" />
-    <Compile Include="Migrations\202001051203244_add user-vacation.Designer.cs">
-      <DependentUpon>202001051203244_add user-vacation.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\202001051205450_add user-vacation1.cs" />
-    <Compile Include="Migrations\202001051205450_add user-vacation1.Designer.cs">
-      <DependentUpon>202001051205450_add user-vacation1.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\202001051218180_hello.cs" />
-    <Compile Include="Migrations\202001051218180_hello.Designer.cs">
-      <DependentUpon>202001051218180_hello.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\202001051301583_add-unit.cs" />
-    <Compile Include="Migrations\202001051301583_add-unit.Designer.cs">
-      <DependentUpon>202001051301583_add-unit.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\202001051311034_add-unit-chief.cs" />
-    <Compile Include="Migrations\202001051311034_add-unit-chief.Designer.cs">
-      <DependentUpon>202001051311034_add-unit-chief.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\202001051343546_add-unit-update.cs" />
-    <Compile Include="Migrations\202001051343546_add-unit-update.Designer.cs">
-      <DependentUpon>202001051343546_add-unit-update.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\202001060753347_vacations.cs" />
-    <Compile Include="Migrations\202001060753347_vacations.Designer.cs">
-      <DependentUpon>202001060753347_vacations.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\202001061133530_hel.cs" />
-    <Compile Include="Migrations\202001061133530_hel.Designer.cs">
-      <DependentUpon>202001061133530_hel.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\202001061135571_he.cs" />
-    <Compile Include="Migrations\202001061135571_he.Designer.cs">
-      <DependentUpon>202001061135571_he.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\202001061137319_he1.cs" />
-    <Compile Include="Migrations\202001061137319_he1.Designer.cs">
-      <DependentUpon>202001061137319_he1.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\202001061139233_he2.cs" />
-    <Compile Include="Migrations\202001061139233_he2.Designer.cs">
-      <DependentUpon>202001061139233_he2.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\202001061213520_sss.cs" />
-    <Compile Include="Migrations\202001061213520_sss.Designer.cs">
-      <DependentUpon>202001061213520_sss.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\202001070613499_vacation fixed.cs" />
-    <Compile Include="Migrations\202001070613499_vacation fixed.Designer.cs">
-      <DependentUpon>202001070613499_vacation fixed.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\202001070640369_1.cs" />
-    <Compile Include="Migrations\202001070640369_1.Designer.cs">
-      <DependentUpon>202001070640369_1.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\202001070646265_2.cs" />
-    <Compile Include="Migrations\202001070646265_2.Designer.cs">
-      <DependentUpon>202001070646265_2.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\202001070656042_3.cs" />
-    <Compile Include="Migrations\202001070656042_3.Designer.cs">
-      <DependentUpon>202001070656042_3.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\202001071836197_4.cs" />
-    <Compile Include="Migrations\202001071836197_4.Designer.cs">
-      <DependentUpon>202001071836197_4.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\202001090636540_alter monthWeights.cs" />
-    <Compile Include="Migrations\202001090636540_alter monthWeights.Designer.cs">
-      <DependentUpon>202001090636540_alter monthWeights.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\202001090722397_float score.cs" />
-    <Compile Include="Migrations\202001090722397_float score.Designer.cs">
-      <DependentUpon>202001090722397_float score.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\202001090907278_check.cs" />
-    <Compile Include="Migrations\202001090907278_check.Designer.cs">
-      <DependentUpon>202001090907278_check.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\202001091353023_voting.cs" />
-    <Compile Include="Migrations\202001091353023_voting.Designer.cs">
-      <DependentUpon>202001091353023_voting.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\202001091939516_vacation duration.cs" />
-    <Compile Include="Migrations\202001091939516_vacation duration.Designer.cs">
-      <DependentUpon>202001091939516_vacation duration.cs</DependentUpon>
+    <Compile Include="Migrations\202001120909209_disable Section_Id1.cs" />
+    <Compile Include="Migrations\202001120909209_disable Section_Id1.Designer.cs">
+      <DependentUpon>202001120909209_disable Section_Id1.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
@@ -484,77 +396,11 @@
     <EmbeddedResource Include="Migrations\202001041843171_88.resx">
       <DependentUpon>202001041843171_88.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\202001050923023_add vacations.resx">
-      <DependentUpon>202001050923023_add vacations.cs</DependentUpon>
+    <EmbeddedResource Include="Migrations\202001120902545_disable Section_Id.resx">
+      <DependentUpon>202001120902545_disable Section_Id.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\202001051157473_add vacation-rating.resx">
-      <DependentUpon>202001051157473_add vacation-rating.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\202001051203244_add user-vacation.resx">
-      <DependentUpon>202001051203244_add user-vacation.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\202001051205450_add user-vacation1.resx">
-      <DependentUpon>202001051205450_add user-vacation1.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\202001051218180_hello.resx">
-      <DependentUpon>202001051218180_hello.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\202001051301583_add-unit.resx">
-      <DependentUpon>202001051301583_add-unit.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\202001051311034_add-unit-chief.resx">
-      <DependentUpon>202001051311034_add-unit-chief.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\202001051343546_add-unit-update.resx">
-      <DependentUpon>202001051343546_add-unit-update.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\202001060753347_vacations.resx">
-      <DependentUpon>202001060753347_vacations.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\202001061133530_hel.resx">
-      <DependentUpon>202001061133530_hel.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\202001061135571_he.resx">
-      <DependentUpon>202001061135571_he.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\202001061137319_he1.resx">
-      <DependentUpon>202001061137319_he1.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\202001061139233_he2.resx">
-      <DependentUpon>202001061139233_he2.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\202001061213520_sss.resx">
-      <DependentUpon>202001061213520_sss.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\202001070613499_vacation fixed.resx">
-      <DependentUpon>202001070613499_vacation fixed.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\202001070640369_1.resx">
-      <DependentUpon>202001070640369_1.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\202001070646265_2.resx">
-      <DependentUpon>202001070646265_2.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\202001070656042_3.resx">
-      <DependentUpon>202001070656042_3.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\202001071836197_4.resx">
-      <DependentUpon>202001071836197_4.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\202001090636540_alter monthWeights.resx">
-      <DependentUpon>202001090636540_alter monthWeights.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\202001090722397_float score.resx">
-      <DependentUpon>202001090722397_float score.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\202001090907278_check.resx">
-      <DependentUpon>202001090907278_check.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\202001091353023_voting.resx">
-      <DependentUpon>202001091353023_voting.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\202001091939516_vacation duration.resx">
-      <DependentUpon>202001091939516_vacation duration.cs</DependentUpon>
+    <EmbeddedResource Include="Migrations\202001120909209_disable Section_Id1.resx">
+      <DependentUpon>202001120909209_disable Section_Id1.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

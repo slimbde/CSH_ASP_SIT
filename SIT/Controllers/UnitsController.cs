@@ -19,9 +19,9 @@ namespace SIT.Controllers
 		// GET: Units
 		public async Task<ActionResult> Index()
 		{
-			var units = db.Units.Include(u => u.Chief);
-			ViewBag.Sections = await db.Sections.ToListAsync();
-			return View(await units.ToListAsync());
+			var units = await db.Units.ToListAsync();
+			units.ForEach(u => u.Sections = db.Sections.Where(s => s.UnitId == u.Id).ToList());
+			return View(units);
 		}
 
 		// GET: Units/Details/5
@@ -31,13 +31,15 @@ namespace SIT.Controllers
 			{
 				return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
 			}
-			Unit unit = await db.Units.FindAsync(id);
+
+			var unit = await db.Units.FindAsync(id);
+			unit.Sections = await db.Sections.Where(s => s.UnitId == id).ToListAsync();
+
 			if (unit == null)
 			{
 				return HttpNotFound();
 			}
-			unit.Chief = db.Users.FirstOrDefault(u => u.Id == unit.ChiefId);
-			ViewBag.sections = db.Sections.Where(s => s.UnitId == id).ToList();
+
 			return View(unit);
 		}
 
@@ -73,12 +75,14 @@ namespace SIT.Controllers
 			{
 				return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
 			}
-			Unit unit = await db.Units.FindAsync(id);
+			var unit = await db.Units.FindAsync(id);
+			unit.Sections = await db.Sections.Where(s => s.UnitId == id).ToListAsync();
 			if (unit == null)
 			{
 				return HttpNotFound();
 			}
 
+			ViewBag.Users = await db.Users.ToListAsync();
 			return View(unit);
 		}
 
@@ -95,6 +99,7 @@ namespace SIT.Controllers
 				await db.SaveChangesAsync();
 				return RedirectToAction("Index");
 			}
+			ViewBag.Users = await db.Users.ToListAsync();
 			return View(unit);
 		}
 
@@ -105,13 +110,13 @@ namespace SIT.Controllers
 			{
 				return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
 			}
-			Unit unit = await db.Units.FindAsync(id);
+			var unit = await db.Units.FindAsync(id);
+			unit.Sections = await db.Sections.Where(s => s.UnitId == id).ToListAsync();
 			if (unit == null)
 			{
 				return HttpNotFound();
 			}
-			unit.Chief = db.Users.FirstOrDefault(u => u.Id == unit.ChiefId);
-			ViewBag.SectionCount = db.Sections.Where(s => s.UnitId == id).Count();
+
 			return View(unit);
 		}
 

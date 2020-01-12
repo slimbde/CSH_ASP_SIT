@@ -10,7 +10,7 @@ namespace SIT.Models
 {
 	public static class VotingEngine
 	{
-		private static ApplicationDbContext db = new ApplicationDbContext();
+		private static ApplicationDbContext db = ApplicationDbContext.Create();
 		private static int maxYear = db.Vacations.Max(v => v.Year);
 		private static List<int> years = new List<int> { maxYear - 2, maxYear - 1, maxYear };
 		private static Dictionary<int, Dictionary<int, double>> monthScore;
@@ -19,6 +19,7 @@ namespace SIT.Models
 
 		private static Dictionary<int, Dictionary<int, double>> GetMonthScore()
 		{
+			var dbloc = db;
 			var result = new Dictionary<int, Dictionary<int, double>>();
 
 			// считаем словарь год-месяц-очки
@@ -28,7 +29,7 @@ namespace SIT.Models
 
 				for (var m = 1; m < 13; ++m)
 				{
-					var exMonthScore = db.MonthWeights.FirstOrDefault(M => M.Id == m).Score / db.MonthWeights.FirstOrDefault(M => M.Id == m).MonthDays;
+					var exMonthScore = dbloc.MonthWeights.FirstOrDefault(M => M.Id == m).Score / dbloc.MonthWeights.FirstOrDefault(M => M.Id == m).MonthDays;
 					var score = 0.0;
 
 					if (y == maxYear - 2)
@@ -46,16 +47,18 @@ namespace SIT.Models
 		}
 		private static SortedDictionary<double, ApplicationUser> GetUserScore(int unit)
 		{
-			var usrs = db.Users.Where(u => (u.Section.UnitId == unit) || (u.Id == db.Units.FirstOrDefault(U => U.Id == unit).ChiefId)).ToList();
+			var dbloc = db;
+
+			var usrs = dbloc.Users.Where(u => (u.Section.UnitId == unit) || (u.Id == dbloc.Units.FirstOrDefault(U => U.Id == unit).ChiefId)).ToList();
 			var result = new SortedDictionary<double, ApplicationUser>();
 
 			// обнуляем VacationRating и признак процесса голосования
 			foreach (var usr in usrs)
 			{
-				db.Votings.FirstOrDefault(v => v.UsrId == usr.Id).VacationRating = 0.0;
-				db.Votings.FirstOrDefault(v => v.UsrId == usr.Id).Voted = false;
+				dbloc.Votings.FirstOrDefault(v => v.UsrId == usr.Id).VacationRating = 0.0;
+				dbloc.Votings.FirstOrDefault(v => v.UsrId == usr.Id).Voted = false;
 			}
-			db.SaveChanges();
+			dbloc.SaveChanges();
 
 
 			// считаем очки по каждому отпуску, общие очки и пишем в базу
@@ -71,7 +74,7 @@ namespace SIT.Models
 				foreach (var usr in usrs)
 				{
 					var userScore = 0.0;
-					var vacs = db.Vacations.Where(v => v.Year == yr && v.UsrId == usr.Id).ToList();
+					var vacs = dbloc.Vacations.Where(v => v.Year == yr && v.UsrId == usr.Id).ToList();
 
 					foreach (var vac in vacs)
 					{
@@ -120,24 +123,22 @@ namespace SIT.Models
 		}
 		private static void SetRating()
 		{
+			var dbloc = db;
+
 			var rating = 1;
 			for (; rating < userScore.Count; ++rating)
 			{
 				var usrId = userScore.ElementAt(rating).Value.Id;
-				db.Votings.FirstOrDefault(v => v.UsrId == usrId).VacationRating = rating;
+				dbloc.Votings.FirstOrDefault(v => v.UsrId == usrId).VacationRating = rating;
 			}
 
-			db.SaveChanges();
+			dbloc.SaveChanges();
 		}
 
 
 
 		public static void InitiateVoting(int unit)
 		{
-			//// защита от повторного запуска
-			//if (GetVotingStatus(unit))
-			//	return;
-
 			// пересчитываем очки дней по годам
 			monthScore = GetMonthScore();
 
@@ -147,21 +148,39 @@ namespace SIT.Models
 			// заполняем VacationRating по каждому пользователю
 			SetRating();
 		}
+		public static void CancelVoting(int unit, int year)
+		{
+			var dbloc = db;
+
+			var unitSections = dbloc.Sections.Where(s => s.UnitId == unit).Select(sec => sec.Id);   // выбираем ид бюро
+			var unitManagerId = dbloc.Units.FirstOrDefault(m => m.Id == unit).ChiefId;  // выбираем ид руководителя отдела
+			var unitUsersId = dbloc.Users.Where(u => unitSections.Any(us => us == u.SectionId) || u.Id == unitManagerId).Select(uus => uus.Id); // фильтруем пользователей
+			dbloc.Votings.Where(v => unitUsersId.Any(uid => uid == v.UsrId)).ToList().ForEach(V => { V.Voted = true; V.VacationRating = 0.0; }); // сносим им рейтинг и флаг голосования
+
+			var vacsToCancel = dbloc.Vacations.Where(vac => vac.Year == year);
+			dbloc.Vacations.RemoveRange(vacsToCancel);
+
+			dbloc.SaveChanges();
+		}
 		public static bool GetVotingStatus(int unit)
 		{
-			var usrs = db.Users.Where(u => (u.Section.UnitId == unit) || (u.Id == db.Units.FirstOrDefault(U => U.Id == unit).ChiefId));
+			var dbloc = db;
+
+			var usrs = dbloc.Users.Where(u => (u.Section.UnitId == unit) || (u.Id == dbloc.Units.FirstOrDefault(U => U.Id == unit).ChiefId));
 
 			// ищем все заявки по данным пользователям
-			var votes = db.Votings.Where(v => usrs.Any(u => u.Id == v.UsrId));
+			var votes = dbloc.Votings.Where(v => usrs.Any(u => u.Id == v.UsrId));
 			var vts = votes.ToList();
 			return votes.Any(v => v.Voted == false);
 		}
 		public static string GetVotingUserName(int unit)
 		{
-			var usrs = db.Users.Where(u => (u.Section.UnitId == unit) || (u.Id == db.Units.FirstOrDefault(U => U.Id == unit).ChiefId));
+			var dbloc = db;
+
+			var usrs = dbloc.Users.Where(u => (u.Section.UnitId == unit) || (u.Id == dbloc.Units.FirstOrDefault(U => U.Id == unit).ChiefId));
 
 			// ищем все заявки среди не проголосовавших пользователей
-			var votes = db.Votings.Where(v => usrs.Any(u => u.Id == v.UsrId)).Where(v => v.Voted == false);
+			var votes = dbloc.Votings.Where(v => usrs.Any(u => u.Id == v.UsrId)).Where(v => v.Voted == false);
 			var votesCount = votes.Count();
 
 			if (votesCount > 0)
@@ -174,19 +193,28 @@ namespace SIT.Models
 		}
 		public static int GetUserUnit(IPrincipal User)
 		{
+			var dbloc = db;
+
 			var unit = 0;
 			// СУУУУКАААА! чтобы использовать Include надо подключить System.Data.Entity;
-			var units = db.Units.Include(u => u.Chief);
+			var units = dbloc.Units.Include(u => u.Chief);
 			try
 			{
-				var usr = db.Users.FirstOrDefault(unt => unt.UserName == User.Identity.Name);
+				var usr = dbloc.Users.FirstOrDefault(unt => unt.UserName == User.Identity.Name);
 				unit = (int)usr.Section.UnitId;
 			}
 			catch (Exception)
 			{
-				// если пользователь руководитель и у него нет SectionId
-				var undb = db.Units.Include(un => un.Chief);
-				unit = undb.FirstOrDefault(u => u.Chief.UserName == User.Identity.Name).Id;
+				try
+				{
+					// если пользователь руководитель и у него нет SectionId
+					unit = dbloc.Units.FirstOrDefault(u => u.Chief.UserName == User.Identity.Name).Id;
+				}
+				catch (Exception)
+				{
+					// если он и не руководитель
+					return -1;
+				}
 			}
 
 			return unit;

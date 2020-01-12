@@ -3,7 +3,7 @@ namespace SIT.Migrations
     using System;
     using System.Data.Entity.Migrations;
     
-    public partial class _2 : DbMigration
+    public partial class disableSection_Id1 : DbMigration
     {
         public override void Up()
         {

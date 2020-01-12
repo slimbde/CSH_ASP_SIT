@@ -15,7 +15,7 @@ namespace SIT.Models
 
 		[Display(Name = "Сотрудник")]
 		public string UsrId { get; set; }
-		public ApplicationUser Usr { get; set; }
+		public virtual ApplicationUser Usr { get; set; }
 
 		[Display(Name = "Год")]
 		public int Year { get; set; }
@@ -45,9 +45,7 @@ namespace SIT.Models
 
 	public class VacationVotingViewModel
 	{
-		/// <summary>
-		/// Словарь дней по конкретному пользователю
-		/// </summary>
+		// Словарь дней по конкретному пользователю
 		public Dictionary<string, Dictionary<int, int>> UserMonthList { get; private set; }
 		public Dictionary<string, double?> UserRating { get; private set; }
 		public bool VotingStarted { get; private set; }
@@ -62,11 +60,7 @@ namespace SIT.Models
 		public List<Unit> GetUnitList() => db.Units.ToList();
 
 
-		private ApplicationDbContext db { get; set; }
-		private List<Vacation> Vacations { get; set; }
-		private IPrincipal User { get; set; }
-
-
+		// CONSTRUCTOR
 		public VacationVotingViewModel(int year, IPrincipal user, int unit, bool voting)
 		{
 			db = ApplicationDbContext.Create();
@@ -80,6 +74,11 @@ namespace SIT.Models
 			SetUserMonthList();
 			SetUserRating();
 		}
+
+
+		private ApplicationDbContext db { get; set; }
+		private List<Vacation> Vacations { get; set; }
+		private IPrincipal User { get; set; }
 
 
 		private void SetVacations()
@@ -133,7 +132,7 @@ namespace SIT.Models
 
 
 		public string UsrId { get; set; }
-		public ApplicationUser Usr { get; set; }
+		public virtual ApplicationUser Usr { get; set; }
 
 
 		public double VacationRating { get; set; }

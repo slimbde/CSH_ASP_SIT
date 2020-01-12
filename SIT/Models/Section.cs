@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
@@ -18,6 +19,7 @@ namespace SIT.Models
 
 		[Display(Name = "Руководитель бюро")]
 		public string ChiefId { get; set; }
+		[ForeignKey("ChiefId")]
 		public virtual ApplicationUser Chief { get; set; }
 
 
@@ -27,12 +29,6 @@ namespace SIT.Models
 
 
 		[Display(Name = "Сотрудники")]
-		public virtual ICollection<ApplicationUser> Workers { get; set; }
-
-
-		public Section()
-		{
-			Workers = new List<ApplicationUser>();
-		}
+		public ICollection<ApplicationUser> Staff { get; set; }
 	}
 }

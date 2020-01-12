@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Data.Entity;
 using System.Security.Claims;
 using System.Threading.Tasks;
@@ -25,12 +26,9 @@ namespace SIT.Models
 		public string FullName { get { return $"{Surname} {Name} {Patronic}"; } }
 
 
-		[Display(Name = "Рейтинг субботника")]
-		public double? CleaningRating { get; set; }
-
-
 		[Display(Name = "Бюро")]
 		public int? SectionId { get; set; }
+		[ForeignKey("SectionId")]
 		public virtual Section Section { get; set; }
 
 

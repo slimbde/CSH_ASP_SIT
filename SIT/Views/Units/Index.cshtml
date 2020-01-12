@@ -2,7 +2,6 @@
 @using SIT.Models
 @{
 	ViewBag.Title = "Index";
-	List<Section> sections = ViewBag.Sections;
 }
 
 <div class="row">
@@ -36,7 +35,7 @@
 						@Html.DisplayFor(modelItem => item.Chief.FullName)
 					</td>
 					<td>
-						@sections.Where(s => s.UnitId == item.Id).Count()
+						@item.Sections.Count
 					</td>
 					<td>
 						@Html.ActionLink("Изменить", "Edit", new { id = item.Id }) |

@@ -24,7 +24,7 @@
 
 	a.disabled {
 		color: gray;
-		pointer-events: none;
+		/*pointer-events: none;*/
 	}
 
 	a.manager {
@@ -62,13 +62,10 @@
 			<td width="200px">
 				@if (User.IsInRole("admin") || @User.IsInRole("manager"))
 				{
-					if (!Model.VotingStarted)
-					{
-						@:Голосование:
-						@Html.ActionLink(Model.VotingStarted ? "Запущено" : "Запустить", "InitiateVoting",
-										   new { unit = Model.UnitId },
-										   new { @class = Model.VotingStarted ? "disabled" : "manager", @id = "vote_status", @onclick = "return alterLink();" });
-					}
+					@:Голосование:
+					@Html.ActionLink(Model.VotingStarted ? "Остановить" : "Запустить", Model.VotingStarted ? "CancelVoting" : "InitiateVoting",
+									   new { unit = Model.UnitId, year = Model.Year },
+									   new { @class = Model.VotingStarted ? "disabled" : "manager", @id = "vote_status", @onclick = "return alterLink();" });
 				}
 			</td>
 			<td width="150px">
@@ -138,7 +135,15 @@
 @section Scripts {
 	<script>
 		function alterLink() {
-			$('#vote_status').removeClass('manager').addClass('disabled');
+			@if (Model.VotingStarted)
+			{
+				@:if (confirm("Вы уверены? Все сделанные заявки будут отменены")) { $('#vote_status').removeClass('disabled').addClass('manager'); return true; }
+				@:else return false;
+			}
+			else
+			{
+				@:$('#vote_status').removeClass('manager').addClass('disabled');
+			}
 		}
 	</script>
 }

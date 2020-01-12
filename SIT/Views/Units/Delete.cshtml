@@ -41,7 +41,7 @@
 @section Scripts {
 	<script>
 		function handle() {
-			if (@(ViewBag.SectionCount)> 0) {
+			if (@(Model.Sections.Count)> 0) {
 				$.ajax({
 					url: '@(Url.Action("ClearUnit","Sections"))?unitId=@Model.Id',
 					type: 'get',

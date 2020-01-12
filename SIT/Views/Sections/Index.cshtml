@@ -2,7 +2,6 @@
 @using SIT.Models
 @{
 	ViewBag.Title = "Index";
-	var db = new ApplicationDbContext();
 }
 
 
@@ -22,7 +21,7 @@
 					@Html.LabelFor(m => m.First().ChiefId)
 				</th>
 				<th>
-					@Html.LabelFor(m => m.First().Workers)
+					@Html.LabelFor(m => m.First().Staff)
 				</th>
 				<th></th>
 			</tr>
@@ -37,7 +36,7 @@
 						@Html.DisplayFor(modelItem => item.Chief.FullName)
 					</td>
 					<td>
-						@db.Users.Where(u => u.SectionId == item.Id).Count()
+						@item.Staff.Count
 					</td>
 					<td>
 						@Html.ActionLink("Изменить", "Edit", new { id = item.Id }) |
