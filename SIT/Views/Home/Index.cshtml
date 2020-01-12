@@ -5,7 +5,7 @@
 <div class="jumbotron" style="opacity:0.8;">
 	<h2>
 		СЛУЖБА ИНФОРМАЦИОННЫХ ТЕХНОЛОГИЙ<br />
-		<small>УПРАВЛЕНИЕ ПЕРСОНАЛОМ</small>
+		<small>УВСИТЦУ</small>
 	</h2>
 	<hr />
 </div>
@@ -21,9 +21,13 @@
 		<p>Вход в систему учета переработок персонала.<br />Просмотр сведений о переработках сотрудников.<br />Учет переработок.</p>
 		<p>@Html.ActionLink("Перейти", "Overworking", null, new { @class = "btn btn-default" })</p>
 	</div>
-	<div class="col-md-4">
-		<h2>Субботники</h2>
-		<p>Вход в систему учета субботников.<br />Распределение персонала по субботникам.<br />Учет субботников.</p>
-		<p>@Html.ActionLink("Перейти", "ExtraLabour", null, new { @class = "btn btn-default" })</p>
-	</div>
+
+	@if (User.IsInRole("admin") || User.IsInRole("manager") || User.IsInRole("chief"))
+	{
+		<div class="col-md-4">
+			<h2 style="color:#987316">Субботники</h2>
+			<p>Вход в систему учета субботников.<br />Распределение персонала по субботникам.<br />Учет субботников.</p>
+			<p>@Html.ActionLink("Перейти", "Index", "Labours", null, new { @class = "btn btn-default", @style = "border:2px solid darkgoldenrod" })</p>
+		</div>
+	}
 </div>

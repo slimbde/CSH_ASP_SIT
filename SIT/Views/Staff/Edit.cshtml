@@ -7,7 +7,6 @@
 
 <h2>Изменить</h2>
 
-
 @using (Html.BeginForm())
 {
 	@Html.AntiForgeryToken()
@@ -28,63 +27,72 @@
 		@Html.HiddenFor(model => model.UserName)
 
 		<div class="form-group">
-			@Html.LabelFor(model => model.Surname, htmlAttributes: new { @class = "control-label col-md-2" })
-			<div class="col-md-10">
+			@Html.LabelFor(model => model.Surname, htmlAttributes: new { @class = "control-label col-md-3" })
+			<div class="col-md-9">
 				@Html.EditorFor(model => model.Surname, new { htmlAttributes = new { @class = "form-control" } })
 				@Html.ValidationMessageFor(model => model.Surname, "", new { @class = "text-danger" })
 			</div>
 		</div>
 
 		<div class="form-group">
-			@Html.LabelFor(model => model.Name, htmlAttributes: new { @class = "control-label col-md-2" })
-			<div class="col-md-10">
+			@Html.LabelFor(model => model.Name, htmlAttributes: new { @class = "control-label col-md-3" })
+			<div class="col-md-9">
 				@Html.EditorFor(model => model.Name, new { htmlAttributes = new { @class = "form-control" } })
 				@Html.ValidationMessageFor(model => model.Name, "", new { @class = "text-danger" })
 			</div>
 		</div>
 
 		<div class="form-group">
-			@Html.LabelFor(model => model.Patronic, htmlAttributes: new { @class = "control-label col-md-2" })
-			<div class="col-md-10">
+			@Html.LabelFor(model => model.Patronic, htmlAttributes: new { @class = "control-label col-md-3" })
+			<div class="col-md-9">
 				@Html.EditorFor(model => model.Patronic, new { htmlAttributes = new { @class = "form-control" } })
 				@Html.ValidationMessageFor(model => model.Patronic, "", new { @class = "text-danger" })
 			</div>
 		</div>
 
 		<div class="form-group">
-			@Html.LabelFor(model => model.TabNo, htmlAttributes: new { @class = "control-label col-md-2" })
-			<div class="col-md-10">
-				@Html.EditorFor(model => model.TabNo, new { htmlAttributes = new { @class = "form-control", @placeholder = "ЧМ-", @maxlength = 10 } })
+			@Html.LabelFor(model => model.TabNo, htmlAttributes: new { @class = "control-label col-md-3" })
+			<div class="col-md-9">
+				@Html.EditorFor(model => model.TabNo, new { htmlAttributes = new { @class = "form-control", @placeholder = "ЧМ-", @maxlength = 11 } })
 				@Html.ValidationMessageFor(model => model.TabNo, "", new { @class = "text-danger" })
 			</div>
 		</div>
 
 		<div class="form-group">
-			@Html.LabelFor(model => model.Section.Name, htmlAttributes: new { @class = "control-label col-md-2" })
-			<div class="col-md-10">
+			@Html.LabelFor(model => model.Section.Name, htmlAttributes: new { @class = "control-label col-md-3" })
+			<div class="col-md-9">
 				@Html.DropDownList("SectionId", sectList, htmlAttributes: new { @class = "form-control" })
 				@Html.ValidationMessageFor(model => model.SectionId, "", new { @class = "text-danger" })
 			</div>
 		</div>
 
 		<div class="form-group">
-			@Html.LabelFor(model => model.Email, htmlAttributes: new { @class = "control-label col-md-2" })
-			<div class="col-md-2">
+			@Html.LabelFor(model => model.Email, htmlAttributes: new { @class = "control-label col-md-3" })
+			<div class="col-md-3">
 				@Html.EditorFor(model => model.Email, new { htmlAttributes = new { @class = "form-control" } })
 				@Html.ValidationMessageFor(model => model.Email, "", new { @class = "text-danger" })
 			</div>
 		</div>
 
 		<div class="form-group">
-			@Html.LabelFor(model => model.PhoneNumber, htmlAttributes: new { @class = "control-label col-md-2" })
-			<div class="col-md-10">
-				@Html.EditorFor(model => model.PhoneNumber, new { htmlAttributes = new { @class = "form-control", @placeholder = "89529991122", @maxlength = 11 } })
+			<label class="control-label col-md-3">Сот.</label>
+			<div class="col-md-9">
+				@Html.EditorFor(model => model.PhoneNumber, new { htmlAttributes = new { @class = "form-control", @placeholder = "89539991133", @maxlength = 11 } })
 				@Html.ValidationMessageFor(model => model.PhoneNumber, "", new { @class = "text-danger" })
 			</div>
 		</div>
+
+		<div class="form-group">
+			@Html.LabelFor(model => model.ParticipateInLabour, htmlAttributes: new { @class = "control-label col-md-3" })
+			<div class="col-md-3" style="margin-top:7px;">
+				@Html.CheckBoxFor(model => model.ParticipateInLabour, new { @style = "" })
+				@Html.ValidationMessageFor(model => model.ParticipateInLabour, "", new { @class = "text-danger" })
+			</div>
+		</div>
+
 		<hr />
 		<div class="form-group">
-			<div class="col-md-offset-2 col-md-10">
+			<div class="col-md-offset-3 col-md-9">
 				<input type="submit" value="Сохранить" class="btn btn-success" />
 			</div>
 		</div>

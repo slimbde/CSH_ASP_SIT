@@ -169,6 +169,7 @@
     <Compile Include="App_Start\Startup.Auth.cs" />
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\LaboursController.cs" />
     <Compile Include="Controllers\ManageController.cs" />
     <Compile Include="Controllers\SectionsController.cs" />
     <Compile Include="Controllers\StaffController.cs" />
@@ -189,13 +190,18 @@
     <Compile Include="Migrations\202001120902545_disable Section_Id.Designer.cs">
       <DependentUpon>202001120902545_disable Section_Id.cs</DependentUpon>
     </Compile>
-    <Compile Include="Migrations\202001120909209_disable Section_Id1.cs" />
-    <Compile Include="Migrations\202001120909209_disable Section_Id1.Designer.cs">
-      <DependentUpon>202001120909209_disable Section_Id1.cs</DependentUpon>
+    <Compile Include="Migrations\202001121539477_lab1.cs" />
+    <Compile Include="Migrations\202001121539477_lab1.Designer.cs">
+      <DependentUpon>202001121539477_lab1.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202001121544301_lab2.cs" />
+    <Compile Include="Migrations\202001121544301_lab2.Designer.cs">
+      <DependentUpon>202001121544301_lab2.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\IdentityModels.cs" />
+    <Compile Include="Models\Labour.cs" />
     <Compile Include="Models\ManageViewModels.cs" />
     <Compile Include="Models\MonthWeight.cs" />
     <Compile Include="Models\Section.cs" />
@@ -372,6 +378,11 @@
     <Content Include="Views\Vacations\Edit.cshtml" />
     <Content Include="Views\Vacations\Index.cshtml" />
     <Content Include="Views\Vacations\Review.cshtml" />
+    <Content Include="Views\Labours\Create.cshtml" />
+    <Content Include="Views\Labours\Delete.cshtml" />
+    <Content Include="Views\Labours\Details.cshtml" />
+    <Content Include="Views\Labours\Edit.cshtml" />
+    <Content Include="Views\Labours\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
@@ -399,8 +410,11 @@
     <EmbeddedResource Include="Migrations\202001120902545_disable Section_Id.resx">
       <DependentUpon>202001120902545_disable Section_Id.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\202001120909209_disable Section_Id1.resx">
-      <DependentUpon>202001120909209_disable Section_Id1.cs</DependentUpon>
+    <EmbeddedResource Include="Migrations\202001121539477_lab1.resx">
+      <DependentUpon>202001121539477_lab1.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202001121544301_lab2.resx">
+      <DependentUpon>202001121544301_lab2.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

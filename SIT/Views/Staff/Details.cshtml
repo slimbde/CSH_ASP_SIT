@@ -4,6 +4,13 @@
 	ViewBag.Title = "Details";
 }
 
+<style>
+	.dl-horizontal dt {
+		width: 25%;
+		margin-right: 10px;
+	}
+</style>
+
 <h2>Подробно</h2>
 
 <div>
@@ -24,6 +31,9 @@
 
 		<dt>@Html.LabelFor(model => model.SectionId)</dt>
 		<dd>@Html.DisplayFor(model => model.Section.Name)</dd>
+
+		<dt>@Html.LabelFor(model => model.ParticipateInLabour)</dt>
+		<dd>@Html.DisplayFor(model => model.ParticipateInLabour)</dd>
 	</dl>
 </div>
 <hr />

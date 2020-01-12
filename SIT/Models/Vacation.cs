@@ -13,9 +13,11 @@ namespace SIT.Models
 	{
 		public int Id { get; set; }
 
+		
 		[Display(Name = "Сотрудник")]
 		public string UsrId { get; set; }
 		public virtual ApplicationUser Usr { get; set; }
+
 
 		[Display(Name = "Год")]
 		public int Year { get; set; }

@@ -18,8 +18,8 @@ namespace SIT
 						"~/Scripts/jquery.validate*"));
 
 			bundles.Add(new ScriptBundle("~/bundles/myScripts")
-				.Include("~/Scripts/my.js"));
-			//.Include("~/Scripts/particle-wave.js"));
+				.Include("~/Scripts/my.js")
+			.Include("~/Scripts/particle-wave.js"));
 
 			//// Используйте версию Modernizr для разработчиков, чтобы учиться работать. Когда вы будете готовы перейти к работе,
 			//// готово к выпуску, используйте средство сборки по адресу https://modernizr.com, чтобы выбрать только необходимые тесты.
@@ -28,9 +28,6 @@ namespace SIT
 
 			bundles.Add(new ScriptBundle("~/bundles/bootstrap").Include(
 					  "~/Scripts/bootstrap.min.js"));
-
-			bundles.Add(new ScriptBundle("~/bundles/datetimepicker").Include(
-					  "~/Scripts/bootstrap-datetimepicker.js"));
 
 			bundles.Add(new ScriptBundle("~/bundles/moment")
 				.Include("~/Scripts/moment-with-locales.min.js"));

@@ -1,0 +1,98 @@
+﻿@model Labour
+@using SIT.Models
+@{
+	ViewBag.Title = "Create";
+	var Now = DateTime.Now.ToString("yyyy-MM-dd");
+	var min = (DateTime.Now.Year - 1).ToString() + "-01-01";
+
+	var selectList = new SelectList(ViewBag.Users as List<ApplicationUser>, "Id", "FullName");
+}
+
+<h2>Создать</h2>
+
+
+@using (Html.BeginForm())
+{
+	@Html.AntiForgeryToken()
+
+	<div class="form-horizontal">
+		<h4>субботник</h4>
+		<hr />
+		@Html.ValidationSummary(true, "", new { @class = "text-danger" })
+		<div class="form-group">
+			<label for="#datepicker" class="control-label col-md-2">Дата cубботника</label>
+			<div class="col-md-10">
+				<input type='date' class="form-control date" name="date" id="datepicker" value="@Now" min="@min" max="@Now" data-val="true" data-val-required="Введите дату" />
+				@Html.ValidationMessage("date", "", new { @class = "text-danger" })
+			</div>
+		</div>
+
+		<div class="form-group">
+			@Html.LabelFor(model => model.Users, htmlAttributes: new { @class = "control-label col-md-2" })
+			<div class="col-md-5" id="labours"></div>
+		</div>
+
+		<dl class="form-group">
+			<dt class="col-md-2">&nbsp;</dt>
+			<dd class="col-md-10 control-label">
+				@Html.DropDownListFor(model => Model.Users, selectList, htmlAttributes: new { @class = "form-control col-md-2", @id = "pick" })
+				<a href="#" class="addLink col-md-3 text-left text-success">Добавить</a>
+			</dd>
+		</dl>
+
+		<hr />
+		<div class="form-group">
+			<div class="col-md-offset-2 col-md-10">
+				<input type="submit" value="Отправить" class="btn btn-primary" />
+			</div>
+		</div>
+	</div>
+}
+
+<div>
+	@Html.ActionLink("Назад", "Index")
+</div>
+
+@section Scripts {
+	@Scripts.Render("~/bundles/jqueryval")
+
+	<script>
+		// функция добавления сотрудника в субботник
+		$(function () {
+			var i = 0;
+			$('.addLink').click(function () {
+				var nick = $('#pick option').filter(':selected').text();
+				var id = $('#pick option').filter(':selected').val();
+
+				if ($('#'+ id).length)
+					alert("Сотрудник уже в этом субботнике");
+				else {
+					var html = "<div id='" + id + "_1'>" + nick + "&nbsp;&nbsp;&nbsp;<a href='#' id=" + id + " onclick='deleteItem(event)' class='text-danger'>Удалить</a>" +
+						"<input type='hidden' name='participants' value='"+id+"' id='"+id+"_2' /></div>";
+					$('#labours').append(html);
+
+					@*$.ajax({
+						url: '@(Url.Action("Append","Labours"))?sectionId='+id+'&unitId='+@Model.Id,
+						type: 'get',
+					});*@
+				}
+			});
+		});
+
+
+		// функция удаления сотрудника из субботника
+		function deleteItem(event) {
+			event.preventDefault();
+			var id = event.target.id;
+
+			@*$.ajax({
+				url: '@(Url.Action("Remove","Sections"))?sectionId='+id+'&unitId='+@Model.Id,
+				type: 'get',
+			});*@
+
+			$('#'+id).remove();
+			$('#'+id+'_1').remove();
+			$('#'+id+'_2').remove();
+		}
+	</script>
+}

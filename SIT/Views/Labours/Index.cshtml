@@ -1,0 +1,69 @@
+﻿@model LabourViewModel
+@using SIT.Models
+@{
+	ViewBag.Title = "Index";
+	var count = 0;
+}
+
+<style>
+	table tbody {
+		display: block;
+		max-height: 650px;
+		overflow-y: scroll;
+	}
+
+		table thead, table tbody tr {
+			display: table;
+			width: 100%;
+			table-layout: fixed;
+		}
+
+	::-webkit-scrollbar {
+		width: 0px; /*Remove scrollbar space */
+		background: transparent; /* Optional: just make scrollbar invisible */
+	}
+</style>
+
+<h2>Субботники</h2>
+@Html.ValidationSummary(true, "", new { @class = "text-danger" })
+<p>
+	@Html.ActionLink("Добавить субботник", "Create", null, new { @class = "pull-right" })
+</p>
+<table class="table table-condensed">
+	<thead>
+		<tr>
+			<th width="12%">@Html.DisplayNameFor(model => model.Users.FirstOrDefault().Surname)</th>
+			<th width="12%">@Html.DisplayNameFor(model => model.Users.FirstOrDefault().Name)</th>
+			<th width="17%">@Html.DisplayNameFor(model => model.Users.FirstOrDefault().Patronic)</th>
+			<th width="15%">Отдел</th>
+			<th width="25%">@Html.DisplayNameFor(model => model.Users.FirstOrDefault().SectionId)</th>
+			<th width="12%"></th>
+			<th></th>
+		</tr>
+	</thead>
+	<tbody>
+		@foreach (var item in Model.Users)
+		{
+			++count;
+
+			var currentUserUnit = Model.GetUserUnit(item).Name;
+			var currentUserDate = Model.GetUserLabourDate(item);
+			var labourDate = currentUserDate == null ? "" : currentUserDate.Value.Date.ToShortDateString();
+
+			<tr class="@(count>2?"":"active")">
+				<td width="12%">@Html.DisplayFor(modelItem => item.Surname)</td>
+				<td width="12%">@Html.DisplayFor(modelItem => item.Name)</td>
+				<td width="17%">@Html.DisplayFor(modelItem => item.Patronic)</td>
+				<td width="15%">@Html.DisplayFor(modelItem => currentUserUnit)</td>
+				<td width="25%">@Html.DisplayFor(modelItem => item.Section.Name)</td>
+				<td width="12%">@labourDate</td>
+				<td>
+					@if (currentUserDate != null)
+					{
+						@Html.ActionLink("Удалить", "Delete", new { userId = item.Id, date = labourDate })
+					}
+				</td>
+			</tr>
+		}
+	</tbody>
+</table>

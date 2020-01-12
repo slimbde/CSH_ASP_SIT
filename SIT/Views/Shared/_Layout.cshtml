@@ -18,11 +18,11 @@
 					<span class="icon-bar"></span>
 					<span class="icon-bar"></span>
 				</button>
-				@Html.ActionLink("СИТ Персонал", "Index", "Home", new { area = "" }, new { @class = "navbar-brand", @id = "menu_Main" })
+				@Html.ActionLink("УВСИТЦУ", "Index", "Home", new { area = "" }, new { @class = "navbar-brand", @id = "menu_Main" })
 			</div>
 			<div class="collapse navbar-collapse">
 				<ul class="nav navbar-nav" id="menuTabs">
-					@if (User.IsInRole("manager") || User.IsInRole("admin"))
+					@if (User.IsInRole("admin"))
 					{
 						<li id="menu_Units"><a href="~/Units/Index" style="color:yellowgreen;" onmouseover="this.style.color = 'chartreuse';" onmouseout="this.style.color = 'yellowgreen';">Отделы</a></li>
 					}
@@ -30,6 +30,7 @@
 					{
 						<li id="menu_Sections"><a href="~/Sections/Index" style="color:darkgoldenrod;" onmouseover="this.style.color = '#f5b820';" onmouseout="this.style.color = 'darkgoldenrod';">Бюро</a></li>
 						<li id="menu_Staff"><a href="~/Staff/Index" style="color:darkgoldenrod;" onmouseover="this.style.color = '#f5b820';" onmouseout="this.style.color = 'darkgoldenrod';">Сотрудники</a></li>
+						<li id="menu_Labours"><a href="~/Labours/Index" style="color:darkgoldenrod;" onmouseover="this.style.color = '#f5b820';" onmouseout="this.style.color = 'darkgoldenrod';">Субботники</a></li>
 					}
 					<li id="menu_Vacations">@Html.ActionLink("Отпуска", "Index", "Vacations")</li>
 					<li id="menu_Help">@Html.ActionLink("Помощь", "Help", "Home")</li>
@@ -50,7 +51,6 @@
 	@Scripts.Render("~/bundles/jquerymin")
 	@Scripts.Render("~/bundles/moment")
 	@Scripts.Render("~/bundles/bootstrap")
-	@Scripts.Render("~/bundles/datetimepicker")
 	@Scripts.Render("~/bundles/myScripts")
 	@RenderSection("scripts", required: false)
 </body>

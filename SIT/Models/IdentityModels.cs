@@ -13,10 +13,14 @@ namespace SIT.Models
 	// В профиль пользователя можно добавить дополнительные данные, если указать больше свойств для класса ApplicationUser. Подробности см. на странице https://go.microsoft.com/fwlink/?LinkID=317594.
 	public class ApplicationUser : IdentityUser
 	{
-		public string Name { get; set; }
-		public string Surname { get; set; }
-		public string Patronic { get; set; }
+		[Display(Name = "Имя")]
 
+		public string Name { get; set; }
+		[Display(Name = "Фамилия")]
+		public string Surname { get; set; }
+
+		[Display(Name = "Отчество")]
+		public string Patronic { get; set; }
 
 		[Display(Name = "Таб. №")]
 		public string TabNo { get; set; }
@@ -28,8 +32,15 @@ namespace SIT.Models
 
 		[Display(Name = "Бюро")]
 		public int? SectionId { get; set; }
-		[ForeignKey("SectionId")]
 		public virtual Section Section { get; set; }
+
+
+		[Display(Name = "Участвует в субботниках")]
+		public bool ParticipateInLabour { get; set; }
+
+
+		[Display(Name = "Субботники")]
+		public virtual ICollection<Labour> Labours { get; set; }
 
 
 		public async Task<ClaimsIdentity> GenerateUserIdentityAsync(UserManager<ApplicationUser> manager)
@@ -48,8 +59,8 @@ namespace SIT.Models
 		public virtual DbSet<MonthWeight> MonthWeights { get; set; }
 		public virtual DbSet<Vacation> Vacations { get; set; }
 		public virtual DbSet<Voting> Votings { get; set; }
-
-
+		public virtual DbSet<Labour> Labours { get; set; }
+		
 		public ApplicationDbContext()
 			: base("DefaultConnection", throwIfV1Schema: false)
 		{ }
