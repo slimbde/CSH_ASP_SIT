@@ -60,7 +60,8 @@ namespace SIT.Models
 		public virtual DbSet<Vacation> Vacations { get; set; }
 		public virtual DbSet<Voting> Votings { get; set; }
 		public virtual DbSet<Labour> Labours { get; set; }
-		
+		public virtual DbSet<Overtime> Overtimes { get; set; }
+
 		public ApplicationDbContext()
 			: base("DefaultConnection", throwIfV1Schema: false)
 		{ }

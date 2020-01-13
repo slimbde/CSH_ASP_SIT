@@ -198,12 +198,73 @@
     <Compile Include="Migrations\202001121544301_lab2.Designer.cs">
       <DependentUpon>202001121544301_lab2.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\202001130739015_overtime.cs" />
+    <Compile Include="Migrations\202001130739015_overtime.Designer.cs">
+      <DependentUpon>202001130739015_overtime.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202001130800008_overtimes.cs" />
+    <Compile Include="Migrations\202001130800008_overtimes.Designer.cs">
+      <DependentUpon>202001130800008_overtimes.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202001130804505_overtimes1.cs" />
+    <Compile Include="Migrations\202001130804505_overtimes1.Designer.cs">
+      <DependentUpon>202001130804505_overtimes1.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202001130806199_overtimes2.cs" />
+    <Compile Include="Migrations\202001130806199_overtimes2.Designer.cs">
+      <DependentUpon>202001130806199_overtimes2.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202001130807573_overtimes3.cs" />
+    <Compile Include="Migrations\202001130807573_overtimes3.Designer.cs">
+      <DependentUpon>202001130807573_overtimes3.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202001130811183_overtimes4.cs" />
+    <Compile Include="Migrations\202001130811183_overtimes4.Designer.cs">
+      <DependentUpon>202001130811183_overtimes4.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202001130818500_overtimes5.cs" />
+    <Compile Include="Migrations\202001130818500_overtimes5.Designer.cs">
+      <DependentUpon>202001130818500_overtimes5.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202001130823552_overtimes6.cs" />
+    <Compile Include="Migrations\202001130823552_overtimes6.Designer.cs">
+      <DependentUpon>202001130823552_overtimes6.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202001130830411_overtimes7.cs" />
+    <Compile Include="Migrations\202001130830411_overtimes7.Designer.cs">
+      <DependentUpon>202001130830411_overtimes7.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202001130835032_overtimes8.cs" />
+    <Compile Include="Migrations\202001130835032_overtimes8.Designer.cs">
+      <DependentUpon>202001130835032_overtimes8.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202001130840254_overtimes9.cs" />
+    <Compile Include="Migrations\202001130840254_overtimes9.Designer.cs">
+      <DependentUpon>202001130840254_overtimes9.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202001130844349_overtimes10.cs" />
+    <Compile Include="Migrations\202001130844349_overtimes10.Designer.cs">
+      <DependentUpon>202001130844349_overtimes10.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202001130846053_overtimes11.cs" />
+    <Compile Include="Migrations\202001130846053_overtimes11.Designer.cs">
+      <DependentUpon>202001130846053_overtimes11.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202001130847417_overtimes12.cs" />
+    <Compile Include="Migrations\202001130847417_overtimes12.Designer.cs">
+      <DependentUpon>202001130847417_overtimes12.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202001130917192_overtimes111.cs" />
+    <Compile Include="Migrations\202001130917192_overtimes111.Designer.cs">
+      <DependentUpon>202001130917192_overtimes111.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\IdentityModels.cs" />
     <Compile Include="Models\Labour.cs" />
     <Compile Include="Models\ManageViewModels.cs" />
     <Compile Include="Models\MonthWeight.cs" />
+    <Compile Include="Models\Overtime.cs" />
     <Compile Include="Models\Section.cs" />
     <Compile Include="Models\Unit.cs" />
     <Compile Include="Models\Vacation.cs" />
@@ -383,6 +444,11 @@
     <Content Include="Views\Labours\Details.cshtml" />
     <Content Include="Views\Labours\Edit.cshtml" />
     <Content Include="Views\Labours\Index.cshtml" />
+    <Content Include="Views\Overtimes\Create.cshtml" />
+    <Content Include="Views\Overtimes\Delete.cshtml" />
+    <Content Include="Views\Overtimes\Details.cshtml" />
+    <Content Include="Views\Overtimes\Edit.cshtml" />
+    <Content Include="Views\Overtimes\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
@@ -415,6 +481,51 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\202001121544301_lab2.resx">
       <DependentUpon>202001121544301_lab2.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202001130739015_overtime.resx">
+      <DependentUpon>202001130739015_overtime.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202001130800008_overtimes.resx">
+      <DependentUpon>202001130800008_overtimes.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202001130804505_overtimes1.resx">
+      <DependentUpon>202001130804505_overtimes1.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202001130806199_overtimes2.resx">
+      <DependentUpon>202001130806199_overtimes2.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202001130807573_overtimes3.resx">
+      <DependentUpon>202001130807573_overtimes3.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202001130811183_overtimes4.resx">
+      <DependentUpon>202001130811183_overtimes4.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202001130818500_overtimes5.resx">
+      <DependentUpon>202001130818500_overtimes5.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202001130823552_overtimes6.resx">
+      <DependentUpon>202001130823552_overtimes6.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202001130830411_overtimes7.resx">
+      <DependentUpon>202001130830411_overtimes7.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202001130835032_overtimes8.resx">
+      <DependentUpon>202001130835032_overtimes8.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202001130840254_overtimes9.resx">
+      <DependentUpon>202001130840254_overtimes9.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202001130844349_overtimes10.resx">
+      <DependentUpon>202001130844349_overtimes10.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202001130846053_overtimes11.resx">
+      <DependentUpon>202001130846053_overtimes11.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202001130847417_overtimes12.resx">
+      <DependentUpon>202001130847417_overtimes12.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202001130917192_overtimes111.resx">
+      <DependentUpon>202001130917192_overtimes111.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

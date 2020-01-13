@@ -28,12 +28,13 @@
 
 			@foreach (var item in Model)
 			{
+				var fullName = item.Chief.FullName;
 				<tr>
 					<td>
 						@Html.DisplayFor(modelItem => item.Name)
 					</td>
 					<td>
-						@Html.DisplayFor(modelItem => item.Chief.FullName)
+						@Html.DisplayFor(modelItem => fullName)
 					</td>
 					<td>
 						@item.Staff.Count

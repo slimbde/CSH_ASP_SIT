@@ -19,7 +19,7 @@ namespace SIT.Controllers
 		// GET: Sections
 		public async Task<ActionResult> Index()
 		{
-			var sections = await db.Sections.ToListAsync();
+			var sections = db.Sections.ToList();
 			foreach (var item in sections)
 			{
 				item.Staff = db.Users.Where(u => u.SectionId == item.Id).ToList();

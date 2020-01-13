@@ -40,6 +40,7 @@ namespace SIT.Controllers
 			return View(ViewModel);
 		}
 
+
 		/// <summary>
 		/// метод для инициализации голосования
 		/// </summary>
@@ -50,6 +51,7 @@ namespace SIT.Controllers
 
 			return RedirectToAction("Index");
 		}
+
 
 		/// <summary>
 		/// метод для остановки голосования
@@ -66,129 +68,7 @@ namespace SIT.Controllers
 		[Authorize(Roles = "admin, manager, chief")]
 		public ActionResult Review(int? unit, int? section, string UsrId, string Year, string Month)
 		{
-			var vacations = db.Vacations.Include(u => u.Usr);
-			var units = new List<Unit>();
-			var sections = new List<Section>();
-			var users = new List<ApplicationUser>();
-
-			if (User.IsInRole("chief"))
-			{
-				if (unit == null || unit == 0)
-					unit = VotingEngine.GetUserUnit(User);
-
-				// отделы
-				units = new List<Unit> { new Unit { Id = 0, Name = "-- все --" } };
-				units.Add(db.Units.FirstOrDefault(unt => unt.Id == unit));
-				vacations = vacations.Where(v => v.Usr.Section.UnitId == unit); // фильтр по отделу
-
-				// бюро
-				sections = new List<Section> { new Section { Id = 0, Name = "-- все --" } };
-				section = db.Sections.FirstOrDefault(s => s.Chief.UserName == User.Identity.Name).Id;
-				sections.Add(db.Sections.FirstOrDefault(s => s.Id == section));
-
-				if (section != null && section != 0)
-					vacations = vacations.Where(v => v.Usr.SectionId == section); // фильтр по бюро
-
-				// пользователи
-				users = new List<ApplicationUser> { new ApplicationUser { Id = "-- все --", Surname = "-- все --" } };
-				users.AddRange(db.Users.Where(u => u.SectionId == section).OrderBy(u => u.Surname).ToList());
-
-				if (!string.IsNullOrEmpty(UsrId) && UsrId != "-- все --")
-					vacations = vacations.Where(v => v.UsrId == UsrId); // фильтр по пользователю
-			}
-			else if (User.IsInRole("manager"))
-			{
-				if (unit == null || unit == 0)
-					unit = VotingEngine.GetUserUnit(User);
-
-				// отделы
-				units = new List<Unit> { new Unit { Id = 0, Name = "-- все --" } };
-				units.Add(db.Units.FirstOrDefault(unt => unt.Id == unit));
-				vacations = vacations.Where(v => v.Usr.Section.UnitId == unit || v.UsrId == db.Units.FirstOrDefault(u => u.Id == unit).ChiefId); // фильтр по отделу
-
-
-				// бюро
-				sections = new List<Section> { new Section { Id = 0, Name = "-- все --" } };
-				sections.AddRange(db.Sections.Where(s => s.UnitId == unit).ToList());
-
-				if (section != null && section != 0)
-					vacations = vacations.Where(v => v.Usr.SectionId == section); // фильтр по бюро
-
-				// пользователи
-				users = new List<ApplicationUser> { new ApplicationUser { Id = "-- все --", Surname = "-- все --" } };
-				users.AddRange(db.Users.Where(u => u.Section.UnitId == unit).OrderBy(u => u.Surname).ToList());
-
-				if (!string.IsNullOrEmpty(UsrId) && UsrId != "-- все --")
-					vacations = vacations.Where(v => v.UsrId == UsrId); // фильтр по пользователю
-			}
-			else
-			{
-				// отделы
-				units = new List<Unit> { new Unit { Id = 0, Name = "-- все --" } };
-				units.AddRange(db.Units.ToList());
-
-				if (unit != null && unit != 0)
-					vacations = vacations.Where(v => v.Usr.Section.UnitId == unit || v.UsrId == db.Units.FirstOrDefault(u => u.Id == unit).ChiefId); // фильтр по отделу
-
-
-				// бюро
-				sections = new List<Section> { new Section { Id = 0, Name = "-- все --" } };
-				if (unit != 0 && unit != null)
-					sections.AddRange(db.Sections.Where(s => s.UnitId == unit).ToList());
-				else
-					sections.AddRange(db.Sections.ToList());
-
-				if (section != null && section != 0)
-					vacations = vacations.Where(v => v.Usr.SectionId == section); // фильтр по бюро
-
-				// пользователи
-				users = new List<ApplicationUser> { new ApplicationUser { Id = "-- все --", Surname = "-- все --" } };
-				if (unit != 0 && unit != null)
-					users.AddRange(db.Users.Where(u => u.Section.UnitId == unit).OrderBy(u => u.Surname).ToList());
-				else
-					users.AddRange(db.Users.OrderBy(u => u.Surname).ToList());
-
-				if (!string.IsNullOrEmpty(UsrId) && UsrId != "-- все --")
-					vacations = vacations.Where(v => v.UsrId == UsrId); // фильтр по пользователю
-			}
-
-
-			// года
-			var years = vacations.Select(v => v.Year).Distinct().ToList();
-			var strYears = new List<string> { "-- все --" };
-			foreach (var item in years)
-			{
-				strYears.Add(item.ToString());
-			}
-			if (!string.IsNullOrEmpty(Year) && Year != "-- все --")
-			{
-				int year = Convert.ToInt32(Year);
-				vacations = vacations.Where(v => v.Year == year);
-			}
-
-			// месяцы
-			var months = vacations.Select(v => v.Month).Distinct().ToList();
-			var strMonths = new List<string> { "-- все --" };
-			foreach (var item in months)
-			{
-				strMonths.Add(item.ToString());
-			}
-			if (!string.IsNullOrEmpty(Month) && Month != "-- все --")
-			{
-				int month = Convert.ToInt32(Month);
-				vacations = vacations.Where(v => v.Month == month);
-			}
-
-
-			var vlvm = new VacationListViewModel
-			{
-				Vacations = vacations.OrderBy(v => v.Usr.Surname).ToList(),
-				Units = new SelectList(units, "Id", "Name"),
-				Sections = new SelectList(sections, "Id", "Name"),
-				Users = new SelectList(users, "Id", "FullName"),
-				Years = new SelectList(strYears),
-				Months = new SelectList(strMonths),
-			};
+			var vlvm = new VacationListViewModel(User, unit, section, UsrId, Year, Month);
 
 			return View(vlvm);
 		}
