@@ -3,6 +3,7 @@
 @model Section
 @{
 	ViewBag.Title = "Details";
+	var chiefFullName = Model.GetUserFullName(Model.ChiefId);
 }
 
 <h2>Подробно</h2>
@@ -24,7 +25,7 @@
 		</dt>
 
 		<dd>
-			@Html.DisplayFor(model => model.Chief.FullName)
+			@Html.DisplayFor(model => chiefFullName)
 		</dd>
 
 		<hr />

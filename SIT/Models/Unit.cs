@@ -8,6 +8,9 @@ namespace SIT.Models
 {
 	public class Unit
 	{
+		ApplicationDbContext db = ApplicationDbContext.Create();
+
+
 		public int Id { get; set; }
 
 		[Required]
@@ -17,7 +20,7 @@ namespace SIT.Models
 
 		[Display(Name = "Руководитель отдела")]
 		public string ChiefId { get; set; }
-		public virtual ApplicationUser Chief { get; set; }
+		public string GetUserFullName(string id) => db.Users.FirstOrDefault(u => u.Id == id).FullName;
 
 
 		[Display(Name = "Бюро в отделе")]

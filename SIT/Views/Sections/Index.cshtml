@@ -28,7 +28,7 @@
 
 			@foreach (var item in Model)
 			{
-				var fullName = item.Chief.FullName;
+				var fullName = item.GetUserFullName(item.ChiefId);
 				<tr>
 					<td>
 						@Html.DisplayFor(modelItem => item.Name)

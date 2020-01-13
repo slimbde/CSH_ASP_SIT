@@ -98,14 +98,15 @@ namespace SIT.Controllers
 			}
 			else if (User.IsInRole("chief"))
 			{
-				var section = db.Sections.FirstOrDefault(s => s.Chief.UserName == User.Identity.Name).Id;
+				var chiefId = db.Users.FirstOrDefault(us => us.UserName == User.Identity.Name).Id;
+				var section = db.Sections.FirstOrDefault(s => s.ChiefId == chiefId).Id;
 				ViewBag.UserList = new SelectList(db.Users.Where(u => u.SectionId == section).OrderBy(u => u.Surname), "Id", "FullName");
 			}
 			else if (User.IsInRole("manager"))
 			{
-				db.Sections.Include(sec => sec.Unit);
-				var unitChief = db.Units.FirstOrDefault(un => un.Id == unit).Chief;
-				ViewBag.UserList = new SelectList(db.Users.Where(us => us.Section.Unit.ChiefId == unitChief.Id || us.Id == unitChief.Id).OrderBy(u => u.Surname), "Id", "FullName");
+				//db.Sections.Include(sec => sec.Unit);
+				var unitChiefId = db.Units.FirstOrDefault(un => un.Id == unit).ChiefId;
+				ViewBag.UserList = new SelectList(db.Users.Where(us => us.Section.Unit.ChiefId == unitChiefId || us.Id == unitChiefId).OrderBy(u => u.Surname), "Id", "FullName");
 			}
 			else
 				ViewBag.UserList = new SelectList(db.Users.OrderBy(u => u.Surname), "Id", "FullName");

@@ -89,7 +89,8 @@ namespace SIT.Models
 
 			// бюро
 			sections = new List<Section> { new Section { Id = 0, Name = "-- все --" } };
-			Section = db.Sections.FirstOrDefault(s => s.Chief.UserName == User.Identity.Name).Id;
+			var chiefId = db.Users.FirstOrDefault(u => u.UserName == User.Identity.Name).Id;
+			Section = db.Sections.FirstOrDefault(s => s.ChiefId == chiefId).Id;
 			sections.Add(db.Sections.FirstOrDefault(s => s.Id == Section));
 
 			if (Section != null && Section != 0)
@@ -246,7 +247,7 @@ namespace SIT.Models
 			IQueryable<Vacation> vacations = null;
 
 			var unitChiefId = db.Units.FirstOrDefault(u => u.Id == UnitId).ChiefId;
-			vacations = db.Vacations.Where(v => (v.Usr.Section.Unit.Chief.Id == unitChiefId) || (v.Usr.Id == unitChiefId));
+			vacations = db.Vacations.Where(v => (v.Usr.Section.Unit.ChiefId == unitChiefId) || (v.Usr.Id == unitChiefId));
 
 			Vacations = vacations.Where(v => v.Year == Year).OrderBy(v => v.Usr.Surname).ThenBy(v => v.Month).Include(v => v.Usr).ToList();
 		}

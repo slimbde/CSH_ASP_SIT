@@ -43,6 +43,10 @@ namespace SIT.Models
 		public virtual ICollection<Labour> Labours { get; set; }
 
 
+		[Display(Name = "Переработки")]
+		public virtual ICollection<Overtime> Overtimes { get; set; }
+
+
 		public async Task<ClaimsIdentity> GenerateUserIdentityAsync(UserManager<ApplicationUser> manager)
 		{
 			// Обратите внимание, что authenticationType должен совпадать с типом, определенным в CookieAuthenticationOptions.AuthenticationType

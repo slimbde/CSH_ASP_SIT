@@ -19,6 +19,21 @@ namespace SIT.Controllers
 		// GET: Staff
 		public async Task<ActionResult> Index()
 		{
+			var unit = VotingEngine.GetUserUnit(User);
+			IQueryable<ApplicationUser> users;
+			if (User.IsInRole("manager"))
+			{
+				users = db.Users.Where(u => u.Section.UnitId == unit || u.Id == (db.Units.FirstOrDefault(un => un.Id == unit).ChiefId));
+				return View(await users.ToListAsync());
+			}
+			else if (User.IsInRole("chief"))
+			{
+				var userId = db.Users.FirstOrDefault(u => u.UserName == User.Identity.Name).Id;
+				var sectionId = db.Sections.FirstOrDefault(s => s.ChiefId == userId).Id;
+				users = db.Users.Where(u => u.SectionId == sectionId);
+				return View(await users.ToListAsync());
+			}
+
 			return View(await db.Users.ToListAsync());
 		}
 

@@ -19,7 +19,7 @@
 	<div class="col-md-4">
 		<h2>Переработки</h2>
 		<p>Вход в систему учета переработок персонала.<br />Просмотр сведений о переработках сотрудников.<br />Учет переработок.</p>
-		<p>@Html.ActionLink("Перейти", "Overworking", null, new { @class = "btn btn-default" })</p>
+		<p>@Html.ActionLink("Перейти", "Index", "Overtimes", null, new { @class = "btn btn-default" })</p>
 	</div>
 
 	@if (User.IsInRole("admin") || User.IsInRole("manager") || User.IsInRole("chief"))

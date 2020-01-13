@@ -10,6 +10,10 @@ namespace SIT.Models
 {
 	public class Section
 	{
+		[NotMapped]
+		ApplicationDbContext db = ApplicationDbContext.Create();
+
+
 		public int Id { get; set; }
 
 		[Required]
@@ -19,8 +23,13 @@ namespace SIT.Models
 
 		[Display(Name = "Руководитель бюро")]
 		public string ChiefId { get; set; }
-		[ForeignKey("ChiefId")]
-		public virtual ApplicationUser Chief { get; set; }
+		//[ForeignKey("ChiefId")]
+		//public virtual ApplicationUser Chief { get; set; }
+
+		public string GetUserFullName(string id)
+		{
+			return db.Users.FirstOrDefault(u => u.Id == id).FullName;
+		}
 
 
 		[Display(Name = "Отдел")]

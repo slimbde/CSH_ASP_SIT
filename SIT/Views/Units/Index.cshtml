@@ -25,14 +25,15 @@
 				<th></th>
 			</tr>
 
-			@foreach (Unit item in Model)
+			@foreach (var item in Model)
 			{
+				var unitChiefName = item.GetUserFullName(item.ChiefId);
 				<tr>
 					<td>
 						@Html.DisplayFor(modelItem => item.Name)
 					</td>
 					<td>
-						@Html.DisplayFor(modelItem => item.Chief.FullName)
+						@Html.DisplayFor(modelItem => unitChiefName)
 					</td>
 					<td>
 						@item.Sections.Count

@@ -171,6 +171,7 @@
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\LaboursController.cs" />
     <Compile Include="Controllers\ManageController.cs" />
+    <Compile Include="Controllers\OvertimesController.cs" />
     <Compile Include="Controllers\SectionsController.cs" />
     <Compile Include="Controllers\StaffController.cs" />
     <Compile Include="Controllers\UnitsController.cs" />
@@ -257,6 +258,26 @@
     <Compile Include="Migrations\202001130917192_overtimes111.cs" />
     <Compile Include="Migrations\202001130917192_overtimes111.Designer.cs">
       <DependentUpon>202001130917192_overtimes111.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202001130942321_right.cs" />
+    <Compile Include="Migrations\202001130942321_right.Designer.cs">
+      <DependentUpon>202001130942321_right.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202001131041007_right1.cs" />
+    <Compile Include="Migrations\202001131041007_right1.Designer.cs">
+      <DependentUpon>202001131041007_right1.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202001131047445_right2.cs" />
+    <Compile Include="Migrations\202001131047445_right2.Designer.cs">
+      <DependentUpon>202001131047445_right2.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202001131048436_right3.cs" />
+    <Compile Include="Migrations\202001131048436_right3.Designer.cs">
+      <DependentUpon>202001131048436_right3.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202001131052020_right4.cs" />
+    <Compile Include="Migrations\202001131052020_right4.Designer.cs">
+      <DependentUpon>202001131052020_right4.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
@@ -526,6 +547,21 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\202001130917192_overtimes111.resx">
       <DependentUpon>202001130917192_overtimes111.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202001130942321_right.resx">
+      <DependentUpon>202001130942321_right.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202001131041007_right1.resx">
+      <DependentUpon>202001131041007_right1.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202001131047445_right2.resx">
+      <DependentUpon>202001131047445_right2.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202001131048436_right3.resx">
+      <DependentUpon>202001131048436_right3.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202001131052020_right4.resx">
+      <DependentUpon>202001131052020_right4.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

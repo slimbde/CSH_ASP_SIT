@@ -26,13 +26,17 @@
 					{
 						<li id="menu_Units"><a href="~/Units/Index" style="color:yellowgreen;" onmouseover="this.style.color = 'chartreuse';" onmouseout="this.style.color = 'yellowgreen';">Отделы</a></li>
 					}
-					@if (User.IsInRole("manager") || User.IsInRole("chief") || User.IsInRole("admin"))
+					@if (User.IsInRole("manager") || User.IsInRole("admin"))
 					{
 						<li id="menu_Sections"><a href="~/Sections/Index" style="color:darkgoldenrod;" onmouseover="this.style.color = '#f5b820';" onmouseout="this.style.color = 'darkgoldenrod';">Бюро</a></li>
+					}
+					@if (User.IsInRole("manager") || User.IsInRole("chief") || User.IsInRole("admin"))
+					{
 						<li id="menu_Staff"><a href="~/Staff/Index" style="color:darkgoldenrod;" onmouseover="this.style.color = '#f5b820';" onmouseout="this.style.color = 'darkgoldenrod';">Сотрудники</a></li>
 						<li id="menu_Labours"><a href="~/Labours/Index" style="color:darkgoldenrod;" onmouseover="this.style.color = '#f5b820';" onmouseout="this.style.color = 'darkgoldenrod';">Субботники</a></li>
 					}
 					<li id="menu_Vacations">@Html.ActionLink("Отпуска", "Index", "Vacations")</li>
+					<li id="menu_Overtimes">@Html.ActionLink("Переработки", "Index", "Overtimes")</li>
 					<li id="menu_Help">@Html.ActionLink("Помощь", "Help", "Home")</li>
 				</ul>
 				@Html.Partial("_LoginPartial")

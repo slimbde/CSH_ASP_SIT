@@ -194,13 +194,11 @@ namespace SIT.Models
 		public static int GetUserUnit(IPrincipal User)
 		{
 			var dbloc = db;
-
 			var unit = 0;
-			// СУУУУКАААА! чтобы использовать Include надо подключить System.Data.Entity;
-			var units = dbloc.Units.Include(u => u.Chief);
+
 			try
 			{
-				var usr = dbloc.Users.FirstOrDefault(unt => unt.UserName == User.Identity.Name);
+				var usr = dbloc.Users.FirstOrDefault(u => u.UserName == User.Identity.Name);
 				unit = (int)usr.Section.UnitId;
 			}
 			catch (Exception)
@@ -208,7 +206,8 @@ namespace SIT.Models
 				try
 				{
 					// если пользователь руководитель и у него нет SectionId
-					unit = dbloc.Units.FirstOrDefault(u => u.Chief.UserName == User.Identity.Name).Id;
+					var chiefId = dbloc.Users.FirstOrDefault(us => us.UserName == User.Identity.Name).Id;
+					unit = dbloc.Units.FirstOrDefault(u => u.ChiefId == chiefId).Id;
 				}
 				catch (Exception)
 				{
