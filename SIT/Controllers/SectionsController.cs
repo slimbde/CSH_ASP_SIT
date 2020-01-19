@@ -17,7 +17,7 @@ namespace SIT.Controllers
 		private ApplicationDbContext db = new ApplicationDbContext();
 
 		// GET: Sections
-		public async Task<ActionResult> Index()
+		public ActionResult Index()
 		{
 			var sections = db.Sections.ToList();
 			foreach (var item in sections)

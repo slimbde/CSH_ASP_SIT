@@ -46,7 +46,8 @@
 		{
 			++count;
 
-			var currentUserUnit = Model.GetUserUnit(item).Name;
+			var currentUserUnit = Model.GetUserUnit(item);
+			var unitName = currentUserUnit == null ? "" : currentUserUnit.Name;
 			var currentUserDate = Model.GetUserLabourDate(item);
 			var labourDate = currentUserDate == null ? "" : currentUserDate.Value.Date.ToShortDateString();
 
@@ -54,7 +55,7 @@
 				<td width="12%">@Html.DisplayFor(modelItem => item.Surname)</td>
 				<td width="12%">@Html.DisplayFor(modelItem => item.Name)</td>
 				<td width="17%">@Html.DisplayFor(modelItem => item.Patronic)</td>
-				<td width="15%">@Html.DisplayFor(modelItem => currentUserUnit)</td>
+				<td width="15%">@Html.DisplayFor(modelItem => unitName)</td>
 				<td width="25%">@Html.DisplayFor(modelItem => item.Section.Name)</td>
 				<td width="12%">@labourDate</td>
 				<td>

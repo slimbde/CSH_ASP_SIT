@@ -61,6 +61,7 @@ namespace SIT.Controllers
 				: message == ManageMessageId.Error ? "Произошла ошибка."
 				: message == ManageMessageId.AddPhoneSuccess ? "Ваш номер телефона добавлен."
 				: message == ManageMessageId.RemovePhoneSuccess ? "Ваш номер телефона удален."
+				: message == ManageMessageId.AlterEmailSuccess ? "Ваш Email изменен."
 				: "";
 
 			var userId = User.Identity.GetUserId();
@@ -70,10 +71,52 @@ namespace SIT.Controllers
 				PhoneNumber = await UserManager.GetPhoneNumberAsync(userId),
 				TwoFactor = await UserManager.GetTwoFactorEnabledAsync(userId),
 				Logins = await UserManager.GetLoginsAsync(userId),
-				BrowserRemembered = await AuthenticationManager.TwoFactorBrowserRememberedAsync(userId)
+				BrowserRemembered = await AuthenticationManager.TwoFactorBrowserRememberedAsync(userId),
+				Email = await UserManager.GetEmailAsync(userId),
 			};
 			return View(model);
 		}
+
+
+		public ActionResult AlterEmail()
+		{
+			return View();
+		}
+
+		[HttpPost]
+		[ValidateAntiForgeryToken]
+		public async Task<ActionResult> AlterEmail(AlterEmailViewModel model)
+		{
+			if (!ModelState.IsValid)
+			{
+				return View(model);
+			}
+
+			var user = await UserManager.FindAsync(model.OldEmail, model.Password);
+			if (user == null)
+			{
+				ModelState.AddModelError("", "Неправильно введен текущий Email или пароль");
+				return View(model);
+			}
+
+			user.Email = model.NewEmail;
+			user.UserName = user.Email;
+
+			var code = await UserManager.GeneratePasswordResetTokenAsync(user.Id);
+			var result = await UserManager.ResetPasswordAsync(user.Id, code, model.Password);
+
+			if (result.Succeeded)
+			{
+				// вхожу в измененную учетную запись
+				await SignInManager.SignInAsync(user, isPersistent: false, rememberBrowser: false);
+
+				return RedirectToAction("Index", new { Message = ManageMessageId.AlterEmailSuccess });
+			}
+
+			AddErrors(result);
+			return View();
+		}
+
 
 		//
 		// POST: /Manage/RemoveLogin
@@ -386,7 +429,8 @@ namespace SIT.Controllers
 			SetPasswordSuccess,
 			RemoveLoginSuccess,
 			RemovePhoneSuccess,
-			Error
+			AlterEmailSuccess,
+			Error,
 		}
 
 		#endregion

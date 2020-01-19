@@ -12,6 +12,7 @@ namespace SIT.Models
 		public string PhoneNumber { get; set; }
 		public bool TwoFactor { get; set; }
 		public bool BrowserRemembered { get; set; }
+		public string Email { get; set; }
 	}
 
 	public class ManageLoginsViewModel
@@ -83,5 +84,25 @@ namespace SIT.Models
 	{
 		public string SelectedProvider { get; set; }
 		public ICollection<System.Web.Mvc.SelectListItem> Providers { get; set; }
+	}
+
+
+	public class AlterEmailViewModel
+	{
+		[Required]
+		[EmailAddress]
+		[Display(Name = "Текущий адрес эл. почты")]
+		public string OldEmail { get; set; }
+
+		[Required]
+		[EmailAddress]
+		[Display(Name = "Новый адрес эл. почты")]
+		public string NewEmail { get; set; }
+
+		[Required]
+		[StringLength(100, ErrorMessage = "Значение {0} должно содержать не менее {2} символов.", MinimumLength = 6)]
+		[DataType(DataType.Password)]
+		[Display(Name = "Пароль")]
+		public string Password { get; set; }
 	}
 }

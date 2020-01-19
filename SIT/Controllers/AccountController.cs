@@ -212,7 +212,7 @@ namespace SIT.Controllers
 						await db.SaveChangesAsync();
 					}
 
-					return View("RegSucceed");
+					return View("RegSucceeded");
 				}
 				AddErrors(result);
 			}
@@ -320,6 +320,7 @@ namespace SIT.Controllers
 			{
 				return RedirectToAction("ResetPasswordConfirmation", "Account");
 			}
+
 			AddErrors(result);
 			return View();
 		}

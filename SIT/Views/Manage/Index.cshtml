@@ -10,6 +10,15 @@
 	<h4>Изменение параметров учетной записи</h4>
 	<hr />
 	<dl class="dl-horizontal">
+		<dt>Email:</dt>
+		<dd>
+			@(Model.Email ?? "None")
+			@if (Model.Email != null)
+			{
+				<text>[&nbsp;&nbsp;@Html.ActionLink("Изменить", "AlterEmail")&nbsp;&nbsp;]</text>
+			}
+		</dd>
+
 		<dt>Пароль:</dt>
 		<dd>
 			[
@@ -29,7 +38,7 @@
 				@Html.ActionLink("Управление", "ManageLogins") ]
 			</dd>*@
 
-		<dt>Номер телефона:</dt>
+		<dt>Сот:</dt>
 		<dd>
 			@(Model.PhoneNumber ?? "None")
 			@if (Model.PhoneNumber != null)

@@ -439,7 +439,7 @@
     <Content Include="Views\Manage\VerifyPhoneNumber.cshtml" />
     <Content Include="Views\Shared\Lockout.cshtml" />
     <Content Include="Views\Shared\_LoginPartial.cshtml" />
-    <Content Include="Views\Account\RegSucceed.cshtml" />
+    <Content Include="Views\Account\RegSucceeded.cshtml" />
     <Content Include="Views\Sections\Create.cshtml" />
     <Content Include="Views\Sections\Delete.cshtml" />
     <Content Include="Views\Sections\Details.cshtml" />
@@ -470,6 +470,7 @@
     <Content Include="Views\Overtimes\Details.cshtml" />
     <Content Include="Views\Overtimes\Edit.cshtml" />
     <Content Include="Views\Overtimes\Index.cshtml" />
+    <Content Include="Views\Manage\AlterEmail.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

@@ -7,12 +7,17 @@ using System.Threading.Tasks;
 using System.Web.Mvc;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.EntityFramework;
+using System.Web.Security;
 
 namespace SIT.Models
 {
 	// В профиль пользователя можно добавить дополнительные данные, если указать больше свойств для класса ApplicationUser. Подробности см. на странице https://go.microsoft.com/fwlink/?LinkID=317594.
 	public class ApplicationUser : IdentityUser
 	{
+		[NotMapped]
+		private ApplicationDbContext db = ApplicationDbContext.Create();
+
+
 		[Display(Name = "Имя")]
 
 		public string Name { get; set; }
@@ -46,6 +51,24 @@ namespace SIT.Models
 		[Display(Name = "Переработки")]
 		public virtual ICollection<Overtime> Overtimes { get; set; }
 
+
+		public bool IsManager
+		{
+			get
+			{
+				var userManager = new ApplicationUserManager(new UserStore<ApplicationUser>(db));
+				return userManager.IsInRole(Id, "manager");
+			}
+		}
+
+		public bool IsAdmin
+		{
+			get
+			{
+				var userManager = new ApplicationUserManager(new UserStore<ApplicationUser>(db));
+				return userManager.IsInRole(Id, "admin");
+			}
+		}
 
 		public async Task<ClaimsIdentity> GenerateUserIdentityAsync(UserManager<ApplicationUser> manager)
 		{
