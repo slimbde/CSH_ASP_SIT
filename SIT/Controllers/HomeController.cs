@@ -29,8 +29,6 @@ namespace SIT.Controllers
 
 		public ActionResult Help()
 		{
-			ViewBag.Message = "Your contact page.";
-
 			return View();
 		}
 	}

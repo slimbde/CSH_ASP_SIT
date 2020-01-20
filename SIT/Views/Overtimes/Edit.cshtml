@@ -1,66 +1,75 @@
 ﻿@model SIT.Models.Overtime
 
 @{
-    ViewBag.Title = "Edit";
+	ViewBag.Title = "Edit";
+	var Now = DateTime.Now.ToString("yyyy-MM-dd");
+	var dt = Model.Date.ToString("yyyy-MM-dd");
+
+	string usDt = "";
+	if (Model.Utilized != null)
+	{
+		usDt = ((DateTime)Model.Utilized).ToString("yyyy-MM-dd");
+	}
 }
 
-<h2>Edit</h2>
+<h2>Изменить</h2>
 
 
 @using (Html.BeginForm())
 {
-    @Html.AntiForgeryToken()
-    
-    <div class="form-horizontal">
-        <h4>Overtime</h4>
-        <hr />
-        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
-        @Html.HiddenFor(model => model.Id)
+	@Html.AntiForgeryToken()
 
-        <div class="form-group">
-            @Html.LabelFor(model => model.UsrId, "UsrId", htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.DropDownList("UsrId", null, htmlAttributes: new { @class = "form-control" })
-                @Html.ValidationMessageFor(model => model.UsrId, "", new { @class = "text-danger" })
-            </div>
-        </div>
+	<div class="form-horizontal">
+		<h4>Переработку</h4>
+		<hr />
+		@Html.ValidationSummary(true, "", new { @class = "text-danger" })
+		@Html.HiddenFor(model => model.Id)
+		@Html.HiddenFor(model => model.UsrId)
+		@Html.HiddenFor(model => model.UsrAddedId)
 
-        <div class="form-group">
-            @Html.LabelFor(model => model.Date, htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.EditorFor(model => model.Date, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.Date, "", new { @class = "text-danger" })
-            </div>
-        </div>
+		<div class="form-group">
+			@Html.LabelFor(model => model.UsrId, "Сотрудник", htmlAttributes: new { @class = "control-label col-md-2" })
+			<div class="col-md-10" style="margin-top:7px;">
+				@Html.DisplayFor(model => model.Usr.FullName)
+			</div>
+		</div>
 
-        <div class="form-group">
-            @Html.LabelFor(model => model.Duration, htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.EditorFor(model => model.Duration, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.Duration, "", new { @class = "text-danger" })
-            </div>
-        </div>
+		<div class="form-group">
+			<label for="#datepicker" class="control-label col-md-2">Дата переработки</label>
+			<div class="col-md-10">
+				<input type='date' class="form-control date" name="Date" id="datepicker" data-val="true" data-val-required="Введите дату" value="@dt" min="@(DateTime.Now.Year-1)-01-01" max="@Now" />
+				@Html.ValidationMessage("Date", "", new { @class = "text-danger" })
+			</div>
+		</div>
 
-        <div class="form-group">
-            @Html.LabelFor(model => model.Utilized, htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.EditorFor(model => model.Utilized, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.Utilized, "", new { @class = "text-danger" })
-            </div>
-        </div>
+		<div class="form-group">
+			@Html.LabelFor(model => model.Duration, htmlAttributes: new { @class = "control-label col-md-2" })
+			<div class="col-md-10">
+				@Html.EditorFor(model => model.Duration, new { htmlAttributes = new { @class = "form-control" } })
+				@Html.ValidationMessageFor(model => model.Duration, "", new { @class = "text-danger" })
+			</div>
+		</div>
 
-        <div class="form-group">
-            <div class="col-md-offset-2 col-md-10">
-                <input type="submit" value="Save" class="btn btn-default" />
-            </div>
-        </div>
-    </div>
+		<div class="form-group">
+			<label for="#datepicker1" class="control-label col-md-2">Дата использования</label>
+			<div class="col-md-10">
+				<input type='date' class="form-control date" name="Utilized" id="datepicker1" data-val="false" data-val-required="Введите дату" value="@usDt" min="@(DateTime.Now.Year-1)-01-01" max="@Now" />
+				<small class="text-muted">пустое поле - не использована</small>
+				@Html.ValidationMessage("Utilized", "", new { @class = "text-danger" })
+			</div>
+		</div>
+
+		<hr />
+		<div class="form-group">
+			<div class="col-md-offset-2 col-md-10">
+				<input type="submit" value="Сохранить" class="btn btn-primary" />
+			</div>
+		</div>
+	</div>
+	@Html.ActionLink("Назад", "Index")
 }
 
-<div>
-    @Html.ActionLink("Back to List", "Index")
-</div>
 
 @section Scripts {
-    @Scripts.Render("~/bundles/jqueryval")
+	@Scripts.Render("~/bundles/jqueryval")
 }

@@ -26,9 +26,10 @@
 <h2>Переработки</h2>
 
 <p>
+	<text class="text-success">@ViewBag.message</text>
 	@if (User.IsInRole("admin") || User.IsInRole("manager") || User.IsInRole("chief"))
 	{
-		@Html.ActionLink("Добавить переработку", "Create", new { returnAction = "Review" }, new { @class = "pull-right" })<br />
+		@Html.ActionLink("Добавить переработку", "Create", new { returnAction = "Index" }, new { @class = "pull-right" })<br />
 	}
 </p>
 
@@ -63,24 +64,38 @@
 		</tr>
 	</table>
 
-	<table class="table" border="0">
+	<table class="table table-hover table-condensed" border="0">
 		<thead>
 			<tr>
 				<th width="25%">Бюро</th>
 				<th width="25%">Сотрудник</th>
-				<th width="10%">Год</th>
-				<th width="10%">Задержка</th>
-				<th width="12%">Использована</th>
+				<th width="10%">Когда</th>
+				<th width="10%">Сколько</th>
+				<th width="12%">Закрыта</th>
 				<th>
-					<input type="checkbox" name="available" @(Model.Available?"checked":"") />&nbsp;&nbsp;&nbsp;&nbsp;Использованные
+					<input type="checkbox" name="available" @(Model.Available ? "checked" : "") />&nbsp;&nbsp;&nbsp;&nbsp;Использованные
 				</th>
 			</tr>
 		</thead>
 		<tbody>
 			@foreach (var item in Model.Overtimes)
 			{
-				var util = item.Utilized == null ? "" : ((DateTime)item.Utilized).ToString("dd.MM.yyyy");
-				<tr>
+				var currentDate = item.Date.ToShortDateString();
+				var util = string.Empty;
+				var hint = string.Empty;
+
+				if (item.Utilized == null)
+				{
+					util = "";
+					hint = "добавил: " + Overtime.GetUserFullName(item.UsrAddedId);
+				}
+				else
+				{
+					util = ((DateTime)item.Utilized).ToString("dd.MM.yyyy");
+					hint = "учел: " + Overtime.GetUserFullName(item.UsrAppliedId);
+				}
+
+				<tr title="@hint">
 					<td width="25%">
 						@Html.DisplayFor(modelItem => item.Usr.Section.Name)
 					</td>
@@ -88,7 +103,7 @@
 						@Html.DisplayFor(modelItem => item.Usr.FullName)
 					</td>
 					<td width="10%">
-						@Html.DisplayFor(modelItem => item.Date.Year)
+						@Html.DisplayFor(modelItem => currentDate)
 					</td>
 					<td width="10%">
 						@Html.DisplayFor(modelItem => item.Duration) мин.
@@ -97,8 +112,11 @@
 						@Html.DisplayFor(modelItem => util)
 					</td>
 					<td>
-						@Html.ActionLink("Учесть", "Edit", new { id = item.Id }) |
-						@Html.ActionLink("Удалить", "Delete", new { id = item.Id })
+						@if (User.IsInRole("admin") || User.IsInRole("manager") || User.IsInRole("chief"))
+						{
+							@Html.ActionLink("Изменить", "Edit", new { id = item.Id }) @:|
+							@Html.ActionLink("Удалить", "Delete", new { id = item.Id })
+						}
 					</td>
 				</tr>
 			}

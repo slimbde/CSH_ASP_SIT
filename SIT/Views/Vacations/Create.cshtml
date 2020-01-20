@@ -3,6 +3,7 @@
 @{
 	ViewBag.Title = "Create";
 	var userList = ViewBag.UserList as SelectList;
+	var min = VotingEngine.GetVotingStatus(VotingEngine.GetUserUnit(User)) ? DateTime.Now.Year + 1 : DateTime.Now.Year;
 }
 
 <style>
@@ -37,7 +38,7 @@
 		<div class="form-group">
 			<label for="#datepicker" class="control-label col-md-2">Дата начала</label>
 			<div class="col-md-10">
-				<input type='date' class="form-control date" name="date" id="datepicker" data-val="true" data-val-required="Введите дату" min="@(DateTime.Now.Year)-01-01" max="@(DateTime.Now.Year+1)-12-31" />
+				<input type='date' class="form-control date" name="date" id="datepicker" data-val="true" data-val-required="Введите дату" min="@min-01-01" max="@(DateTime.Now.Year+1)-12-31" />
 				@Html.ValidationMessage("date", "", new { @class = "text-danger" })
 			</div>
 		</div>

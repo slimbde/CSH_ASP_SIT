@@ -1,64 +1,68 @@
-﻿@model SIT.Models.Overtime
-
+﻿@model Overtime
+@using SIT.Models
 @{
-    ViewBag.Title = "Create";
+	ViewBag.Title = "Create";
+	var userList = ViewBag.UsrList as SelectList;
+	var Now = DateTime.Now.ToString("yyyy-MM-dd");
 }
 
-<h2>Create</h2>
+<h2>Добавить</h2>
 
 
-@using (Html.BeginForm()) 
+@using (Html.BeginForm())
 {
-    @Html.AntiForgeryToken()
-    
-    <div class="form-horizontal">
-        <h4>Overtime</h4>
-        <hr />
-        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
-        <div class="form-group">
-            @Html.LabelFor(model => model.UsrId, "UsrId", htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.DropDownList("UsrId", null, htmlAttributes: new { @class = "form-control" })
-                @Html.ValidationMessageFor(model => model.UsrId, "", new { @class = "text-danger" })
-            </div>
-        </div>
+	@Html.AntiForgeryToken()
+	<input type="hidden" name="UsrAddedId" value="@(Overtime.GetUserId(User))" />
+	<div class="form-horizontal">
+		<h4>Переработку</h4>
+		<hr />
+		@Html.ValidationSummary(true, "", new { @class = "text-danger" })
+		<div class="form-group">
+			@Html.LabelFor(model => model.UsrId, "Пользователь", htmlAttributes: new { @class = "control-label col-md-2" })
+			<div class="col-md-10">
+				@Html.DropDownList("UsrId", userList, htmlAttributes: new { @class = "form-control" })
+				@Html.ValidationMessageFor(model => model.UsrId, "", new { @class = "text-danger" })
+			</div>
+		</div>
 
-        <div class="form-group">
-            @Html.LabelFor(model => model.Date, htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.EditorFor(model => model.Date, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.Date, "", new { @class = "text-danger" })
-            </div>
-        </div>
+		<div class="form-group">
+			<label for="#datepicker" class="control-label col-md-2">Дата переработки</label>
+			<div class="col-md-10">
+				<input type='date' class="form-control date" name="Date" id="datepicker" data-val="true" data-val-required="Введите дату" value="@Now" min="@(DateTime.Now.Year-1)-01-01" max="@Now" />
+				@Html.ValidationMessage("Date", "", new { @class = "text-danger" })
+			</div>
+		</div>
 
-        <div class="form-group">
-            @Html.LabelFor(model => model.Duration, htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.EditorFor(model => model.Duration, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.Duration, "", new { @class = "text-danger" })
-            </div>
-        </div>
+		<div class="form-group">
+			@Html.LabelFor(model => model.Duration, htmlAttributes: new { @class = "control-label col-md-2" })
+			<div class="col-md-10">
+				@Html.EditorFor(model => model.Duration, new { htmlAttributes = new { @class = "form-control" } })
+				@Html.ValidationMessageFor(model => model.Duration, "", new { @class = "text-danger" })
+			</div>
+		</div>
 
-        <div class="form-group">
-            @Html.LabelFor(model => model.Utilized, htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.EditorFor(model => model.Utilized, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.Utilized, "", new { @class = "text-danger" })
-            </div>
-        </div>
+		<div class="form-group">
+			<label for="#datepicker1" class="control-label col-md-2">Дата использования</label>
+			<div class="col-md-10">
+				<input type='date' class="form-control date" name="Utilized" id="datepicker1" data-val="false" data-val-required="Введите дату" min="@(DateTime.Now.Year-1)-01-01" max="@Now" />
+				<small class="text-muted">пустое поле - не использована</small>
+				@Html.ValidationMessage("Utilized", "", new { @class = "text-danger" })
+			</div>
+		</div>
 
-        <div class="form-group">
-            <div class="col-md-offset-2 col-md-10">
-                <input type="submit" value="Create" class="btn btn-default" />
-            </div>
-        </div>
-    </div>
+		<hr />
+		<div class="form-group">
+			<div class="col-md-offset-2 col-md-10">
+				<input type="submit" value="Добавить" class="btn btn-primary" />
+			</div>
+		</div>
+	</div>
 }
 
 <div>
-    @Html.ActionLink("Back to List", "Index")
+	@Html.ActionLink("Назад", "Index")
 </div>
 
 @section Scripts {
-    @Scripts.Render("~/bundles/jqueryval")
+	@Scripts.Render("~/bundles/jqueryval")
 }

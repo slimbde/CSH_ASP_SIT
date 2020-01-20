@@ -9,6 +9,8 @@ using System.Web;
 using System.Web.Mvc;
 using SIT.Models;
 using Microsoft.AspNet.Identity.Owin;
+using Microsoft.AspNet.Identity.EntityFramework;
+using Microsoft.AspNet.Identity;
 
 namespace SIT.Controllers
 {
@@ -138,12 +140,34 @@ namespace SIT.Controllers
 		// сведения см. в статье https://go.microsoft.com/fwlink/?LinkId=317598.
 		[HttpPost]
 		[ValidateAntiForgeryToken]
-		public async Task<ActionResult> Edit([Bind(Include = "Id,Name,Surname,Patronic,TabNo,SectionId,Email,EmailConfirmed,PasswordHash,SecurityStamp,PhoneNumber,PhoneNumberConfirmed,TwoFactorEnabled,LockoutEndDateUtc,LockoutEnabled,AccessFailedCount,UserName,ParticipateInLabour")] ApplicationUser applicationUser)
+		public async Task<ActionResult> Edit([Bind(Include = "Id,Name,Surname,Patronic,TabNo,SectionId,Email,EmailConfirmed,PasswordHash,SecurityStamp,PhoneNumber,PhoneNumberConfirmed,TwoFactorEnabled,LockoutEndDateUtc,LockoutEnabled,AccessFailedCount,UserName,ParticipateInLabour")] ApplicationUser applicationUser, string role = "")
 		{
 			if (ModelState.IsValid)
 			{
 				db.Entry(applicationUser).State = EntityState.Modified;
 				await db.SaveChangesAsync();
+
+				// изменение роли пользователя
+				if (role != "")
+				{
+					var userManager = new ApplicationUserManager(new UserStore<ApplicationUser>(db));
+
+					userManager.RemoveFromRole(applicationUser.Id, "admin");
+					userManager.RemoveFromRole(applicationUser.Id, "manager");
+					userManager.RemoveFromRole(applicationUser.Id, "chief");
+
+					if (role != "none")
+					{
+						if (role == "manager" || role == "admin")
+						{
+							applicationUser.SectionId = null;
+							await db.SaveChangesAsync();
+						}
+
+						userManager.AddToRole(applicationUser.Id, role);
+					}
+				}
+
 				return RedirectToAction("Index");
 			}
 			ViewBag.Sections = await db.Sections.ToListAsync();

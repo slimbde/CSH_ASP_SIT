@@ -70,6 +70,15 @@ namespace SIT.Models
 			}
 		}
 
+		public bool IsChief
+		{
+			get
+			{
+				var userManager = new ApplicationUserManager(new UserStore<ApplicationUser>(db));
+				return userManager.IsInRole(Id, "chief");
+			}
+		}
+
 		public async Task<ClaimsIdentity> GenerateUserIdentityAsync(UserManager<ApplicationUser> manager)
 		{
 			// Обратите внимание, что authenticationType должен совпадать с типом, определенным в CookieAuthenticationOptions.AuthenticationType

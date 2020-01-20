@@ -176,20 +176,47 @@ namespace SIT.Models
 		public static string GetVotingUserName(int unit)
 		{
 			var dbloc = db;
-
 			var usrs = dbloc.Users.Where(u => (u.Section.UnitId == unit) || (u.Id == dbloc.Units.FirstOrDefault(U => U.Id == unit).ChiefId));
+			var voterId = string.Empty;
 
-			// ищем все заявки среди не проголосовавших пользователей
-			var votes = dbloc.Votings.Where(v => usrs.Any(u => u.Id == v.UsrId)).Where(v => v.Voted == false);
-			var votesCount = votes.Count();
-
-			if (votesCount > 0)
+			while (true)
 			{
-				var voterId = votes.FirstOrDefault(v => v.VacationRating == votes.Min(V => V.VacationRating)).UsrId;
-				return usrs.FirstOrDefault(u => u.Id == voterId).FullName;
+				// ищем все заявки среди не проголосовавших пользователей
+				var votes = dbloc.Votings.Where(v => usrs.Any(u => u.Id == v.UsrId)).Where(v => v.Voted == false);
+
+				if (votes.Count() > 0)
+				{
+					// находим пользователя с минимальным рейтингом из не проголосовавших
+					voterId = votes.FirstOrDefault(v => v.VacationRating == votes.Min(V => V.VacationRating)).UsrId;
+
+					// проверяем сумму его отпусков
+					var userVacs = dbloc.Vacations.Where(vac => vac.Year == maxYear && vac.UsrId == voterId);
+					if (userVacs != null && userVacs.Count() > 0)
+					{
+						int? sm = userVacs.Sum(us => us.Duration);
+						// смотрим на результат суммы по отпускам этого юзера
+						if (sm is null)
+							break;
+
+						// если сумма уже 28, выставляем что он уже проголосовал
+						if (sm == 28)
+						{
+							votes.FirstOrDefault(vot => vot.UsrId == voterId).Voted = true;
+							dbloc.SaveChanges();
+						}
+						else
+							// и если нашли такого, у которого сумма меньше 28 - возвращаем его
+							break;
+					}
+					else
+						// если вакансий за макс год у пользователя еще нет - возвращаем его
+						break;
+				}
+				else
+					return "not started";
 			}
 
-			return "not started";
+			return usrs.FirstOrDefault(u => u.Id == voterId).FullName;
 		}
 		public static int GetUserUnit(IPrincipal User)
 		{

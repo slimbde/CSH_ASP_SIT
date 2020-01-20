@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Data.Entity;
 using System.Linq;
 using System.Security.Principal;
@@ -23,12 +24,32 @@ namespace SIT.Models
 		public DateTime Date { get; set; }
 
 
-		[Display(Name = "Продолжительность")]
+		[Display(Name = "Переработка (мин.)")]
+		[Range(1, 1200, ErrorMessage = "Допустимая продолжительность 1...1200 мин.")]
 		public int Duration { get; set; }
 
 
 		[Display(Name = "Использована")]
 		public DateTime? Utilized { get; set; }
+
+		public string UsrAddedId { get; set; }
+
+		public string UsrAppliedId { get; set; }
+
+		public static string GetUserId(IPrincipal user)
+		{
+			using (var db = ApplicationDbContext.Create())
+				return db.Users.FirstOrDefault(u => u.UserName == user.Identity.Name).Id;
+		}
+
+		public static string GetUserFullName(string id)
+		{
+			if (id == null)
+				return "";
+
+			using (var db = ApplicationDbContext.Create())
+				return db.Users.FirstOrDefault(u => u.Id == id).FullName;
+		}
 	}
 
 

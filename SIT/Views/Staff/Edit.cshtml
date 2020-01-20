@@ -3,6 +3,14 @@
 @{
 	ViewBag.Title = "Edit";
 	var sectList = new SelectList(ViewBag.Sections as List<Section>, "Id", "Name");
+
+	var role = "none";
+	if (Model.IsAdmin)
+	{ role = "admin"; }
+	else if (Model.IsManager)
+	{ role = "manager"; }
+	else if (Model.IsChief)
+	{ role = "chief"; }
 }
 
 <h2>Изменить</h2>
@@ -11,7 +19,7 @@
 {
 	@Html.AntiForgeryToken()
 
-	<div class="form-horizontal">
+	<div class="form-horizontal" id="form">
 		<h4>Сотрудник</h4>
 		<hr />
 		@Html.ValidationSummary(true, "", new { @class = "text-danger" })
@@ -58,13 +66,23 @@
 				@Html.ValidationMessageFor(model => model.TabNo, "", new { @class = "text-danger" })
 			</div>
 		</div>
-		@if (!Model.IsManager && !Model.IsAdmin)
-		{
-			<div class="form-group">
+
+		<div id="here">
+			<div class="form-group" id="section">
 				@Html.LabelFor(model => model.Section.Name, htmlAttributes: new { @class = "control-label col-md-3" })
 				<div class="col-md-9">
 					@Html.DropDownList("SectionId", sectList, htmlAttributes: new { @class = "form-control" })
 					@Html.ValidationMessageFor(model => model.SectionId, "", new { @class = "text-danger" })
+				</div>
+			</div>
+		</div>
+
+		@if (User.IsInRole("admin"))
+		{
+			<div class="form-group">
+				@Html.LabelFor(model => model.Roles, htmlAttributes: new { @class = "control-label col-md-3" })
+				<div class="col-md-9">
+					@Html.DropDownList("role", new SelectList(new List<string> { "none", "chief", "manager", "admin" }, role), htmlAttributes: new { @class = "form-control" })
 				</div>
 			</div>
 		}
@@ -100,4 +118,26 @@
 
 @section Scripts {
 	@Scripts.Render("~/bundles/jqueryval")
+
+	<script>
+		// отображение поля выбора бюро при запуске
+		$(window).on('load', function () {
+			var admin = '@Model.IsAdmin'=='True';
+			var manager = '@Model.IsManager' == 'True';
+
+			if (admin||manager) {
+				$('#section').hide();
+			}
+		});
+
+		// скрытие\отображение выбора бюро
+		$("#role").change(function () {
+			var sel = this.value;
+
+			if (sel == "manager" || sel == "admin")
+				$('#section').hide();
+			else
+				$('#section').show();
+		});
+	</script>
 }
