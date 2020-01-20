@@ -2,11 +2,12 @@
 
 @{
 	ViewBag.Title = "Delete";
+	var chiefName = Model.GetUserFullName(Model.ChiefId);
 }
 
-<h2>Удаление бюро</h2>
+<h2>Вы уверены, что хотите удалить?</h2>
 
-<h4>Вы уверены, что хотите удалить?</h4>
+<h4>Бюро</h4>
 <div>
 	<hr />
 	<dl class="dl-horizontal">
@@ -23,7 +24,7 @@
 		</dt>
 
 		<dd>
-			@Html.DisplayFor(model => model.Chief.FullName)
+			@Html.DisplayFor(model => chiefName)
 		</dd>
 		<dt></dt>
 		<dd>

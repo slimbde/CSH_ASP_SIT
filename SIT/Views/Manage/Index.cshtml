@@ -1,6 +1,6 @@
 ﻿@model SIT.Models.IndexViewModel
 @{
-	ViewBag.Title = "Управление";
+	ViewBag.Title = "Личный кабинет";
 }
 
 <h2>@ViewBag.Title.</h2>
@@ -16,6 +16,19 @@
 			@if (Model.Email != null)
 			{
 				<text>[&nbsp;&nbsp;@Html.ActionLink("Изменить", "AlterEmail")&nbsp;&nbsp;]</text>
+			}
+		</dd>
+
+		<dt>Сот:</dt>
+		<dd>
+			@(Model.PhoneNumber ?? "None")
+			@if (Model.PhoneNumber != null)
+			{
+				<text>[&nbsp;&nbsp;@Html.ActionLink("Изменить", "AddPhoneNumber")&nbsp;&nbsp;]</text>
+			}
+			else
+			{
+				<text>[&nbsp;&nbsp;@Html.ActionLink("Добавить", "AddPhoneNumber")&nbsp;&nbsp;]</text>
 			}
 		</dd>
 
@@ -37,19 +50,6 @@
 				@Model.Logins.Count [
 				@Html.ActionLink("Управление", "ManageLogins") ]
 			</dd>*@
-
-		<dt>Сот:</dt>
-		<dd>
-			@(Model.PhoneNumber ?? "None")
-			@if (Model.PhoneNumber != null)
-			{
-				<text>[&nbsp;&nbsp;@Html.ActionLink("Изменить", "AddPhoneNumber")&nbsp;&nbsp;]</text>
-			}
-			else
-			{
-				<text>[&nbsp;&nbsp;@Html.ActionLink("Добавить", "AddPhoneNumber")&nbsp;&nbsp;]</text>
-			}
-		</dd>
 
 		@*@if (Model.TwoFactor)
 				{

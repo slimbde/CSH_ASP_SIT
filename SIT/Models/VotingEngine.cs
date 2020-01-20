@@ -10,8 +10,7 @@ namespace SIT.Models
 {
 	public static class VotingEngine
 	{
-		private static ApplicationDbContext db = ApplicationDbContext.Create();
-		private static int maxYear = db.Vacations.Max(v => v.Year);
+		private static int maxYear { get { using (var db = new ApplicationDbContext()) { return db.Vacations.Max(v => v.Year); } } }
 		private static List<int> years = new List<int> { maxYear - 2, maxYear - 1, maxYear };
 		private static Dictionary<int, Dictionary<int, double>> monthScore;
 		private static SortedDictionary<double, ApplicationUser> userScore;
@@ -19,7 +18,7 @@ namespace SIT.Models
 
 		private static Dictionary<int, Dictionary<int, double>> GetMonthScore()
 		{
-			var dbloc = db;
+			var dbloc = new ApplicationDbContext();
 			var result = new Dictionary<int, Dictionary<int, double>>();
 
 			// считаем словарь год-месяц-очки
@@ -47,7 +46,7 @@ namespace SIT.Models
 		}
 		private static SortedDictionary<double, ApplicationUser> GetUserScore(int unit)
 		{
-			var dbloc = db;
+			var dbloc = new ApplicationDbContext();
 
 			var usrs = dbloc.Users.Where(u => (u.Section.UnitId == unit) || (u.Id == dbloc.Units.FirstOrDefault(U => U.Id == unit).ChiefId)).ToList();
 			var result = new SortedDictionary<double, ApplicationUser>();
@@ -97,7 +96,10 @@ namespace SIT.Models
 						++usrCount;
 					}
 				}
-				avgScore /= usrCount;
+
+				// защита от деления на нуль, если в каком-то из расчетных годов
+				// нет ни одной записи отпусков, т.е. счетчик usrCount==0
+				avgScore = usrCount == 0 ? 0.0 : avgScore / usrCount;
 
 				// присвоим новичкам средний балл
 				rookies.ForEach(r =>
@@ -116,14 +118,14 @@ namespace SIT.Models
 				if (!result.ContainsKey(item.Value))
 					result.Add(item.Value, item.Key);
 				else
-					result.Add(item.Value + rnd.NextDouble() / 10000, item.Key);
+					result.Add(item.Value + rnd.NextDouble() / 1000, item.Key);
 			}
 
 			return result;
 		}
 		private static void SetRating()
 		{
-			var dbloc = db;
+			var dbloc = new ApplicationDbContext();
 
 			var rating = 1;
 			for (; rating < userScore.Count; ++rating)
@@ -150,21 +152,21 @@ namespace SIT.Models
 		}
 		public static void CancelVoting(int unit, int year)
 		{
-			var dbloc = db;
+			var dbloc = new ApplicationDbContext();
 
 			var unitSections = dbloc.Sections.Where(s => s.UnitId == unit).Select(sec => sec.Id);   // выбираем ид бюро
 			var unitManagerId = dbloc.Units.FirstOrDefault(m => m.Id == unit).ChiefId;  // выбираем ид руководителя отдела
 			var unitUsersId = dbloc.Users.Where(u => unitSections.Any(us => us == u.SectionId) || u.Id == unitManagerId).Select(uus => uus.Id); // фильтруем пользователей
 			dbloc.Votings.Where(v => unitUsersId.Any(uid => uid == v.UsrId)).ToList().ForEach(V => { V.Voted = true; V.VacationRating = 0.0; }); // сносим им рейтинг и флаг голосования
 
-			var vacsToCancel = dbloc.Vacations.Where(vac => vac.Year == year);
+			var vacsToCancel = dbloc.Vacations.Where(vac => vac.Year == year && unitUsersId.Any(ud => ud == vac.UsrId)); // фильтруем только нужных пользователей и год
 			dbloc.Vacations.RemoveRange(vacsToCancel);
 
 			dbloc.SaveChanges();
 		}
 		public static bool GetVotingStatus(int unit)
 		{
-			var dbloc = db;
+			var dbloc = new ApplicationDbContext();
 
 			var usrs = dbloc.Users.Where(u => (u.Section.UnitId == unit) || (u.Id == dbloc.Units.FirstOrDefault(U => U.Id == unit).ChiefId));
 
@@ -175,7 +177,7 @@ namespace SIT.Models
 		}
 		public static string GetVotingUserName(int unit)
 		{
-			var dbloc = db;
+			var dbloc = new ApplicationDbContext();
 			var usrs = dbloc.Users.Where(u => (u.Section.UnitId == unit) || (u.Id == dbloc.Units.FirstOrDefault(U => U.Id == unit).ChiefId));
 			var voterId = string.Empty;
 
@@ -189,8 +191,13 @@ namespace SIT.Models
 					// находим пользователя с минимальным рейтингом из не проголосовавших
 					voterId = votes.FirstOrDefault(v => v.VacationRating == votes.Min(V => V.VacationRating)).UsrId;
 
+					var year = maxYear;
+					var voterRating = votes.FirstOrDefault(vo => vo.UsrId == voterId).VacationRating;
+					if (voterRating == 0)
+						year = maxYear + 1;
+
 					// проверяем сумму его отпусков
-					var userVacs = dbloc.Vacations.Where(vac => vac.Year == maxYear && vac.UsrId == voterId);
+					var userVacs = dbloc.Vacations.Where(vac => vac.Year == year && vac.UsrId == voterId);
 					if (userVacs != null && userVacs.Count() > 0)
 					{
 						int? sm = userVacs.Sum(us => us.Duration);
@@ -220,7 +227,7 @@ namespace SIT.Models
 		}
 		public static int GetUserUnit(IPrincipal User)
 		{
-			var dbloc = db;
+			var dbloc = new ApplicationDbContext();
 			var unit = 0;
 
 			try

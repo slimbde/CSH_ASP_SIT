@@ -32,10 +32,8 @@
 <table class="table table-condensed">
 	<thead>
 		<tr>
-			<th width="12%">@Html.DisplayNameFor(model => model.Users.FirstOrDefault().Surname)</th>
-			<th width="12%">@Html.DisplayNameFor(model => model.Users.FirstOrDefault().Name)</th>
-			<th width="17%">@Html.DisplayNameFor(model => model.Users.FirstOrDefault().Patronic)</th>
-			<th width="15%">Отдел</th>
+			<th width="30%">@Html.DisplayNameFor(model => model.Users.FirstOrDefault().FullName)</th>
+			<th width="25%">Отдел</th>
 			<th width="25%">@Html.DisplayNameFor(model => model.Users.FirstOrDefault().SectionId)</th>
 			<th width="12%"></th>
 			<th></th>
@@ -52,10 +50,8 @@
 			var labourDate = currentUserDate == null ? "" : currentUserDate.Value.Date.ToShortDateString();
 
 			<tr class="@(count>2?"":"active")">
-				<td width="12%">@Html.DisplayFor(modelItem => item.Surname)</td>
-				<td width="12%">@Html.DisplayFor(modelItem => item.Name)</td>
-				<td width="17%">@Html.DisplayFor(modelItem => item.Patronic)</td>
-				<td width="15%">@Html.DisplayFor(modelItem => unitName)</td>
+				<td width="30%">@Html.DisplayFor(modelItem => item.FullName)</td>
+				<td width="20%">@Html.DisplayFor(modelItem => unitName)</td>
 				<td width="25%">@Html.DisplayFor(modelItem => item.Section.Name)</td>
 				<td width="12%">@labourDate</td>
 				<td>

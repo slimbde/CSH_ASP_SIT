@@ -219,6 +219,7 @@ namespace SIT.Models
 		public string UsrFullName { get => db.Users.FirstOrDefault(u => u.UserName == User.Identity.Name).FullName; }
 		public string GetFullName(string usrId) => db.Users.FirstOrDefault(u => u.Id == usrId).FullName;
 		public List<Unit> GetUnitList() => db.Units.ToList();
+		public int GetUserVotesCount(string id) => db.Vacations.Where(v => v.UsrId == id && v.Year == Year).Sum(vac => vac.Duration);
 
 
 		// CONSTRUCTOR

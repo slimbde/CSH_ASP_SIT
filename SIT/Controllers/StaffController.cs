@@ -45,11 +45,11 @@ namespace SIT.Controllers
 		/// </summary>
 		/// <param name="id">ид сотрудника</param>
 		/// <param name="section">ид секции</param>
-		public async void Append(string id, int section)
+		public void Append(string id, int section)
 		{
 			var user = db.Users.Find(id);
 			user.SectionId = section;
-			await db.SaveChangesAsync();
+			db.SaveChanges();
 		}
 
 		/// <summary>
