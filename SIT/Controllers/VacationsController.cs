@@ -66,7 +66,7 @@ namespace SIT.Controllers
 
 
 		[Authorize(Roles = "admin, manager, chief")]
-		public ActionResult Review(int? unit, int? section, string UsrId, string Year, string Month)
+		public ActionResult Review(int? unit, int? section, string UsrId, string Month, string Year = "2020")
 		{
 			var vlvm = new VacationListViewModel(User, unit, section, UsrId, Year, Month);
 

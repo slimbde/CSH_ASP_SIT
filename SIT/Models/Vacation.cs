@@ -74,7 +74,7 @@ namespace SIT.Models
 			Units = new SelectList(units, "Id", "Name");
 			Sections = new SelectList(sections, "Id", "Name");
 			Users = new SelectList(users, "Id", "FullName");
-			Years = new SelectList(strYears);
+			Years = new SelectList(strYears, "2020");
 			Months = new SelectList(strMonths);
 		}
 		private void handleChief()

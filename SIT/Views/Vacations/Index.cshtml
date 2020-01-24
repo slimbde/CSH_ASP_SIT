@@ -7,7 +7,7 @@
 <style>
 	table tbody {
 		display: block;
-		max-height: 600px;
+		max-height: 64vh;
 		overflow-y: scroll;
 	}
 
@@ -32,11 +32,11 @@
 	}
 </style>
 
-<div style="display:inline-block;margin:20px 0 10px;width:100%;">
+<div style="display:inline-block;margin:20px 0 5px;width:100%;">
 	<text style="font-size:xx-large;">Отпуска @Model.Year</text>
 	@if (User.IsInRole("admin"))
 	{
-		using (Html.BeginForm("Index", "Vacations", FormMethod.Get, new { @style = "float:right;margin-top:10px;" }))
+		using (Html.BeginForm("Index", "Vacations", FormMethod.Get, new { @style = "float:right;margin-top:5px;" }))
 		{
 			<div class="form-inline">
 				<label class="control-label" style="color:#8ab92d;">Отдел&nbsp;</label>
@@ -46,7 +46,7 @@
 	}
 </div>
 
-<table class="table" style="margin-bottom:0;" border="0">
+<table class="table table-condensed" style="margin-bottom:0;" border="0">
 	<tbody>
 		<tr>
 			<td>
@@ -79,7 +79,7 @@
 </table>
 
 @* ОСНОВНАЯ ТАБЛИЦА *@
-<table class="table" style="margin-bottom:0;">
+<table class="table table-condensed" style="margin-bottom:0;">
 	<thead>
 		<tr>
 			<th width="5%" title="Рейтинговая позиция">R</th>

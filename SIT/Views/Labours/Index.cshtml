@@ -8,7 +8,7 @@
 <style>
 	table tbody {
 		display: block;
-		max-height: 650px;
+		max-height: 66vh;
 		overflow-y: scroll;
 	}
 
@@ -29,7 +29,7 @@
 <p>
 	@Html.ActionLink("Добавить субботник", "Create", null, new { @class = "pull-right" })
 </p>
-<table class="table table-condensed">
+<table class="table table-condensed table-hover">
 	<thead>
 		<tr>
 			<th width="30%">@Html.DisplayNameFor(model => model.Users.FirstOrDefault().FullName)</th>

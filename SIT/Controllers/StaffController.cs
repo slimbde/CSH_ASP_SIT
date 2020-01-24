@@ -57,26 +57,28 @@ namespace SIT.Controllers
 		/// </summary>
 		/// <param name="id">ид сотрудника</param>
 		/// <param name="section">ид секции</param>
-		public async void Remove(string id, int section)
+		public void Remove(string id, int section)
 		{
 			var user = db.Users.Find(id);
 			if (user.SectionId == section)
 				user.SectionId = null;
-			await db.SaveChangesAsync();
+
+			db.SaveChanges();
 		}
 
 		/// <summary>
 		/// удаляет у всех сотрудников секции SectionId
 		/// </summary>
 		/// <param name="section">ид секции</param>
-		public async void ClearSection(int section)
+		public void ClearSection(int section)
 		{
 			foreach (var user in db.Users)
 			{
 				if (user.SectionId == section)
 					user.SectionId = null;
 			}
-			await db.SaveChangesAsync();
+
+			db.SaveChanges();
 		}
 
 		// GET: Staff/Details/5
