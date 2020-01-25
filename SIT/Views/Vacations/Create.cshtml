@@ -3,7 +3,7 @@
 @{
 	ViewBag.Title = "Create";
 	var userList = ViewBag.UserList as SelectList;
-	var min = VotingEngine.GetVotingStatus(VotingEngine.GetUserUnit(User)) ? DateTime.Now.Year + 1 : DateTime.Now.Year;
+	var min = VotingEngine.GetVotingStatus(VotingEngine.GetUserIdUnit(Model.UsrId)) ? DateTime.Now.Year + 1 : DateTime.Now.Year;
 }
 
 <style>

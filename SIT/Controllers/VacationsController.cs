@@ -23,7 +23,7 @@ namespace SIT.Controllers
 			{
 				unit = VotingEngine.GetUserUnit(User);
 
-				// когда пользователь не прописан в бюро или отдел
+				// когда пользователь не прописан в бюро или отдел или он админ
 				if (unit == -1)
 				{
 					ViewBag.Message = "Пользователь не состоит ни в бюро ни в отделе";
@@ -79,11 +79,31 @@ namespace SIT.Controllers
 		{
 			var model = new Vacation { UsrId = db.Users.FirstOrDefault(u => u.UserName == User.Identity.Name).Id, Duration = 14 };
 
-			var unit = VotingEngine.GetUserUnit(User);
+			var unit = VotingEngine.GetUserUnit(User); // -1 когда не зареган в бюро или админ
 
-			// когда заходит обычный пользователь для голосования
-			if (!User.IsInRole("admin") && !User.IsInRole("chief") && !User.IsInRole("manager"))
+			if (User.IsInRole("chief"))
 			{
+				var chiefId = db.Users.FirstOrDefault(us => us.UserName == User.Identity.Name).Id;
+				var section = db.Sections.FirstOrDefault(s => s.ChiefId == chiefId).Id;
+				ViewBag.UserList = new SelectList(db.Users.Where(u => u.SectionId == section).OrderBy(u => u.Surname), "Id", "FullName");
+			}
+			else if (User.IsInRole("manager"))
+			{
+				var unitChiefId = db.Units.FirstOrDefault(un => un.Id == unit).ChiefId;
+				ViewBag.UserList = new SelectList(db.Users.Where(us => us.Section.Unit.ChiefId == unitChiefId || us.Id == unitChiefId).OrderBy(u => u.Surname), "Id", "FullName");
+			}
+			else if (User.IsInRole("admin"))
+				ViewBag.UserList = new SelectList(db.Users.OrderBy(u => u.Surname), "Id", "FullName");
+			else
+			{
+				// когда пользователь не прописан в бюро или отдел или он админ
+				if (unit == -1)
+				{
+					ViewBag.Message = "Пользователь не состоит ни в бюро ни в отделе";
+					return View("Error");
+				}
+
+				// когда заходит обычный пользователь для голосования
 				var currentVotingUserName = VotingEngine.GetVotingUserName(unit);
 				if (currentVotingUserName == "not started")
 					return RedirectToAction("Index");
@@ -94,22 +114,7 @@ namespace SIT.Controllers
 
 				// ему для выбора сотрудника доступен только он
 				ViewBag.UserList = new SelectList(db.Users.Where(u => u.UserName == User.Identity.Name), "Id", "FullName");
-				return View(model);
 			}
-			else if (User.IsInRole("chief"))
-			{
-				var chiefId = db.Users.FirstOrDefault(us => us.UserName == User.Identity.Name).Id;
-				var section = db.Sections.FirstOrDefault(s => s.ChiefId == chiefId).Id;
-				ViewBag.UserList = new SelectList(db.Users.Where(u => u.SectionId == section).OrderBy(u => u.Surname), "Id", "FullName");
-			}
-			else if (User.IsInRole("manager"))
-			{
-				//db.Sections.Include(sec => sec.Unit);
-				var unitChiefId = db.Units.FirstOrDefault(un => un.Id == unit).ChiefId;
-				ViewBag.UserList = new SelectList(db.Users.Where(us => us.Section.Unit.ChiefId == unitChiefId || us.Id == unitChiefId).OrderBy(u => u.Surname), "Id", "FullName");
-			}
-			else
-				ViewBag.UserList = new SelectList(db.Users.OrderBy(u => u.Surname), "Id", "FullName");
 
 			return View(model);
 		}

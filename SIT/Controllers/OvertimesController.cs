@@ -17,7 +17,7 @@ namespace SIT.Controllers
 		private ApplicationDbContext db = new ApplicationDbContext();
 
 		// GET: Overtimes
-		public ActionResult Index(int? unit, int? section, string usrId, string year, int? duration, string available, string message = "")
+		public ActionResult Index(int? unit, int? section, string usrId, int? duration, string available, string message = "", string year = "2020")
 		{
 			bool notUsed = available != null ? true : false;
 			var model = new OvertimeListViewModel(User, unit, section, usrId, year, duration, notUsed);
@@ -33,14 +33,15 @@ namespace SIT.Controllers
 		{
 			IQueryable<ApplicationUser> usrs = db.Users;
 			var usrId = Overtime.GetUserId(User);
-			var usrUnit = VotingEngine.GetUserUnit(User);
+			var usrUnit = VotingEngine.GetUserUnit(User); // -1 если пользователь админ
 
 			if (User.IsInRole("chief"))
 				usrs = usrs.Where(us => us.Section.ChiefId == usrId);
 			else if (User.IsInRole("manager"))
 				usrs = usrs.Where(u => u.Section.UnitId == usrUnit || u.Id == usrId);
+			else if (User.IsInRole("admin"))
+				ViewBag.UsrList = new SelectList(await usrs.OrderBy(u => u.Surname).ToListAsync(), "Id", "FullName");
 
-			ViewBag.UsrList = new SelectList(await usrs.OrderBy(u => u.Surname).ToListAsync(), "Id", "FullName");
 			return View();
 		}
 

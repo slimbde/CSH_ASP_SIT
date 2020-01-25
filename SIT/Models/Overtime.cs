@@ -94,7 +94,7 @@ namespace SIT.Models
 		private void handleChief()
 		{
 			if (Unit == null || Unit == 0)
-				Unit = VotingEngine.GetUserUnit(User);
+				Unit = VotingEngine.GetUserUnit(User); // -1 когда пользователь не прописан в бюро
 
 			// отделы
 			units = new List<Unit> { new Unit { Id = 0, Name = "-- все --" } };
@@ -198,12 +198,15 @@ namespace SIT.Models
 		private void handleTimePoint()
 		{
 			// года
-			var dates = overtimes.Select(v => v.Date).Distinct().ToList();
+			var dates = overtimes.Select(v => v.Date.Year).Distinct().ToList();
 			strYears = new List<string> { "-- все --" };
-			dates.ForEach(item => strYears.Add(item.Year.ToString()));
+			dates.ForEach(item => strYears.Add(item.ToString()));
 
 			if (!string.IsNullOrEmpty(Year) && Year != "-- все --")
-				overtimes = overtimes.Where(v => v.Date.Year == Convert.ToInt32(Year)); // фильтр по году
+			{
+				var yr = Convert.ToInt32(Year);
+				overtimes = overtimes.Where(v => v.Date.Year == yr); // фильтр по году
+			}
 
 			// длительности
 			strDurations = new List<string> { "-- все --" };
@@ -225,7 +228,7 @@ namespace SIT.Models
 			Units = new SelectList(units, "Id", "Name");
 			Sections = new SelectList(sections, "Id", "Name");
 			Users = new SelectList(users, "Id", "FullName");
-			Years = new SelectList(strYears);
+			Years = new SelectList(strYears, "2020");
 			Durations = new SelectList(strDurations);
 		}
 

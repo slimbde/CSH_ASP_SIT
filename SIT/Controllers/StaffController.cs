@@ -22,7 +22,7 @@ namespace SIT.Controllers
 		// GET: Staff
 		public async Task<ActionResult> Index()
 		{
-			var unit = VotingEngine.GetUserUnit(User);
+			var unit = VotingEngine.GetUserUnit(User); // -1 когда админ или не зареган в бюро
 			IQueryable<ApplicationUser> users;
 			if (User.IsInRole("manager"))
 			{

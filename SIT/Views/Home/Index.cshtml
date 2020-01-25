@@ -1,4 +1,5 @@
-﻿@{
+﻿@using SIT.Models;
+@{
 	ViewBag.Title = "Home Page";
 }
 
@@ -8,17 +9,44 @@
 		<small>УВСИТЦУ</small>
 	</h2>
 	<hr />
+	@if (User.Identity.IsAuthenticated)
+	{
+		<h3 class="text-info">@(VotingEngine.GetUserFullName(User))</h3>
+		<div>
+			<dl class="dl-horizontal">
+				<dt cl>Охрана труда:</dt>
+				<dd class="text-success">25.04.2019&nbsp;&nbsp;&nbsp;OK</dd>
+
+				<dt>Пром. безопасность:</dt>
+				<dd class="text-success">25.06.2019&nbsp;&nbsp;&nbsp;OK</dd>
+
+				<dt>Медосмотр:</dt>
+				<dd class="text-danger">10.08.2017&nbsp;&nbsp;&nbsp;СДАТЬ</dd>
+			</dl>
+
+			<dl class="dl-horizontal">
+				<dt>Каска:</dt>
+				<dd class="text-danger">25.04.2016&nbsp;&nbsp;&nbsp;ПОЛУЧИТЬ</dd>
+
+				<dt>Костюм:</dt>
+				<dd class="text-success">12.12.2019&nbsp;&nbsp;&nbsp;OK</dd>
+
+				<dt>Бушлат:</dt>
+				<dd class="text-danger">14.05.2018&nbsp;&nbsp;&nbsp;ПОЛУЧИТЬ</dd>
+			</dl>
+		</div>
+	}
 </div>
 
 <div class="row">
 	<div class="col-md-4">
 		<h2>Отпуска</h2>
-		<p>Вход в систему распределения отпусков персонала.<br />Просмотр графика отпусков.<br />Участие в голосовании при составлении графика отпусков.</p>
+		<p>Просмотр графика отпусков.<br />Участие в голосовании при составлении графика отпусков.</p>
 		<p>@Html.ActionLink("Перейти", "Index", "Vacations", null, new { @class = "btn btn-default" })</p>
 	</div>
 	<div class="col-md-4">
 		<h2>Переработки</h2>
-		<p>Вход в систему учета переработок персонала.<br />Просмотр сведений о переработках сотрудников.<br />Учет переработок.</p>
+		<p>Просмотр сведений о переработках сотрудников.<br />Учет переработок.</p>
 		<p>@Html.ActionLink("Перейти", "Index", "Overtimes", null, new { @class = "btn btn-default" })</p>
 	</div>
 
@@ -26,7 +54,7 @@
 	{
 		<div class="col-md-4">
 			<h2 style="color:#987316">Субботники</h2>
-			<p>Вход в систему учета субботников.<br />Распределение персонала по субботникам.<br />Учет субботников.</p>
+			<p>Распределение персонала по субботникам.<br />Учет субботников.</p>
 			<p>@Html.ActionLink("Перейти", "Index", "Labours", null, new { @class = "btn btn-default", @style = "border:2px solid darkgoldenrod" })</p>
 		</div>
 	}

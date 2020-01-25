@@ -239,18 +239,50 @@ namespace SIT.Models
 			{
 				try
 				{
-					// если пользователь руководитель и у него нет SectionId
+					// если пользователь руководитель отдела и у него нет SectionId
 					var chiefId = dbloc.Users.FirstOrDefault(us => us.UserName == User.Identity.Name).Id;
 					unit = dbloc.Units.FirstOrDefault(u => u.ChiefId == chiefId).Id;
 				}
 				catch (Exception)
 				{
-					// если он и не руководитель
+					// если он и не руководитель (еще не зареган в бюро или админ)
 					return -1;
 				}
 			}
 
 			return unit;
+		}
+		public static int GetUserIdUnit(string userId)
+		{
+			var dbloc = new ApplicationDbContext();
+			var unit = 0;
+
+			try
+			{
+				var usr = dbloc.Users.FirstOrDefault(u => u.Id == userId);
+				unit = (int)usr.Section.UnitId;
+			}
+			catch (Exception)
+			{
+				// если пользователь руководитель отдела и у него нет SectionId
+				try
+				{
+					var chiefId = dbloc.Users.FirstOrDefault(us => us.Id == userId).Id;
+					unit = dbloc.Units.FirstOrDefault(u => u.ChiefId == chiefId).Id;
+				}
+				catch (Exception)
+				{
+					// если он и не руководитель (еще не зареган в бюро или админ)
+					return -1;
+				}
+			}
+
+			return unit;
+		}
+		public static string GetUserFullName(IPrincipal User)
+		{
+			using (var db = new ApplicationDbContext())
+				return db.Users.FirstOrDefault(u => u.UserName == User.Identity.Name).FullName;
 		}
 	}
 }

@@ -29,7 +29,6 @@ textarea {
 	background: #fff;
 	position: absolute;
 	z-index: -1000;
-	opacity: 0.4;
 }
 
 input[type=checkbox] {
