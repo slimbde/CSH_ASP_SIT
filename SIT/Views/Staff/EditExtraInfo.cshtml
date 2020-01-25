@@ -1,0 +1,63 @@
+﻿@model ApplicationUser
+@using SIT.Models
+
+@{
+	var MedExam                 = @Model.MedExam == null ? "" : @Model.MedExam.Value.Date.ToString("yyyy-MM-dd");
+	var LabourSecurityExam      = @Model.LabourSecurityExam == null ? "" : @Model.LabourSecurityExam.Value.Date.ToString("yyyy-MM-dd");
+	var IndustrialSecurityExam  = @Model.IndustrialSecurityExam == null ? "" : @Model.IndustrialSecurityExam.Value.Date.ToString("yyyy-MM-dd");
+	var GotHelmet               = @Model.GotHelmet == null ? "" : @Model.GotHelmet.Value.Date.ToString("yyyy-MM-dd");
+	var GotSuit                 = @Model.GotSuit == null ? "" : @Model.GotSuit.Value.Date.ToString("yyyy-MM-dd");
+	var GotBoots                = @Model.GotBoots == null ? "" : @Model.GotBoots.Value.Date.ToString("yyyy-MM-dd");
+	var GotCoat                 = @Model.GotCoat == null ? "" : @Model.GotCoat.Value.Date.ToString("yyyy-MM-dd");
+}
+
+<div class="col-md-6">
+	<div class="form-group">
+		<label for="" class="control-label col-md-4">@Html.DisplayNameFor(m => m.MedExam)</label>
+		<div class="col-md-8">
+			<input type='date' class="form-control date" name="MedExam" data-val="false" value=@MedExam />
+		</div>
+	</div>
+
+	<div class="form-group">
+		<label for="" class="control-label col-md-4">@Html.DisplayNameFor(m => m.LabourSecurityExam)</label>
+		<div class="col-md-8">
+			<input type='date' class="form-control date" name="LabourSecurityExam" data-val="false" value="@LabourSecurityExam" />
+		</div>
+	</div>
+
+	<div class="form-group">
+		<label for="" class="control-label col-md-4">@Html.DisplayNameFor(m => m.IndustrialSecurityExam)</label>
+		<div class="col-md-8">
+			<input type='date' class="form-control date" name="IndustrialSecurityExam" data-val="false" value="@IndustrialSecurityExam" />
+		</div>
+	</div>
+
+	<div class="form-group">
+		<label for="" class="control-label col-md-4">@Html.DisplayNameFor(m => m.GotHelmet)</label>
+		<div class="col-md-8">
+			<input type='date' class="form-control date" name="GotHelmet" data-val="false" value="@GotHelmet" />
+		</div>
+	</div>
+
+	<div class="form-group">
+		<label for="" class="control-label col-md-4">@Html.DisplayNameFor(m => m.GotSuit)</label>
+		<div class="col-md-8">
+			<input type='date' class="form-control date" name="GotSuit" data-val="false" value="@GotSuit" />
+		</div>
+	</div>
+
+	<div class="form-group">
+		<label for="" class="control-label col-md-4">@Html.DisplayNameFor(m => m.GotBoots)</label>
+		<div class="col-md-8">
+			<input type='date' class="form-control date" name="GotBoots" data-val="false" value="@GotBoots" />
+		</div>
+	</div>
+
+	<div class="form-group">
+		<label for="" class="control-label col-md-4">@Html.DisplayNameFor(m => m.GotCoat)</label>
+		<div class="col-md-8">
+			<input type='date' class="form-control date" name="GotCoat" data-val="false" value="@GotCoat" />
+		</div>
+	</div>
+</div>

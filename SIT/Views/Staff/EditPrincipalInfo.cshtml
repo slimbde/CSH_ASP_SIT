@@ -1,0 +1,84 @@
+﻿@model ApplicationUser
+@using SIT.Models
+@{
+	var role = "none";
+	if (Model.IsAdmin)
+	{ role = "admin"; }
+	else if (Model.IsManager)
+	{ role = "manager"; }
+	else if (Model.IsChief)
+	{ role = "chief"; }
+
+	var sectList = new SelectList(ViewData["Sections"] as List<Section>, "Id", "Name");
+}
+
+<div class="col-md-6">
+	<div class="form-group">
+		@Html.LabelFor(model => model.Surname, htmlAttributes: new { @class = "control-label col-md-3" })
+		<div class="col-md-9">
+			@Html.EditorFor(model => model.Surname, new { htmlAttributes = new { @class = "form-control" } })
+			@Html.ValidationMessageFor(model => model.Surname, "", new { @class = "text-danger" })
+		</div>
+	</div>
+
+	<div class="form-group">
+		@Html.LabelFor(model => model.Name, htmlAttributes: new { @class = "control-label col-md-3" })
+		<div class="col-md-9">
+			@Html.EditorFor(model => model.Name, new { htmlAttributes = new { @class = "form-control" } })
+			@Html.ValidationMessageFor(model => model.Name, "", new { @class = "text-danger" })
+		</div>
+	</div>
+
+	<div class="form-group">
+		@Html.LabelFor(model => model.Patronic, htmlAttributes: new { @class = "control-label col-md-3" })
+		<div class="col-md-9">
+			@Html.EditorFor(model => model.Patronic, new { htmlAttributes = new { @class = "form-control" } })
+			@Html.ValidationMessageFor(model => model.Patronic, "", new { @class = "text-danger" })
+		</div>
+	</div>
+
+	<div class="form-group">
+		@Html.LabelFor(model => model.TabNo, htmlAttributes: new { @class = "control-label col-md-3" })
+		<div class="col-md-9">
+			@Html.EditorFor(model => model.TabNo, new { htmlAttributes = new { @class = "form-control", @placeholder = "ЧМ-", @maxlength = 11 } })
+			@Html.ValidationMessageFor(model => model.TabNo, "", new { @class = "text-danger" })
+		</div>
+	</div>
+
+	<div id="here">
+		<div class="form-group" id="section">
+			@Html.LabelFor(model => model.Section.Name, htmlAttributes: new { @class = "control-label col-md-3" })
+			<div class="col-md-9">
+				@Html.DropDownList("SectionId", sectList, htmlAttributes: new { @class = "form-control" })
+				@Html.ValidationMessageFor(model => model.SectionId, "", new { @class = "text-danger" })
+			</div>
+		</div>
+	</div>
+
+	@if (User.IsInRole("admin"))
+	{
+		<div class="form-group">
+			@Html.LabelFor(model => model.Roles, htmlAttributes: new { @class = "control-label col-md-3", @style = "color:#7BA428;" })
+			<div class="col-md-9">
+				@Html.DropDownList("role", new SelectList(new List<string> { "none", "chief", "manager", "admin" }, role), htmlAttributes: new { @class = "form-control", @style = "box-shadow:0 0 10px #7BA428;" })
+			</div>
+		</div>
+	}
+
+	<div class="form-group">
+		<label class="control-label col-md-3">Сот.</label>
+		<div class="col-md-9">
+			@Html.EditorFor(model => model.PhoneNumber, new { htmlAttributes = new { @class = "form-control", @placeholder = "89539991133", @maxlength = 11 } })
+			@Html.ValidationMessageFor(model => model.PhoneNumber, "", new { @class = "text-danger" })
+		</div>
+	</div>
+
+	<div class="form-group">
+		@Html.LabelFor(model => model.ParticipateInLabour, htmlAttributes: new { @class = "control-label col-md-3" })
+		<div class="col-md-3" style="margin-top:7px;">
+			@Html.CheckBoxFor(model => model.ParticipateInLabour, new { @style = "" })
+			@Html.ValidationMessageFor(model => model.ParticipateInLabour, "", new { @class = "text-danger" })
+		</div>
+	</div>
+</div>
+

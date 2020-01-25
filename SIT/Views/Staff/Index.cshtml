@@ -7,7 +7,7 @@
 <style>
 	table tbody {
 		display: block;
-		max-height: 66vh;
+		max-height: 65vh;
 		overflow-y: scroll;
 	}
 
@@ -25,6 +25,7 @@
 
 <h2>Список сотрудников</h2>
 <p>
+	@Html.ActionLink("Медосмотры", "MedExams", null, new { style = "color:#987316" })
 	@Html.ActionLink("Добавить сотрудника", "Register", "Account", null, new { @class = "pull-right" })
 </p>
 

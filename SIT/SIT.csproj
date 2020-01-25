@@ -287,6 +287,10 @@
     <Compile Include="Migrations\202001191815319_overtime_user_applied.Designer.cs">
       <DependentUpon>202001191815319_overtime_user_applied.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\202001250749505_user extra info.cs" />
+    <Compile Include="Migrations\202001250749505_user extra info.Designer.cs">
+      <DependentUpon>202001250749505_user extra info.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\IdentityModels.cs" />
@@ -414,6 +418,11 @@
     <Content Include="Scripts\moment.min.js" />
     <Content Include="Scripts\my.js" />
     <Content Include="Scripts\particle-wave.js" />
+    <Content Include="Views\Home\SummaryView.cshtml" />
+    <Content Include="Views\Staff\DetailsExtra.cshtml" />
+    <Content Include="Views\Staff\EditExtraInfo.cshtml" />
+    <Content Include="Views\Staff\EditPrincipalInfo.cshtml" />
+    <Content Include="Views\Staff\MedExams.cshtml" />
     <Content Include="Web.config" />
     <Content Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
@@ -577,6 +586,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\202001191815319_overtime_user_applied.resx">
       <DependentUpon>202001191815319_overtime_user_applied.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202001250749505_user extra info.resx">
+      <DependentUpon>202001250749505_user extra info.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

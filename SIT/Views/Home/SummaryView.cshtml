@@ -1,0 +1,114 @@
+﻿@model ApplicationUser
+@using SIT.Models
+@{
+	string role="";
+
+	if (User.IsInRole("admin"))
+	{ role = "РУКОВОДИТЕЛЬ УПРАВЛЕНИЯ"; }
+	else if (User.IsInRole("manager"))
+	{ role = "РУКОВОДИТЕЛЬ ОТДЕЛА"; }
+	else if (User.IsInRole("chief"))
+	{ role = "РУКОВОДИТЕЛЬ БЮРО"; }
+	else
+	{ role = "СОТРУДНИК"; }
+}
+
+@if (Model != null)
+{
+	<h2>@Model.FullName</h2>
+	<small>@role</small>
+	<hr />
+	<div class="row">
+		<div class="col-md-4">
+			<dl class="dl-horizontal">
+				<dt>@Html.DisplayNameFor(m => m.MedExam)</dt>
+				@if (Model.MedExam != null)
+				{
+					var ok = Model.MedExamOkay;
+					<dd class="@(ok?"text-success":"text-danger")">@Model.MedExam.Value.Date.ToString("dd.MM.yyyy")&nbsp;&nbsp;&nbsp;@(ok ? "ОК" : "ПРОЙТИ")</dd>
+				}
+				else
+				{
+					<dd class="text-danger">---&nbsp;&nbsp;&nbsp;ПРОЙТИ</dd>
+				}
+
+				<dt>@Html.DisplayNameFor(m => m.LabourSecurityExam)</dt>
+				@if (Model.LabourSecurityExam != null)
+				{
+					var ok = Model.LabourSecurityExamOkay;
+					<dd class="@(ok?"text-success":"text-danger")">@Model.LabourSecurityExam.Value.Date.ToString("dd.MM.yyyy")&nbsp;&nbsp;&nbsp;@(ok ? "ОК" : "СДАТЬ")</dd>
+				}
+				else
+				{
+					<dd class="text-danger">---&nbsp;&nbsp;&nbsp;СДАТЬ</dd>
+				}
+
+				<dt>@Html.DisplayNameFor(m => m.IndustrialSecurityExam)</dt>
+				@if (Model.IndustrialSecurityExam != null)
+				{
+					var ok = Model.IndustrialSecurityExamOkay;
+					<dd class="@(ok?"text-success":"text-danger")">@Model.IndustrialSecurityExam.Value.Date.ToString("dd.MM.yyyy")&nbsp;&nbsp;&nbsp;@(ok ? "ОК" : "СДАТЬ")</dd>
+				}
+				else
+				{
+					<dd class="text-danger">---&nbsp;&nbsp;&nbsp;СДАТЬ</dd>
+				}
+			</dl>
+		</div>
+		<div class="col-md-8">
+			<dl class="dl-horizontal">
+				<dt>@Html.DisplayNameFor(m => m.GotHelmet)</dt>
+				@if (Model.GotHelmet != null)
+				{
+					var ok = Model.GotHelmetOkay;
+					<dd class="@(ok?"text-success":"text-danger")">@Model.GotHelmet.Value.Date.ToString("dd.MM.yyyy")&nbsp;&nbsp;&nbsp;@(ok ? "ОК" : "ПОЛУЧИТЬ")</dd>
+				}
+				else
+				{
+					<dd class="text-danger">---&nbsp;&nbsp;&nbsp;ПОЛУЧИТЬ</dd>
+				}
+
+				<dt>@Html.DisplayNameFor(m => m.GotSuit)</dt>
+				@if (Model.GotSuit != null)
+				{
+					var ok = Model.GotSuitOkay;
+					<dd class="@(ok?"text-success":"text-danger")">@Model.GotSuit.Value.Date.ToString("dd.MM.yyyy")&nbsp;&nbsp;&nbsp;@(ok ? "ОК" : "ПОЛУЧИТЬ")</dd>
+				}
+				else
+				{
+					<dd class="text-danger">---&nbsp;&nbsp;&nbsp;ПОЛУЧИТЬ</dd>
+				}
+
+				<dt>@Html.DisplayNameFor(m => m.GotBoots)</dt>
+				@if (Model.GotBoots != null)
+				{
+					var ok = Model.GotBootsOkay;
+					<dd class="@(ok?"text-success":"text-danger")">@Model.GotBoots.Value.Date.ToString("dd.MM.yyyy")&nbsp;&nbsp;&nbsp;@(ok ? "ОК" : "ПОЛУЧИТЬ")</dd>
+				}
+				else
+				{
+					<dd class="text-danger">---&nbsp;&nbsp;&nbsp;ПОЛУЧИТЬ</dd>
+				}
+
+				<dt>@Html.DisplayNameFor(m => m.GotCoat)</dt>
+				@if (Model.GotCoat != null)
+				{
+					var ok = Model.GotCoatOkay;
+					<dd class="@(ok?"text-success":"text-danger")">@Model.GotCoat.Value.Date.ToString("dd.MM.yyyy")&nbsp;&nbsp;&nbsp;@(ok ? "ОК" : "ПОЛУЧИТЬ")</dd>
+				}
+				else
+				{
+					<dd class="text-danger">---&nbsp;&nbsp;&nbsp;ПОЛУЧИТЬ</dd>
+				}
+			</dl>
+		</div>
+	</div>
+}
+else
+{
+	<h2>
+		СЛУЖБА ИНФОРМАЦИОННЫХ ТЕХНОЛОГИЙ<br />
+		<small>УВСИТЦУ</small>
+	</h2>
+	<hr />
+}

@@ -127,13 +127,14 @@ namespace SIT.Controllers
 			{
 				return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
 			}
-			ApplicationUser applicationUser = await db.Users.FirstOrDefaultAsync(u => u.Id == id);
+
+			var applicationUser = await db.Users.FirstOrDefaultAsync(u => u.Id == id);
 			if (applicationUser == null)
 			{
 				return HttpNotFound();
 			}
 
-			ViewBag.Sections = await db.Sections.ToListAsync();
+			ViewBag.Sections = await db.Sections.OrderBy(s => s.Name).ToListAsync();
 			return View(applicationUser);
 		}
 
@@ -142,7 +143,9 @@ namespace SIT.Controllers
 		// сведения см. в статье https://go.microsoft.com/fwlink/?LinkId=317598.
 		[HttpPost]
 		[ValidateAntiForgeryToken]
-		public async Task<ActionResult> Edit([Bind(Include = "Id,Name,Surname,Patronic,TabNo,SectionId,Email,EmailConfirmed,PasswordHash,SecurityStamp,PhoneNumber,PhoneNumberConfirmed,TwoFactorEnabled,LockoutEndDateUtc,LockoutEnabled,AccessFailedCount,UserName,ParticipateInLabour")] ApplicationUser applicationUser, string role = "")
+		public async Task<ActionResult> Edit([Bind(Include = "Id,Name,Surname,Patronic,TabNo,SectionId,Email,EmailConfirmed,PasswordHash,SecurityStamp," +
+			"PhoneNumber,PhoneNumberConfirmed,TwoFactorEnabled,LockoutEndDateUtc,LockoutEnabled,AccessFailedCount,UserName," +
+			"ParticipateInLabour,MedExam,LabourSecurityExam,IndustrialSecurityExam,GotHelmet,GotSuit,GotBoots,GotCoat")] ApplicationUser applicationUser, string role = "")
 		{
 			if (ModelState.IsValid)
 			{
@@ -174,6 +177,26 @@ namespace SIT.Controllers
 			}
 			ViewBag.Sections = await db.Sections.ToListAsync();
 			return View(applicationUser);
+		}
+
+		public async Task<ActionResult> MedExams()
+		{
+			var unit = VotingEngine.GetUserUnit(User); // -1 когда админ или не зареган в бюро
+			IQueryable<ApplicationUser> users;
+			if (User.IsInRole("manager"))
+			{
+				users = db.Users.Where(u => u.Section.UnitId == unit || u.Id == (db.Units.FirstOrDefault(un => un.Id == unit).ChiefId));
+				return View(await users.OrderBy(usr => usr.Surname).ToListAsync());
+			}
+			else if (User.IsInRole("chief"))
+			{
+				var userId = db.Users.FirstOrDefault(u => u.UserName == User.Identity.Name).Id;
+				var sectionId = db.Sections.FirstOrDefault(s => s.ChiefId == userId).Id;
+				users = db.Users.Where(u => u.SectionId == sectionId);
+				return View(await users.OrderBy(usr => usr.Surname).ToListAsync());
+			}
+
+			return View(await db.Users.OrderBy(usr => usr.Surname).ToListAsync());
 		}
 
 		// GET: Staff/Delete/5

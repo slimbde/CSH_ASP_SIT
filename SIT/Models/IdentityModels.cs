@@ -8,6 +8,7 @@ using System.Web.Mvc;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.EntityFramework;
 using System.Web.Security;
+using System;
 
 namespace SIT.Models
 {
@@ -19,8 +20,8 @@ namespace SIT.Models
 
 
 		[Display(Name = "Имя")]
-
 		public string Name { get; set; }
+
 		[Display(Name = "Фамилия")]
 		public string Surname { get; set; }
 
@@ -30,27 +31,51 @@ namespace SIT.Models
 		[Display(Name = "Таб. №")]
 		public string TabNo { get; set; }
 
-
 		[Display(Name = "Ф.И.О.")]
 		public string FullName { get { return $"{Surname} {Name} {Patronic}"; } }
-
 
 		[Display(Name = "Бюро")]
 		public int? SectionId { get; set; }
 		public virtual Section Section { get; set; }
 
-
-		[Display(Name = "Участвует в субботниках")]
+		[Display(Name = "Субботники")]
 		public bool ParticipateInLabour { get; set; }
 
+		[Display(Name = "Медосмотр")]
+		public DateTime? MedExam { get; set; }
+
+		[Display(Name = "Охрана труда")]
+		public DateTime? LabourSecurityExam { get; set; }
+
+		[Display(Name = "Пром. безопасность")]
+		public DateTime? IndustrialSecurityExam { get; set; }
+
+		[Display(Name = "Каска")]
+		public DateTime? GotHelmet { get; set; }
+
+		[Display(Name = "Костюм")]
+		public DateTime? GotSuit { get; set; }
+
+		[Display(Name = "Ботинки")]
+		public DateTime? GotBoots { get; set; }
+
+		[Display(Name = "Куртка утепл.")]
+		public DateTime? GotCoat { get; set; }
 
 		[Display(Name = "Субботники")]
 		public virtual ICollection<Labour> Labours { get; set; }
 
-
 		[Display(Name = "Переработки")]
 		public virtual ICollection<Overtime> Overtimes { get; set; }
 
+
+		public bool MedExamOkay { get { return MedExam == null ? false : DateTime.Now.Year - MedExam.Value.Year < 2; } }
+		public bool LabourSecurityExamOkay { get { return LabourSecurityExam == null ? false : DateTime.Now.Year - LabourSecurityExam.Value.Year < 3; } }
+		public bool IndustrialSecurityExamOkay { get { return IndustrialSecurityExam == null ? false : DateTime.Now.Year - IndustrialSecurityExam.Value.Year < 3; } }
+		public bool GotHelmetOkay { get { return GotHelmet == null ? false : DateTime.Now.Year - GotHelmet.Value.Year < 3; } }
+		public bool GotSuitOkay { get { return GotSuit == null ? false : DateTime.Now.Year - GotSuit.Value.Year < 1; } }
+		public bool GotBootsOkay { get { return GotBoots == null ? false : DateTime.Now.Year - GotBoots.Value.Year < 1; } }
+		public bool GotCoatOkay { get { return GotCoat == null ? false : DateTime.Now.Year - GotCoat.Value.Year < 3; } }
 
 		public bool IsManager
 		{
@@ -60,7 +85,6 @@ namespace SIT.Models
 				return userManager.IsInRole(Id, "manager");
 			}
 		}
-
 		public bool IsAdmin
 		{
 			get
@@ -69,7 +93,6 @@ namespace SIT.Models
 				return userManager.IsInRole(Id, "admin");
 			}
 		}
-
 		public bool IsChief
 		{
 			get

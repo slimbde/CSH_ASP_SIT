@@ -16,8 +16,7 @@ namespace SIT
 
 
 			bundles.Add(new ScriptBundle("~/bundles/myScripts")
-				.Include("~/Scripts/my.js")
-				.Include("~/Scripts/particle-wave.js"));
+				.Include("~/Scripts/my.js"));
 
 
 			bundles.Add(new ScriptBundle("~/bundles/bootstrap").Include(

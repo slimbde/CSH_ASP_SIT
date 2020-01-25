@@ -16,12 +16,12 @@ namespace SIT.Controllers
 		ApplicationDbContext db = new ApplicationDbContext();
 
 
-		public ActionResult Index()
+		public async Task<ActionResult> Index()
 		{
-			//// костыль добавления ролей пользователям
-			//var user = db.Users.FirstOrDefault(u => u.Surname == "Белоглазова");
-			//var userManager = new ApplicationUserManager(new UserStore<ApplicationUser>(db));
-			//userManager.AddToRole(user.Id, "chief");
+			if (User.Identity.IsAuthenticated)
+			{
+				return View(await db.Users.FirstOrDefaultAsync(u => u.UserName == User.Identity.Name));
+			}
 
 			return View();
 		}

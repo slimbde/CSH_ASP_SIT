@@ -1,0 +1,54 @@
+﻿@model IEnumerable<ApplicationUser>
+@using SIT.Models
+
+<style>
+	table tbody {
+		display: block;
+		max-height: 66vh;
+		overflow-y: scroll;
+	}
+
+		table thead, table tbody tr {
+			display: table;
+			width: 100%;
+			table-layout: fixed;
+		}
+
+	::-webkit-scrollbar {
+		width: 0px; /*Remove scrollbar space */
+		background: transparent; /* Optional: just make scrollbar invisible */
+	}
+</style>
+
+<h2>Медосмотры</h2>
+@Html.ActionLink("Назад", "Index")
+<table class="table table-condensed table-hover">
+	<thead>
+		<tr>
+			<th width="25%">@Html.DisplayNameFor(model => model.FullName)</th>
+			<th width="10%">@Html.DisplayNameFor(model => model.TabNo)</th>
+			<th width="22%">@Html.DisplayNameFor(model => model.Section.Name)</th>
+			<th width="8%">@Html.DisplayNameFor(model => model.MedExam)</th>
+			<th width="10%">Статус</th>
+			<th width="10%">Сот</th>
+			<th>@Html.DisplayNameFor(model => model.Email)</th>
+		</tr>
+	</thead>
+	<tbody>
+		@foreach (var item in Model)
+		{
+			var medExamOk = item.MedExamOkay?"ОК":"ПРОЙТИ";
+			var medExam = item.MedExam==null?"---":item.MedExam.Value.ToString("dd.MM.yyyy");
+
+			<tr class="@(item.MedExamOkay?"text-success":"text-danger")">
+				<td width="25%">@Html.DisplayFor(modelItem => item.FullName)</td>
+				<td width="10%">@Html.DisplayFor(modelItem => item.TabNo)</td>
+				<td width="22%">@Html.DisplayFor(modelItem => item.Section.Name)</td>
+				<td width="8%" style="font-weight:bolder;">@Html.DisplayFor(modelItem => medExam)</td>
+				<td width="10%">@medExamOk</td>
+				<td width="10%">@Html.DisplayFor(modelItem => item.PhoneNumber)</td>
+				<td>@Html.DisplayFor(modelItem => item.Email)</td>
+			</tr>
+		}
+	</tbody>
+</table>
